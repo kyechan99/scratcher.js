@@ -1,0 +1,11 @@
+node_modules
+pnpm-lock.yaml
+.turbo
+dist
+coverage
+*.log
+.DS_Store
+apps/docs/.docs/.nuxt/
+apps/docs/.docs/.output/
+apps/docs/.docs/.data/
+apps/docs/.docs/dist/
