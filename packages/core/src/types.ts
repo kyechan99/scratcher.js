@@ -12,7 +12,6 @@ export type ScratchEngineOptions = {
   width: number;
   height: number;
   coverage?: number;
-  gridSize?: number;
 };
 
 export type ScratchSnapshot = {

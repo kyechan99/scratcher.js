@@ -6,7 +6,7 @@ import {
   type ScratcherConfig as CoreScratcherConfig,
 } from '@scratcher/core';
 import { Scratcher as VueScratcher } from '@scratcher/vue';
-import { computed, onMounted, onUnmounted, reactive, ref, watch } from 'vue';
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
 
 type FrameworkId = 'react' | 'vue' | 'react-native' | 'typescript';
 
@@ -15,7 +15,7 @@ const frameworkOrder: FrameworkId[] = ['react', 'vue', 'react-native', 'typescri
 interface PlaygroundScratcherConfig extends CoreScratcherConfig {
   width: number;
   height: number;
-  gridSize: number;
+  coverage: number;
   brushSize: number;
   cover: string;
 }
@@ -65,36 +65,13 @@ const scratcher = new Scratcher({
 });`,
 };
 
-const configState = reactive<Record<FrameworkId, string>>({
-  react: `const scratcherConfig = {
+const sharedConfigCode = ref(`const scratcherConfig = {
   width: 360,
   height: 200,
-  gridSize: 10,
+  coverage: 10,
   brushSize: 30,
   cover: "#b9c2ce"
-};`,
-  vue: `const scratcherConfig = {
-  width: 360,
-  height: 200,
-  gridSize: 8,
-  brushSize: 24,
-  cover: "#63c9b0"
-};`,
-  'react-native': `const scratcherConfig = {
-  width: 360,
-  height: 200,
-  gridSize: 12,
-  brushSize: 32,
-  cover: "#f6b66d"
-};`,
-  typescript: `const scratcherConfig: ScratcherConfig = {
-  width: 360,
-  height: 200,
-  gridSize: 9,
-  brushSize: 26,
-  cover: "#8ca3f0"
-};`,
-});
+};`);
 
 const activeFramework = ref<FrameworkId>('react');
 const parseError = ref('');
@@ -106,7 +83,7 @@ const snapshot = ref<ScratchSnapshot>({
 const currentScratcherConfig = ref<PlaygroundScratcherConfig>({
   width: 360,
   height: 200,
-  gridSize: 10,
+  coverage: 10,
   brushSize: 30,
   cover: '#b9c2ce',
 });
@@ -115,9 +92,9 @@ let scratcher: CoreScratcher | null = null;
 let parseTimer: number | null = null;
 
 const configCode = computed({
-  get: () => configState[activeFramework.value],
+  get: () => sharedConfigCode.value,
   set: (value: string) => {
-    configState[activeFramework.value] = value;
+    sharedConfigCode.value = value;
   },
 });
 
@@ -261,7 +238,10 @@ function parseConfig(source: string): PlaygroundScratcherConfig {
   return {
     width: Math.max(180, safeNumber(result.width, 360)),
     height: Math.max(120, safeNumber(result.height, 200)),
-    gridSize: Math.max(4, safeNumber(result.gridSize, 10)),
+    coverage: Math.max(
+      4,
+      safeNumber(result.coverage, safeNumber((result as { gridSize?: unknown }).gridSize, 10)),
+    ),
     brushSize: Math.max(8, safeNumber(result.brushSize, 30)),
     cover: safeText(
       normalizeCoverColor(result.cover, safeText(result.coverTop, '#d6d9df')),
@@ -271,7 +251,7 @@ function parseConfig(source: string): PlaygroundScratcherConfig {
 }
 
 const previewCallbacks = computed<ScratchControllerCallbacks>(() => ({
-  onProgress: next => {
+  onProgress: (next: any) => {
     snapshot.value = next;
   },
 }));
@@ -283,7 +263,7 @@ function handleScratcherReady(nextScratcher: CoreScratcher) {
 
 function refreshFromEditor() {
   try {
-    currentScratcherConfig.value = parseConfig(configState[activeFramework.value]);
+    currentScratcherConfig.value = parseConfig(sharedConfigCode.value);
     parseError.value = '';
   } catch (error) {
     parseError.value = error instanceof Error ? error.message : '코드 해석 중 오류가 발생했습니다.';
@@ -307,10 +287,6 @@ function resetCanvas() {
 
   snapshot.value = scratcher.reset();
 }
-
-watch(activeFramework, () => {
-  scheduleRefresh();
-});
 
 watch(configCode, () => {
   scheduleRefresh();
@@ -374,7 +350,7 @@ onUnmounted(() => {
           class="scratch-card"
           :width="currentScratcherConfig.width"
           :height="currentScratcherConfig.height"
-          :grid-size="currentScratcherConfig.gridSize"
+          :coverage="currentScratcherConfig.coverage"
           :brush-size="currentScratcherConfig.brushSize"
           :cover="normalizeCoverColor(currentScratcherConfig.cover, '#d6d9df')"
           :callbacks="previewCallbacks"
@@ -384,10 +360,7 @@ onUnmounted(() => {
           <div class="reward">🎁 Scratched!</div>
         </VueScratcher>
 
-        <div class="preview-footer">
-          <p>
-            Framework: <strong>{{ frameworkLabels[activeFramework] }}</strong>
-          </p>
+        <div class="preview-footer"> 
           <button type="button" class="reset-button" @click="resetCanvas">reset</button>
         </div>
       </section>

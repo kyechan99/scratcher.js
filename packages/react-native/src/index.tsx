@@ -21,7 +21,7 @@ export function useNativeScratchEngine(
 ): UseNativeScratchEngineResult {
   const engine = useMemo(
     () => new ScratchEngine(options),
-    [options.height, options.width, options.coverage, options.gridSize],
+    [options.height, options.width, options.coverage],
   );
   const [snapshot, setSnapshot] = useState<ScratchSnapshot>(engine.snapshot());
 
@@ -59,17 +59,10 @@ export function useNativeScratchController(
         width: options.width,
         height: options.height,
         coverage: options.coverage,
-        gridSize: options.gridSize,
         brushSize: options.brushSize,
         completionThreshold: options.completionThreshold,
       }),
-    [
-      options.height,
-      options.width,
-      options.coverage,
-      options.gridSize,
-      options.completionThreshold,
-    ],
+    [options.height, options.width, options.coverage, options.completionThreshold],
   );
   const engine = scratcher.engine;
   const [snapshot, setSnapshot] = useState<ScratchSnapshot>(engine.snapshot());

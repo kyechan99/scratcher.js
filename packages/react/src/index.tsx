@@ -18,7 +18,7 @@ export interface UseScratchEngineResult {
 export function useScratchEngine(options: ScratchEngineOptions): UseScratchEngineResult {
   const engine = useMemo(
     () => new ScratchEngine(options),
-    [options.height, options.width, options.coverage, options.gridSize],
+    [options.height, options.width, options.coverage],
   );
   const [snapshot, setSnapshot] = useState<ScratchSnapshot>(engine.snapshot());
 
@@ -56,19 +56,11 @@ export function useScratchController(
         width: options.width,
         height: options.height,
         coverage: options.coverage,
-        gridSize: options.gridSize,
         brushSize: options.brushSize,
         cover: options.cover,
         completionThreshold: options.completionThreshold,
       }),
-    [
-      options.height,
-      options.width,
-      options.coverage,
-      options.gridSize,
-      options.cover,
-      options.completionThreshold,
-    ],
+    [options.height, options.width, options.coverage, options.cover, options.completionThreshold],
   );
   const engine = scratcher.engine;
   const [snapshot, setSnapshot] = useState<ScratchSnapshot>(engine.snapshot());
@@ -135,18 +127,6 @@ export function useScratchController(
   };
 }
 
-export interface ScratchSurfaceProps {
-  width: number;
-  height: number;
-  className?: string;
-}
-
-export function ScratchSurface({ width, height, className }: ScratchSurfaceProps) {
-  const ref = useRef<HTMLCanvasElement | null>(null);
-
-  return <canvas ref={ref} width={width} height={height} className={className} />;
-}
-
 export interface ScratcherProps extends ScratcherConfig {
   className?: string;
   style?: CSSProperties;
@@ -160,7 +140,6 @@ export function Scratcher({
   width,
   height,
   coverage,
-  gridSize,
   brushSize,
   completionThreshold,
   callbacks,
@@ -179,12 +158,11 @@ export function Scratcher({
         width,
         height,
         coverage,
-        gridSize,
         brushSize,
         cover,
         completionThreshold,
       }),
-    [width, height, coverage, gridSize, cover, completionThreshold],
+    [width, height, coverage, cover, completionThreshold],
   );
   const callbacksRef = useRef<ScratchControllerCallbacks | undefined>(callbacks);
 

@@ -10,7 +10,7 @@ export class ScratchEngine {
   private scratchedCells: number;
 
   constructor(options: ScratchEngineOptions) {
-    const cellSize = options.coverage ?? options.gridSize ?? 16;
+    const cellSize = options.coverage ?? 16;
 
     this.width = options.width;
     this.height = options.height;

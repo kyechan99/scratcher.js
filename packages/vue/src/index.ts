@@ -67,7 +67,6 @@ export function useScratchController(
     width: options.width,
     height: options.height,
     coverage: options.coverage,
-    gridSize: options.gridSize,
     brushSize: options.brushSize,
     cover: options.cover,
     completionThreshold: options.completionThreshold,
@@ -136,7 +135,6 @@ export const Scratcher = defineComponent({
     width: { type: Number, required: true },
     height: { type: Number, required: true },
     coverage: { type: Number, required: false },
-    gridSize: { type: Number, required: false },
     brushSize: { type: Number, required: true },
     completionThreshold: { type: Number, required: false },
     callbacks: {
@@ -163,7 +161,6 @@ export const Scratcher = defineComponent({
         width: props.width,
         height: props.height,
         coverage: props.coverage,
-        gridSize: props.gridSize,
         brushSize: props.brushSize,
         cover: props.cover,
         completionThreshold: props.completionThreshold,
@@ -198,14 +195,7 @@ export const Scratcher = defineComponent({
     );
 
     watch(
-      () => [
-        props.width,
-        props.height,
-        props.coverage,
-        props.gridSize,
-        props.cover,
-        props.completionThreshold,
-      ],
+      () => [props.width, props.height, props.coverage, props.cover, props.completionThreshold],
       () => {
         initScratcher();
         bindCanvas();

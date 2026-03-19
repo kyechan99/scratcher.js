@@ -49,7 +49,6 @@ export class Scratcher {
       width: options.width,
       height: options.height,
       coverage: options.coverage,
-      gridSize: options.gridSize,
     });
 
     const controllerOptions: ScratchControllerOptions = {
