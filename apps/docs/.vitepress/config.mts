@@ -1,5 +1,6 @@
 import { defineConfig } from 'vitepress';
 import { fileURLToPath } from 'node:url';
+import { tabsMarkdownPlugin } from 'vitepress-plugin-tabs';
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
@@ -21,6 +22,11 @@ export default defineConfig({
           new URL('../../../packages/vue/src/index.ts', import.meta.url),
         ),
       },
+    },
+  },
+  markdown: {
+    config(md) {
+      md.use(tabsMarkdownPlugin);
     },
   },
   themeConfig: {

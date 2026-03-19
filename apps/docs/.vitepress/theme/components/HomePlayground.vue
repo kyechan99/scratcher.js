@@ -8,10 +8,6 @@ import {
 import { Scratcher as VueScratcher } from '@scratcher/vue';
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
 
-type FrameworkId = 'react' | 'vue' | 'react-native' | 'typescript';
-
-const frameworkOrder: FrameworkId[] = ['react', 'vue', 'react-native', 'typescript'];
-
 interface PlaygroundScratcherConfig extends CoreScratcherConfig {
   width: number;
   height: number;
@@ -19,51 +15,6 @@ interface PlaygroundScratcherConfig extends CoreScratcherConfig {
   brushSize: number;
   cover: string;
 }
-
-const frameworkLabels: Record<FrameworkId, string> = {
-  react: 'React',
-  vue: 'Vue',
-  'react-native': 'React Native',
-  typescript: 'TypeScript',
-};
- 
-
-const usageExamples: Record<FrameworkId, string> = {
-  react: `import { Scratcher } from "@scratcher/react";
-
-<Scratcher
-  {...scratcherConfig}
-  callbacks={{
-    onProgress: (next) => console.log(next.progress),
-    onComplete: () => console.log("completed")
-  }}
->
-  <div>React: React Coupon</div>
-</Scratcher>;`,
-  vue: `import { Scratcher } from "@scratcher/vue";
-
-<Scratcher
-  v-bind="scratcherConfig"
-  :callbacks="{
-    onStrokeEnd: (next) => console.log(next.scratchedCells)
-  }"
->
-  <div>Vue: Vue Coupon</div>
-</Scratcher>`,
-  'react-native': `import { useNativeScratchController } from "@scratcher/react-native";
-
-const { scratcher } = useNativeScratchController({
-  ...scratcherConfig,
-  callbacks: {
-    onReset: () => console.log("reset")
-  }
-});`,
-  typescript: `import { Scratcher, type ScratcherConfig } from "@scratcher/core";
-
-const scratcher = new Scratcher({
-  ...scratcherConfig
-});`,
-};
 
 const sharedConfigCode = ref(`const scratcherConfig = {
   width: 360,
@@ -73,7 +24,6 @@ const sharedConfigCode = ref(`const scratcherConfig = {
   cover: "#b9c2ce"
 };`);
 
-const activeFramework = ref<FrameworkId>('react');
 const parseError = ref('');
 const snapshot = ref<ScratchSnapshot>({
   scratchedCells: 0,
@@ -117,14 +67,14 @@ function extractConfigObjectLiteral(source: string): string {
   const anchor = /\bconst\s+(?:scratcherConfig|config)(?:\s*:\s*[^=]+)?\s*=\s*/.exec(source);
   if (!anchor || anchor.index < 0) {
     throw new Error(
-      'const scratcherConfig = { ... } 또는 const config = { ... } 형태를 찾지 못했습니다.',
+      `Could not find the form 'const scratcherConfig = { ... }' or 'const config = { ... }'.`,
     );
   }
 
   const startSearchIndex = anchor.index + anchor[0].length;
   const startBraceIndex = source.indexOf('{', startSearchIndex);
   if (startBraceIndex < 0) {
-    throw new Error('config 객체 시작({)을 찾지 못했습니다.');
+    throw new Error(`Could not find config.`);
   }
 
   let depth = 0;
@@ -224,11 +174,11 @@ function parseConfig(source: string): PlaygroundScratcherConfig {
   const evaluator = new Function(`return (${objectLiteral});`);
   const result = evaluator() as
     | Partial<
-        PlaygroundScratcherConfig & {
-          coverTop?: string;
-          coverBottom?: string;
-        }
-      >
+      PlaygroundScratcherConfig & {
+        coverTop?: string;
+        coverBottom?: string;
+      }
+    >
     | undefined;
 
   if (!result || typeof result !== 'object') {
@@ -306,36 +256,17 @@ onUnmounted(() => {
 
 <template>
   <section class="home-shell">
-    <header class="home-intro"> 
-      <h1>Scratcher.js</h1> 
+    <header class="home-intro">
+      <h1>Scratcher.js</h1>
     </header>
 
     <div class="studio-grid">
       <section class="studio-panel editor-panel">
         <div class="panel-head">
-          <h2>Framework Usage</h2> 
+          <h2>Framework Usage</h2>
         </div>
 
-        <div class="framework-tabs">
-          <button
-            v-for="id in frameworkOrder"
-            :key="id"
-            :class="['tab', { active: activeFramework === id }]"
-            type="button"
-            @click="activeFramework = id"
-          >
-            {{ frameworkLabels[id] }}
-          </button>
-        </div>
- 
-        <pre class="usage-code"><code>{{ usageExamples[activeFramework] }}</code></pre>
- 
-        <textarea
-          v-model="configCode"
-          class="code-editor"
-          spellcheck="false"
-          aria-label="Scratcher config editor"
-        />
+        <textarea v-model="configCode" class="code-editor" spellcheck="false" aria-label="Scratcher config editor" />
 
         <p v-if="parseError" class="error-text">error: {{ parseError }}</p>
       </section>
@@ -346,21 +277,14 @@ onUnmounted(() => {
           <p>progress {{ progressPercent }}%</p>
         </div>
 
-        <VueScratcher
-          class="scratch-card"
-          :width="currentScratcherConfig.width"
-          :height="currentScratcherConfig.height"
-          :coverage="currentScratcherConfig.coverage"
-          :brush-size="currentScratcherConfig.brushSize"
-          :cover="normalizeCoverColor(currentScratcherConfig.cover, '#d6d9df')"
-          :callbacks="previewCallbacks"
-          canvas-class="scratch-canvas"
-          :on-scratcher-ready="handleScratcherReady"
-        >
+        <VueScratcher class="scratch-card" :width="currentScratcherConfig.width" :height="currentScratcherConfig.height"
+          :coverage="currentScratcherConfig.coverage" :brush-size="currentScratcherConfig.brushSize"
+          :cover="normalizeCoverColor(currentScratcherConfig.cover, '#d6d9df')" :callbacks="previewCallbacks"
+          canvas-class="scratch-canvas" :on-scratcher-ready="handleScratcherReady">
           <div class="reward">🎁 Scratched!</div>
         </VueScratcher>
 
-        <div class="preview-footer"> 
+        <div class="preview-footer">
           <button type="button" class="reset-button" @click="resetCanvas">reset</button>
         </div>
       </section>
@@ -389,7 +313,7 @@ onUnmounted(() => {
   color: #43506a;
   font-size: 0.98rem;
 }
- 
+
 
 .studio-grid {
   display: grid;
@@ -448,20 +372,7 @@ onUnmounted(() => {
   border-color: #5fbf9f;
   background: linear-gradient(135deg, #e9fff8, #defff0);
 }
- 
-.usage-code {
-  margin: 0 0 10px;
-  border: 1px solid #d0d8e6;
-  border-radius: 14px;
-  padding: 12px 14px;
-  background: linear-gradient(180deg, #141d2b, #0f1722);
-  color: #eaf2ff;
-  font-family: var(--vp-font-family-mono);
-  font-size: 0.82rem;
-  line-height: 1.55;
-  white-space: pre-wrap;
-  overflow-x: auto;
-}
+
 
 .code-editor {
   width: 100%;

@@ -18,7 +18,8 @@
     "prettier": "^3.6.2",
     "turbo": "^2.0.0",
     "typescript": "^5.8.2",
-    "vitepress": "2.0.0-alpha.16"
+    "vitepress": "2.0.0-alpha.16",
+    "vitepress-plugin-tabs": "^0.8.0"
   },
   "packageManager": "pnpm@10.17.1"
 }

@@ -200,6 +200,7 @@ export const Scratcher = defineComponent({
         initScratcher();
         bindCanvas();
       },
+      { flush: 'post' },
     );
 
     onMounted(() => {
