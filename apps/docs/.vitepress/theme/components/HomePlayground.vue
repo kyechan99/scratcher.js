@@ -14,6 +14,8 @@ interface PlaygroundScratcherConfig extends CoreScratcherConfig {
   coverage: number;
   brushSize: number;
   cover: string;
+  completionThreshold?: number;
+  revealOnCompletion?: boolean;
 }
 
 const sharedConfigCode = ref(`const scratcherConfig = {
@@ -21,10 +23,13 @@ const sharedConfigCode = ref(`const scratcherConfig = {
   height: 200,
   coverage: 10,
   brushSize: 30,
-  cover: "#b9c2ce"
+  cover: "#b9c2ce",
+  completionThreshold: 0.2,
+  revealOnCompletion: true
 };`);
 
 const parseError = ref('');
+const isCompleted = ref(false);
 const snapshot = ref<ScratchSnapshot>({
   scratchedCells: 0,
   totalCells: 1,
@@ -36,6 +41,8 @@ const currentScratcherConfig = ref<PlaygroundScratcherConfig>({
   coverage: 10,
   brushSize: 30,
   cover: '#b9c2ce',
+  completionThreshold: 0.2,
+  revealOnCompletion: true
 });
 
 let scratcher: CoreScratcher | null = null;
@@ -197,12 +204,17 @@ function parseConfig(source: string): PlaygroundScratcherConfig {
       normalizeCoverColor(result.cover, safeText(result.coverTop, '#d6d9df')),
       safeText(result.coverTop, '#d6d9df'),
     ),
+    completionThreshold: safeNumber(result.completionThreshold, 0.7),
+    revealOnCompletion: result.revealOnCompletion === true,
   };
 }
 
 const previewCallbacks = computed<ScratchControllerCallbacks>(() => ({
   onProgress: (next: any) => {
     snapshot.value = next;
+  },
+  onComplete: () => {
+    isCompleted.value = true;
   },
 }));
 
@@ -215,6 +227,7 @@ function refreshFromEditor() {
   try {
     currentScratcherConfig.value = parseConfig(sharedConfigCode.value);
     parseError.value = '';
+    isCompleted.value = false;
   } catch (error) {
     parseError.value = error instanceof Error ? error.message : '코드 해석 중 오류가 발생했습니다.';
   }
@@ -236,6 +249,7 @@ function resetCanvas() {
   }
 
   snapshot.value = scratcher.reset();
+  isCompleted.value = false;
 }
 
 watch(configCode, () => {
@@ -280,11 +294,14 @@ onUnmounted(() => {
         <VueScratcher class="scratch-card" :width="currentScratcherConfig.width" :height="currentScratcherConfig.height"
           :coverage="currentScratcherConfig.coverage" :brush-size="currentScratcherConfig.brushSize"
           :cover="normalizeCoverColor(currentScratcherConfig.cover, '#d6d9df')" :callbacks="previewCallbacks"
-          canvas-class="scratch-canvas" :on-scratcher-ready="handleScratcherReady">
+          :completion-threshold="currentScratcherConfig.completionThreshold"
+          :reveal-on-completion="currentScratcherConfig.revealOnCompletion" canvas-class="scratch-canvas"
+          :on-scratcher-ready="handleScratcherReady">
           <div class="reward">🎁 Scratched!</div>
         </VueScratcher>
 
         <div class="preview-footer">
+          <p v-if="isCompleted" class="completion-status">✅ Completed!</p>
           <button type="button" class="reset-button" @click="resetCanvas">reset</button>
         </div>
       </section>
@@ -469,6 +486,26 @@ onUnmounted(() => {
 
 .reset-button:hover {
   background: #0f684d;
+}
+
+.completion-status {
+  margin: 0;
+  color: #2d9a66;
+  font-weight: 700;
+  font-size: 0.9rem;
+  animation: fadeInPulse 0.4s ease-out;
+}
+
+@keyframes fadeInPulse {
+  0% {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 @media (min-width: 960px) {

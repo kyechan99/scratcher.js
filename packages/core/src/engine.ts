@@ -46,6 +46,17 @@ export class ScratchEngine {
     };
   }
 
+  revealAll(): ScratchSnapshot {
+    const totalCells = this.grid.length;
+    for (let i = 0; i < totalCells; i += 1) {
+      if (this.grid[i] === 0) {
+        this.grid[i] = 1;
+        this.scratchedCells += 1;
+      }
+    }
+    return this.snapshot();
+  }
+
   private markCircle(x: number, y: number, radius: number): void {
     const minX = Math.max(0, Math.floor((x - radius) / this.cellSize));
     const maxX = Math.min(this.cols - 1, Math.floor((x + radius) / this.cellSize));

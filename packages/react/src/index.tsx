@@ -59,8 +59,16 @@ export function useScratchController(
         brushSize: options.brushSize,
         cover: options.cover,
         completionThreshold: options.completionThreshold,
+        revealOnCompletion: options.revealOnCompletion,
       }),
-    [options.height, options.width, options.coverage, options.cover, options.completionThreshold],
+    [
+      options.height,
+      options.width,
+      options.coverage,
+      options.cover,
+      options.completionThreshold,
+      options.revealOnCompletion,
+    ],
   );
   const engine = scratcher.engine;
   const [snapshot, setSnapshot] = useState<ScratchSnapshot>(engine.snapshot());
@@ -142,6 +150,7 @@ export function Scratcher({
   coverage,
   brushSize,
   completionThreshold,
+  revealOnCompletion,
   callbacks,
   cover,
   className,
@@ -161,8 +170,9 @@ export function Scratcher({
         brushSize,
         cover,
         completionThreshold,
+        revealOnCompletion,
       }),
-    [width, height, coverage, cover, completionThreshold],
+    [width, height, coverage, cover, completionThreshold, revealOnCompletion],
   );
   const callbacksRef = useRef<ScratchControllerCallbacks | undefined>(callbacks);
 

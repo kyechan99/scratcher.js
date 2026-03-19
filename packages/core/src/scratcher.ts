@@ -56,6 +56,7 @@ export class Scratcher {
       brushSize: options.brushSize,
       callbacks: options.callbacks,
       completionThreshold: options.completionThreshold,
+      revealOnCompletion: options.revealOnCompletion,
     };
 
     this.controller = new ScratchController(controllerOptions);
@@ -171,6 +172,23 @@ export class Scratcher {
     ctx.globalCompositeOperation = 'destination-out';
   }
 
+  private clearCover(canvas: ScratcherCanvasType): void {
+    const ctx = canvas.getContext?.('2d');
+    if (!ctx) {
+      return;
+    }
+
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.clearRect?.(0, 0, this.canvasWidth, this.canvasHeight);
+    ctx.globalCompositeOperation = 'destination-out';
+  }
+
+  private syncRevealIfCompleted(canvas: ScratcherCanvasType, wasCompleted: boolean): void {
+    if (!wasCompleted && this.controller.isCompleted && this.controller.shouldRevealOnCompletion) {
+      this.clearCover(canvas);
+    }
+  }
+
   private attachEventListener(
     canvas: ScratcherCanvasType,
     mapPoint: MapPointHandler,
@@ -181,7 +199,9 @@ export class Scratcher {
       canvas.setPointerCapture?.(event.pointerId);
       const point = mapPoint(event, canvas);
       renderAtPoint(point.x, point.y, this.controller.currentBrushSize, canvas);
+      const wasCompleted = this.controller.isCompleted;
       this.start(point);
+      this.syncRevealIfCompleted(canvas, wasCompleted);
     };
 
     const onPointerMove = (e: unknown) => {
@@ -192,7 +212,9 @@ export class Scratcher {
       const event = e as ScratcherPointerEventType;
       const point = mapPoint(event, canvas);
       renderAtPoint(point.x, point.y, this.controller.currentBrushSize, canvas);
+      const wasCompleted = this.controller.isCompleted;
       this.move(point);
+      this.syncRevealIfCompleted(canvas, wasCompleted);
     };
 
     const onPointerEnd = () => {

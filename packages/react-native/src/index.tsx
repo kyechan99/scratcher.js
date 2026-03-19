@@ -61,8 +61,15 @@ export function useNativeScratchController(
         coverage: options.coverage,
         brushSize: options.brushSize,
         completionThreshold: options.completionThreshold,
+        revealOnCompletion: options.revealOnCompletion,
       }),
-    [options.height, options.width, options.coverage, options.completionThreshold],
+    [
+      options.height,
+      options.width,
+      options.coverage,
+      options.completionThreshold,
+      options.revealOnCompletion,
+    ],
   );
   const engine = scratcher.engine;
   const [snapshot, setSnapshot] = useState<ScratchSnapshot>(engine.snapshot());

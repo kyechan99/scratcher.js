@@ -32,6 +32,7 @@ export interface ScratchControllerCallbacks {
 export interface ScratcherConfig extends ScratchEngineOptions {
   brushSize: number;
   completionThreshold?: number;
+  revealOnCompletion?: boolean;
   callbacks?: ScratchControllerCallbacks;
   cover?: string;
 }

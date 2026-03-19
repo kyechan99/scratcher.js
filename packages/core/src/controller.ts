@@ -6,6 +6,7 @@ export type ScratchControllerOptions = {
   brushSize: number;
   callbacks?: ScratchControllerCallbacks;
   completionThreshold?: number;
+  revealOnCompletion?: boolean;
 };
 
 export class ScratchController {
@@ -13,6 +14,7 @@ export class ScratchController {
   private brushSize: number;
   private callbacks: ScratchControllerCallbacks;
   private completionThreshold: number;
+  private revealOnCompletion: boolean;
   private drawing: boolean;
   private completed: boolean;
   private currentSnapshot: ScratchSnapshot;
@@ -21,7 +23,8 @@ export class ScratchController {
     this.engine = options.engine;
     this.brushSize = Math.max(1, options.brushSize);
     this.callbacks = options.callbacks ?? {};
-    this.completionThreshold = options.completionThreshold ?? 0.7;
+    this.completionThreshold = options.completionThreshold ?? 0.5;
+    this.revealOnCompletion = options.revealOnCompletion ?? false;
     this.drawing = false;
     this.completed = false;
     this.currentSnapshot = this.engine.snapshot();
@@ -33,6 +36,14 @@ export class ScratchController {
 
   get isDrawing(): boolean {
     return this.drawing;
+  }
+
+  get isCompleted(): boolean {
+    return this.completed;
+  }
+
+  get shouldRevealOnCompletion(): boolean {
+    return this.revealOnCompletion;
   }
 
   get currentBrushSize(): number {
@@ -94,9 +105,12 @@ export class ScratchController {
 
     if (!this.completed && snapshot.progress >= this.completionThreshold) {
       this.completed = true;
-      this.callbacks.onComplete?.(snapshot);
+      if (this.revealOnCompletion) {
+        this.currentSnapshot = this.engine.revealAll();
+      }
+      this.callbacks.onComplete?.(this.currentSnapshot);
     }
 
-    return snapshot;
+    return this.currentSnapshot;
   }
 }

@@ -70,6 +70,7 @@ export function useScratchController(
     brushSize: options.brushSize,
     cover: options.cover,
     completionThreshold: options.completionThreshold,
+    revealOnCompletion: options.revealOnCompletion,
   });
   const engine = scratcher.engine;
   const snapshot = ref<ScratchSnapshot>(engine.snapshot());
@@ -137,6 +138,7 @@ export const Scratcher = defineComponent({
     coverage: { type: Number, required: false },
     brushSize: { type: Number, required: true },
     completionThreshold: { type: Number, required: false },
+    revealOnCompletion: { type: Boolean, required: false },
     callbacks: {
       type: Object as PropType<ScratchControllerCallbacks | undefined>,
       required: false,
@@ -164,6 +166,7 @@ export const Scratcher = defineComponent({
         brushSize: props.brushSize,
         cover: props.cover,
         completionThreshold: props.completionThreshold,
+        revealOnCompletion: props.revealOnCompletion,
       });
       scratcherRef.value = scratcher;
       scratcher.setCallbacks(props.callbacks);
@@ -195,7 +198,14 @@ export const Scratcher = defineComponent({
     );
 
     watch(
-      () => [props.width, props.height, props.coverage, props.cover, props.completionThreshold],
+      () => [
+        props.width,
+        props.height,
+        props.coverage,
+        props.cover,
+        props.completionThreshold,
+        props.revealOnCompletion,
+      ],
       () => {
         initScratcher();
         bindCanvas();
