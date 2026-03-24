@@ -20,10 +20,17 @@ export type ScratchSnapshot = {
   progress: number;
 };
 
+export interface ScratchStore {
+  applyStroke(stroke: BrushStroke): ScratchSnapshot;
+  reset(): ScratchSnapshot;
+  snapshot(): ScratchSnapshot;
+  revealAll(): ScratchSnapshot;
+}
+
 export interface ScratchControllerCallbacks {
-  onStrokeStart?: (point: Point, snapshot: ScratchSnapshot) => void;
-  onStrokeMove?: (point: Point, snapshot: ScratchSnapshot) => void;
-  onStrokeEnd?: (snapshot: ScratchSnapshot) => void;
+  onScratchStart?: (point: Point, snapshot: ScratchSnapshot) => void;
+  onScratchMove?: (point: Point, snapshot: ScratchSnapshot) => void;
+  onScratchEnd?: (snapshot: ScratchSnapshot) => void;
   onReset?: (snapshot: ScratchSnapshot) => void;
   onProgress?: (snapshot: ScratchSnapshot) => void;
   onComplete?: (snapshot: ScratchSnapshot) => void;
@@ -48,7 +55,7 @@ export type ScratcherCanvasRectType = {
   top: number;
 };
 
-export type ScratcherCanvasContextType = {
+type ScratcherCanvasContextType = {
   beginPath: () => void;
   arc: (x: number, y: number, radius: number, startAngle: number, endAngle: number) => void;
   fill: () => void;
@@ -58,6 +65,7 @@ export type ScratcherCanvasContextType = {
   globalCompositeOperation?: string;
 };
 
+// HTMLCanvasElement
 export type ScratcherCanvasType = {
   addEventListener: (type: string, listener: (e: unknown) => void) => void;
   removeEventListener: (type: string, listener: (e: unknown) => void) => void;
@@ -66,9 +74,18 @@ export type ScratcherCanvasType = {
   getContext?: (contextId: '2d') => ScratcherCanvasContextType | null;
 };
 
+/**
+ * Optional overrides for canvas interaction and rendering behavior when a
+ * scratcher is bound to a canvas-like target.
+ */
 export type ScratcherCanvasBindingOptions = {
+  /** Converts pointer coordinates into local scratch-space coordinates. */
   mapPoint?: (e: ScratcherPointerEventType, canvas: ScratcherCanvasType) => Point;
+
+  /** Draws one scratch stamp at the given point and brush size. */
   renderAtPoint?: (x: number, y: number, brushSize: number, canvas: ScratcherCanvasType) => void;
+
+  /** Renders the initial cover layer over the scratchable area. */
   renderCover?: (
     canvas: ScratcherCanvasType,
     cover: string | undefined,

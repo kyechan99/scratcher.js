@@ -1,43 +1,49 @@
-import { ScratchController, ScratchControllerOptions } from './controller';
-import { ScratchEngine } from './engine';
+import { ScratchCanvasAdapter } from './canvas';
+import { createScratchStore } from './state';
 import {
   ScratcherCanvasType,
   Point,
+  ScratchStore,
   ScratchControllerCallbacks,
   ScratcherCanvasBindingOptions,
   ScratcherConfig,
-  ScratcherPointerEventType,
   ScratchSnapshot,
 } from './types';
 
-export type ScratcherOptions = ScratcherConfig;
+type ScratchRuntimeEventMap = {
+  scratchStart: { point: Point; snapshot: ScratchSnapshot };
+  scratchMove: { point: Point; snapshot: ScratchSnapshot };
+  scratchEnd: { snapshot: ScratchSnapshot };
+  reset: { snapshot: ScratchSnapshot };
+  progress: { snapshot: ScratchSnapshot };
+  complete: { snapshot: ScratchSnapshot };
+};
 
-type MapPointHandler = (e: ScratcherPointerEventType, canvas: ScratcherCanvasType) => Point;
+type ScratchRuntimeEventName = keyof ScratchRuntimeEventMap;
 
-type RenderAtPointHandler = (
-  x: number,
-  y: number,
-  brushSize: number,
-  canvas: ScratcherCanvasType,
-) => void;
+export const SCRATCH_POINTER = {
+  IDLE: 'idle',
+  DRAWING: 'drawing',
+} as const;
 
-type RenderCoverHandler = (
-  canvas: ScratcherCanvasType,
-  cover: string | undefined,
-  width: number,
-  height: number,
-) => void;
+export type ScratchPointerState = (typeof SCRATCH_POINTER)[keyof typeof SCRATCH_POINTER];
 
-interface ScratcherCanvasBindingState {
-  canvas: ScratcherCanvasType;
-  renderCover: RenderCoverHandler;
-  cleanup: () => void;
-}
+type ScratchPointSnapshotCallback = (point: Point, snapshot: ScratchSnapshot) => void;
+type ScratchSnapshotCallback = (snapshot: ScratchSnapshot) => void;
 
 export class Scratcher {
-  readonly engine: ScratchEngine;
-  readonly controller: ScratchController;
-  private canvasBinding: ScratcherCanvasBindingState | null;
+  readonly store: ScratchStore;
+  private brushSize: number;
+  private pointerState: ScratchPointerState;
+  private completed: boolean;
+  private currentSnapshot: ScratchSnapshot;
+  private completionThreshold: number;
+  private revealOnCompletion: boolean;
+  private readonly listeners: {
+    [K in ScratchRuntimeEventName]: Set<(payload: ScratchRuntimeEventMap[K]) => void>;
+  };
+  private callbackSubscriptions: Array<() => void>;
+  private canvasAdapter: ScratchCanvasAdapter | null;
   private readonly cover: string | undefined;
   private readonly canvasWidth: number;
   private readonly canvasHeight: number;
@@ -45,194 +51,263 @@ export class Scratcher {
   constructor(options: ScratcherConfig) {
     this.cover = options.cover;
 
-    this.engine = new ScratchEngine({
+    this.store = createScratchStore({
       width: options.width,
       height: options.height,
       coverage: options.coverage,
     });
 
-    const controllerOptions: ScratchControllerOptions = {
-      engine: this.engine,
-      brushSize: options.brushSize,
-      callbacks: options.callbacks,
-      completionThreshold: options.completionThreshold,
-      revealOnCompletion: options.revealOnCompletion,
+    this.brushSize = Math.max(1, options.brushSize);
+    this.pointerState = SCRATCH_POINTER.IDLE;
+    this.completed = false;
+    this.currentSnapshot = this.store.snapshot();
+    this.completionThreshold = Math.min(1, Math.max(0, options.completionThreshold ?? 0.5));
+    this.revealOnCompletion = options.revealOnCompletion ?? false;
+    this.listeners = {
+      scratchStart: new Set(),
+      scratchMove: new Set(),
+      scratchEnd: new Set(),
+      reset: new Set(),
+      progress: new Set(),
+      complete: new Set(),
     };
-
-    this.controller = new ScratchController(controllerOptions);
-    this.canvasBinding = null;
+    this.callbackSubscriptions = [];
+    this.canvasAdapter = null;
     this.canvasWidth = options.width;
     this.canvasHeight = options.height;
+
+    this.setCallbacks(options.callbacks);
   }
 
   get snapshot(): ScratchSnapshot {
-    return this.controller.snapshot;
+    return this.currentSnapshot;
   }
 
   get isDrawing(): boolean {
-    return this.controller.isDrawing;
+    return this.pointerState === SCRATCH_POINTER.DRAWING;
+  }
+
+  get isCompleted(): boolean {
+    return this.completed;
+  }
+
+  get shouldRevealOnCompletion(): boolean {
+    return this.revealOnCompletion;
+  }
+
+  get currentBrushSize(): number {
+    return this.brushSize;
   }
 
   start(point: Point): ScratchSnapshot {
-    return this.controller.start(point);
+    this.pointerState = SCRATCH_POINTER.DRAWING;
+    const snapshot = this.apply(point);
+    this.emit('scratchStart', { point, snapshot });
+    return snapshot;
   }
 
   move(point: Point): ScratchSnapshot {
-    return this.controller.move(point);
+    if (!this.isDrawing) {
+      return this.currentSnapshot;
+    }
+
+    const snapshot = this.apply(point);
+    this.emit('scratchMove', { point, snapshot });
+    return snapshot;
   }
 
   end(): ScratchSnapshot {
-    return this.controller.end();
+    if (!this.isDrawing) {
+      return this.currentSnapshot;
+    }
+
+    this.pointerState = SCRATCH_POINTER.IDLE;
+    this.emit('scratchEnd', { snapshot: this.currentSnapshot });
+    return this.currentSnapshot;
   }
 
   reset(): ScratchSnapshot {
-    if (this.canvasBinding) {
-      this.canvasBinding.renderCover(
-        this.canvasBinding.canvas,
-        this.cover,
-        this.canvasWidth,
-        this.canvasHeight,
-      );
-    }
-    return this.controller.reset();
+    this.canvasAdapter?.resetCover();
+    this.pointerState = SCRATCH_POINTER.IDLE;
+    this.completed = false;
+    this.currentSnapshot = this.store.reset();
+    this.emit('reset', { snapshot: this.currentSnapshot });
+    this.emit('progress', { snapshot: this.currentSnapshot });
+    return this.currentSnapshot;
   }
 
   setBrushSize(size: number): void {
-    this.controller.setBrushSize(size);
+    this.brushSize = Math.max(1, size);
   }
 
   setCallbacks(callbacks?: ScratchControllerCallbacks): void {
-    this.controller.setCallbacks(callbacks);
+    this.clearCallbackSubscriptions();
+
+    const nextCallbacks = callbacks ?? {};
+    const { onScratchStart, onScratchMove, onScratchEnd, onReset, onProgress, onComplete } =
+      nextCallbacks;
+
+    this.bindPointSnapshotCallback('scratchStart', onScratchStart);
+    this.bindPointSnapshotCallback('scratchMove', onScratchMove);
+    this.bindSnapshotCallback('scratchEnd', onScratchEnd);
+    this.bindSnapshotCallback('reset', onReset);
+    this.bindSnapshotCallback('progress', onProgress);
+    this.bindSnapshotCallback('complete', onComplete);
+  }
+
+  on<EventName extends ScratchRuntimeEventName>(
+    eventName: EventName,
+    listener: (payload: ScratchRuntimeEventMap[EventName]) => void,
+  ): () => void {
+    const eventListeners = this.listeners[eventName] as Set<
+      (payload: ScratchRuntimeEventMap[EventName]) => void
+    >;
+
+    eventListeners.add(listener);
+
+    return () => {
+      eventListeners.delete(listener);
+    };
   }
 
   bindCanvas(canvas: ScratcherCanvasType, options?: ScratcherCanvasBindingOptions): () => void {
     this.unbindCanvas();
-    const mapPoint = options?.mapPoint ?? this.defaultMapPoint;
-    const renderAtPoint = options?.renderAtPoint ?? this.defaultRenderAtPoint;
-    const renderCover = options?.renderCover ?? this.defaultRenderCover;
-
-    renderCover(canvas, this.cover, this.canvasWidth, this.canvasHeight);
-    const cleanup = this.attachEventListener(canvas, mapPoint, renderAtPoint);
-
-    this.canvasBinding = {
+    const adapter = new ScratchCanvasAdapter({
       canvas,
-      renderCover,
-      cleanup,
-    };
+      interaction: this,
+      cover: this.cover,
+      width: this.canvasWidth,
+      height: this.canvasHeight,
+      bindingOptions: options,
+    });
+    adapter.bind();
+    this.canvasAdapter = adapter;
 
-    return cleanup;
+    return () => {
+      adapter.unbind();
+      if (this.canvasAdapter === adapter) {
+        this.canvasAdapter = null;
+      }
+    };
   }
 
   unbindCanvas(): void {
-    this.canvasBinding?.cleanup();
-    this.canvasBinding = null;
+    this.canvasAdapter?.unbind();
+    this.canvasAdapter = null;
   }
 
-  private defaultMapPoint(event: ScratcherPointerEventType, target: ScratcherCanvasType): Point {
-    const rect = target.getBoundingClientRect();
-    return {
-      x: event.clientX - rect.left,
-      y: event.clientY - rect.top,
-    };
+  private clearCallbackSubscriptions(): void {
+    for (const unsubscribe of this.callbackSubscriptions) {
+      unsubscribe();
+    }
+    this.callbackSubscriptions = [];
   }
 
-  private defaultRenderAtPoint(
-    x: number,
-    y: number,
-    brushSize: number,
-    canvas: ScratcherCanvasType,
+  private addCallbackSubscription(unsubscribe: () => void): void {
+    this.callbackSubscriptions.push(unsubscribe);
+  }
+
+  private registerCallback<CallbackFn extends (...args: never[]) => void>(
+    callback: CallbackFn | undefined,
+    subscribe: (nextCallback: CallbackFn) => () => void,
   ): void {
-    const ctx = canvas.getContext?.('2d');
-    if (!ctx) {
+    if (!callback) {
       return;
     }
 
-    ctx.beginPath();
-    ctx.arc(x, y, brushSize / 2, 0, Math.PI * 2);
-    ctx.fill();
+    this.addCallbackSubscription(subscribe(callback));
   }
 
-  private defaultRenderCover(
-    canvas: ScratcherCanvasType,
-    cover: string | undefined,
-    width: number,
-    height: number,
+  private bindPointSnapshotCallback(
+    eventName: 'scratchStart' | 'scratchMove',
+    callback: ScratchPointSnapshotCallback | undefined,
   ): void {
-    const ctx = canvas.getContext?.('2d');
-    if (!ctx) {
-      return;
-    }
-
-    ctx.globalCompositeOperation = 'source-over';
-    ctx.clearRect?.(0, 0, width, height);
-    if (ctx.fillRect) {
-      ctx.fillStyle = cover ?? '#b9c2ce';
-      ctx.fillRect(0, 0, width, height);
-    }
-    ctx.globalCompositeOperation = 'destination-out';
+    this.registerCallback(callback, nextCallback =>
+      this.on(eventName, ({ point, snapshot }) => {
+        nextCallback(point, snapshot);
+      }),
+    );
   }
 
-  private clearCover(canvas: ScratcherCanvasType): void {
-    const ctx = canvas.getContext?.('2d');
-    if (!ctx) {
-      return;
-    }
-
-    ctx.globalCompositeOperation = 'source-over';
-    ctx.clearRect?.(0, 0, this.canvasWidth, this.canvasHeight);
-    ctx.globalCompositeOperation = 'destination-out';
+  private bindSnapshotCallback(
+    eventName: 'scratchEnd' | 'reset' | 'progress' | 'complete',
+    callback: ScratchSnapshotCallback | undefined,
+  ): void {
+    this.registerCallback(callback, nextCallback =>
+      this.on(eventName, ({ snapshot }) => {
+        nextCallback(snapshot);
+      }),
+    );
   }
 
-  private syncRevealIfCompleted(canvas: ScratcherCanvasType, wasCompleted: boolean): void {
-    if (!wasCompleted && this.controller.isCompleted && this.controller.shouldRevealOnCompletion) {
-      this.clearCover(canvas);
-    }
-  }
+  private apply(point: Point): ScratchSnapshot {
+    const snapshot = this.store.applyStroke({
+      size: this.brushSize,
+      points: [point],
+    });
 
-  private attachEventListener(
-    canvas: ScratcherCanvasType,
-    mapPoint: MapPointHandler,
-    renderAtPoint: RenderAtPointHandler,
-  ): () => void {
-    const onPointerDown = (e: unknown) => {
-      const event = e as ScratcherPointerEventType;
-      canvas.setPointerCapture?.(event.pointerId);
-      const point = mapPoint(event, canvas);
-      renderAtPoint(point.x, point.y, this.controller.currentBrushSize, canvas);
-      const wasCompleted = this.controller.isCompleted;
-      this.start(point);
-      this.syncRevealIfCompleted(canvas, wasCompleted);
-    };
+    this.currentSnapshot = snapshot;
+    this.emit('progress', { snapshot });
 
-    const onPointerMove = (e: unknown) => {
-      if (!this.isDrawing) {
-        return;
+    if (!this.completed && snapshot.progress >= this.completionThreshold) {
+      this.completed = true;
+      if (this.revealOnCompletion) {
+        this.currentSnapshot = this.store.revealAll();
       }
+      this.emit('complete', { snapshot: this.currentSnapshot });
+    }
 
-      const event = e as ScratcherPointerEventType;
-      const point = mapPoint(event, canvas);
-      renderAtPoint(point.x, point.y, this.controller.currentBrushSize, canvas);
-      const wasCompleted = this.controller.isCompleted;
-      this.move(point);
-      this.syncRevealIfCompleted(canvas, wasCompleted);
-    };
-
-    const onPointerEnd = () => {
-      this.end();
-    };
-
-    canvas.addEventListener('pointerdown', onPointerDown);
-    canvas.addEventListener('pointermove', onPointerMove);
-    canvas.addEventListener('pointerup', onPointerEnd);
-    canvas.addEventListener('pointerleave', onPointerEnd);
-    canvas.addEventListener('pointercancel', onPointerEnd);
-
-    return () => {
-      canvas.removeEventListener('pointerdown', onPointerDown);
-      canvas.removeEventListener('pointermove', onPointerMove);
-      canvas.removeEventListener('pointerup', onPointerEnd);
-      canvas.removeEventListener('pointerleave', onPointerEnd);
-      canvas.removeEventListener('pointercancel', onPointerEnd);
-    };
+    return this.currentSnapshot;
   }
+
+  private emit<EventName extends ScratchRuntimeEventName>(
+    eventName: EventName,
+    payload: ScratchRuntimeEventMap[EventName],
+  ): void {
+    const eventListeners = this.listeners[eventName] as Set<
+      (eventPayload: ScratchRuntimeEventMap[EventName]) => void
+    >;
+
+    for (const listener of eventListeners) {
+      listener(payload);
+    }
+  }
+}
+
+type CreateBoundScratcherOptions = ScratcherConfig & {
+  canvas: ScratcherCanvasType;
+  bindingOptions?: ScratcherCanvasBindingOptions;
+};
+
+/**
+ * @brief Create and bind a scratcher instance in one step.
+ *
+ * This helper is intended for consumers who want a simple setup without
+ * manually calling bindCanvas after constructing Scratcher.
+ *
+ * @param options Configuration for Scratcher plus canvas binding inputs.
+ * @param options.canvas Target canvas-like element used for pointer binding.
+ * @param options.bindingOptions Optional adapter overrides for mapping and rendering.
+ * @returns An object containing the created scratcher instance and its unbind function.
+ *
+ * @example
+ * const { scratcher, unbind } = createScratcher({
+ *   canvas,
+ *   width: 320,
+ *   height: 180,
+ *   brushSize: 24,
+ * });
+ */
+export function createScratcher(options: CreateBoundScratcherOptions): {
+  scratcher: Scratcher;
+  unbind: () => void;
+} {
+  const { canvas, bindingOptions, ...scratcherConfig } = options;
+  const scratcher = new Scratcher(scratcherConfig);
+  const unbind = scratcher.bindCanvas(canvas, bindingOptions);
+
+  return {
+    scratcher,
+    unbind,
+  };
 }

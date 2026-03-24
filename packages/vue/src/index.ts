@@ -1,134 +1,15 @@
+import { ScratchControllerCallbacks, Scratcher as CoreScratcher } from '@scratcher/core';
 import {
-  Point,
-  ScratcherConfig,
-  ScratchControllerCallbacks,
-  Scratcher as CoreScratcher,
-  ScratchEngine,
-  ScratchEngineOptions,
-  ScratchSnapshot,
-} from '@scratcher/core';
-import {
-  computed,
   defineComponent,
   h,
   onBeforeUnmount,
   onMounted,
   PropType,
-  Ref,
   ref,
   useAttrs,
   useSlots,
   watch,
 } from 'vue';
-
-export interface UseVueScratchEngineResult {
-  engine: ScratchEngine;
-  snapshot: Ref<ScratchSnapshot>;
-  progress: Ref<number>;
-  reset: () => void;
-}
-
-export function useScratchEngine(options: ScratchEngineOptions): UseVueScratchEngineResult {
-  const engine = new ScratchEngine(options);
-  const snapshot = ref<ScratchSnapshot>(engine.snapshot());
-  const progress = computed(() => snapshot.value.progress);
-
-  const reset = () => {
-    engine.reset();
-    snapshot.value = engine.snapshot();
-  };
-
-  return {
-    engine,
-    snapshot,
-    progress,
-    reset,
-  };
-}
-
-export interface UseVueScratchControllerOptions extends ScratcherConfig {}
-
-export interface UseVueScratchControllerResult {
-  scratcher: CoreScratcher;
-  engine: ScratchEngine;
-  snapshot: Ref<ScratchSnapshot>;
-  progress: Ref<number>;
-  start: (point: Point) => ScratchSnapshot;
-  move: (point: Point) => ScratchSnapshot;
-  end: () => ScratchSnapshot;
-  reset: () => ScratchSnapshot;
-  setBrushSize: (size: number) => void;
-}
-
-export function useScratchController(
-  options: UseVueScratchControllerOptions,
-): UseVueScratchControllerResult {
-  const scratcher = new CoreScratcher({
-    width: options.width,
-    height: options.height,
-    coverage: options.coverage,
-    brushSize: options.brushSize,
-    cover: options.cover,
-    completionThreshold: options.completionThreshold,
-    revealOnCompletion: options.revealOnCompletion,
-  });
-  const engine = scratcher.engine;
-  const snapshot = ref<ScratchSnapshot>(engine.snapshot());
-  const progress = computed(() => snapshot.value.progress);
-  const callbacks = options.callbacks;
-
-  scratcher.setCallbacks({
-    onStrokeStart: (point, next) => callbacks?.onStrokeStart?.(point, next),
-    onStrokeMove: (point, next) => callbacks?.onStrokeMove?.(point, next),
-    onStrokeEnd: next => callbacks?.onStrokeEnd?.(next),
-    onReset: next => callbacks?.onReset?.(next),
-    onProgress: next => {
-      snapshot.value = next;
-      callbacks?.onProgress?.(next);
-    },
-    onComplete: next => callbacks?.onComplete?.(next),
-  });
-
-  const start = (point: Point) => {
-    const next = scratcher.start(point);
-    snapshot.value = next;
-    return next;
-  };
-
-  const move = (point: Point) => {
-    const next = scratcher.move(point);
-    snapshot.value = next;
-    return next;
-  };
-
-  const end = () => {
-    const next = scratcher.end();
-    snapshot.value = next;
-    return next;
-  };
-
-  const reset = () => {
-    const next = scratcher.reset();
-    snapshot.value = next;
-    return next;
-  };
-
-  const setBrushSize = (size: number) => {
-    scratcher.setBrushSize(size);
-  };
-
-  return {
-    scratcher,
-    engine,
-    snapshot,
-    progress,
-    start,
-    move,
-    end,
-    reset,
-    setBrushSize,
-  };
-}
 
 export const Scratcher = defineComponent({
   name: 'Scratcher',
