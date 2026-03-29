@@ -52,7 +52,8 @@
   --vp-c-default-soft: rgba(37, 44, 56, 0.14);
 
   --primary: #7700ff;
-  --vp-c-brand-1: #212121;
+  /* --vp-c-brand-1: #212121; */
+  --vp-c-brand-1: #7700ff;
   --vp-c-brand-2: #757575;
   --vp-c-brand-3: #E0E0E0;
   --vp-c-brand-soft: rgba(112, 19, 149, 0.16);
@@ -71,6 +72,8 @@
   --vp-c-danger-2: var(--vp-c-red-2);
   --vp-c-danger-3: var(--vp-c-red-3);
   --vp-c-danger-soft: var(--vp-c-red-soft);
+
+  --vp-code-color: var(--vp-c-text-1);
 }
 
 /**
@@ -122,12 +125,22 @@
   --vp-custom-block-tip-text: var(--vp-c-text-1);
   --vp-custom-block-tip-bg: var(--vp-c-brand-soft);
   --vp-custom-block-tip-code-bg: var(--vp-c-brand-soft);
+  
+  --white: #eeeeee;
+  --black: #212121;
+  --week-gray: #b9b9b9;
+  --week-gray2: #d8d8d8;
+
+  /* font */
+  --vp-font-family-base: "Inter", -apple-system, BlinkMacSystemFont, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  /* --vp-font-family-mono: 'IBM Plex Mono', 'Consolas', monospace; */
 }
 
-:root {
-  --vp-font-family-base: "Inter", -apple-system, BlinkMacSystemFont, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"
-;
-  /* --vp-font-family-mono: 'IBM Plex Mono', 'Consolas', monospace; */
+html.dark {
+  --white: #212121;
+  --black: #eeeeee;
+  --week-gray: #444444;
+  --week-gray2: #444444;
 }
 
 .VPContent .container  {
@@ -147,23 +160,25 @@
     #f6f7f3; */
 }
 
-.primary-button {
-  border-color: var(--vp-button-brand-border);
-  color: var(--vp-button-brand-text);
-  background-color: var(--vp-button-brand-bg);
-
+.btn { 
   border-radius: 20px;
   padding: 0 20px;
   font-size: 14px;
   line-height: 38px;
 
   text-align: center;
-  white-space: nowrap;
-  border: 1px solid #0000;
+  white-space: nowrap; 
   font-weight: 600;
   transition: color .25s, border-color .25s, background-color .25s;
-  display: inline-block;
+  display: inline-block; 
+ 
+  color: var(--white);
+  background-color: var(--black);
 }
-.primary-button:hover {
+.btn.btn-primary { 
+  color: var(--vp-button-brand-text);
+  background-color: var(--vp-button-brand-bg);
+}
+.btn:hover {
   opacity: 0.8; 
 }

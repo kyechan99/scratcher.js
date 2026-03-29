@@ -4,6 +4,7 @@ import type { Theme } from 'vitepress';
 import DefaultTheme from 'vitepress/theme';
 import { enhanceAppWithTabs } from 'vitepress-plugin-tabs/client';
 import HomePlayground from './components/HomePlayground.vue';
+import LandingSection from './components/LandingSection.vue';
 import './style.css';
 
 export default {
@@ -16,5 +17,6 @@ export default {
   enhanceApp({ app }) {
     enhanceAppWithTabs(app);
     app.component('HomePlayground', HomePlayground);
+    app.component('LandingSection', LandingSection);
   },
 } satisfies Theme;

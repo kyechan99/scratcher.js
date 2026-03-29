@@ -116,7 +116,7 @@ onUnmounted(() => {
         </div>
 
         <div class="action-row">
-          <button type="button" class="primary-button" @click="resetCanvas">Reset</button>
+          <button type="button" class="btn" @click="resetCanvas">Reset</button>
         </div>
       </div>
 
@@ -132,14 +132,6 @@ onUnmounted(() => {
 
         <label class="field">
           <div class="field-head">
-            <span>Reveal threshold</span>
-            <strong>{{ sanitizedScratcherConfig.completionThreshold?.toFixed(2) }}</strong>
-          </div>
-          <input v-model.number="currentScratcherConfig.completionThreshold" type="range" min="0" max="1" step="0.01" />
-        </label>
-
-        <label class="field">
-          <div class="field-head">
             <span>Coverage</span>
             <strong>{{ sanitizedScratcherConfig.coverage }}</strong>
           </div>
@@ -149,19 +141,26 @@ onUnmounted(() => {
         <label class="color-field">
           <span>Cover color</span>
           <div class="color-input-wrap">
-            <input v-model="currentScratcherConfig.cover" type="color"
-              style="width: 32px; height: 32px; border-radius: 8px; border: 1px solid #cdd7e4; padding: 0; background: none;"
-              aria-label="Pick cover color" />
-            <!-- <input v-model="currentScratcherConfig.cover" type="text" placeholder="#b9c2ce or gradient(...)" -->
-            <!-- style="width: 110px; margin-left: 8px;" aria-label="Custom cover color or gradient" /> -->
-            <!-- <span class="cover-chip" :style="{ backgroundColor: sanitizedScratcherConfig.cover }" /> -->
+            <input v-model="currentScratcherConfig.cover" type="color" aria-label="Pick cover color" />
           </div>
         </label>
 
+        <hr />
+
+        <label class="field">
+          <div class="field-head">
+            <span>completionThreshold</span>
+            <strong>{{ sanitizedScratcherConfig.completionThreshold?.toFixed(2) }}</strong>
+          </div>
+          <input v-model.number="currentScratcherConfig.completionThreshold" type="range" min="0" max="1" step="0.01" />
+        </label>
+
         <label class="toggle-row">
-          <span>{{ sanitizedScratcherConfig.revealOnCompletion ? 'On' : 'Off' }}</span>
+          <span>revealOnCompletion {{ sanitizedScratcherConfig.revealOnCompletion ? 'On' : 'Off' }}</span>
           <input v-model="currentScratcherConfig.revealOnCompletion" type="checkbox" />
         </label>
+
+        <hr />
 
         <div class="progress-box">
           <div class="progress-head">
@@ -172,7 +171,7 @@ onUnmounted(() => {
             aria-valuemax="100">
             <div class="progress-fill" :style="{ width: `${progressPercent}%` }" />
           </div>
-          <p v-if="isCompleted" class="completion-status">Completed</p>
+          <p v-if="isCompleted" class="completion-status">Completed 🎉</p>
         </div>
       </aside>
     </div>
@@ -186,11 +185,10 @@ onUnmounted(() => {
   display: grid;
   align-items: center;
 
-
   /* background-image: -webkit-radial-gradient(#ddd 1px, transparent 0), -webkit-radial-gradient(#ddd 1px, transparent 0); */
-  background-image: -moz-radial-gradient(#ddd 1px, transparent 0), -moz-radial-gradient(#ddd 1px, transparent 0);
-  background-image: -o-radial-gradient(#ddd 1px, transparent 0), -o-radial-gradient(#ddd 1px, transparent 0);
-  background-image: radial-gradient(#ddd 1px, transparent 0), radial-gradient(#ddd 1px, transparent 0);
+  background-image: -moz-radial-gradient(var(--week-gray) 1px, transparent 0), -moz-radial-gradient(var(--week-gray) 1px, transparent 0);
+  background-image: -o-radial-gradient(var(--week-gray) 1px, transparent 0), -o-radial-gradient(var(--week-gray) 1px, transparent 0);
+  background-image: radial-gradient(var(--week-gray) 1px, transparent 0), radial-gradient(var(--week-gray) 1px, transparent 0);
   background-position: 0 0, 20px 20px;
   -webkit-background-size: 40px 40px;
   -moz-background-size: 40px 40px;
@@ -266,14 +264,21 @@ onUnmounted(() => {
 .config-card {
   border-radius: 1rem;
   padding: 1.25rem;
-  box-shadow: 0 1rem 2.5rem var(--vp-c-gray-soft);
+  box-shadow: 0 1rem 2.5rem 1rem var(--vp-c-gray-soft);
   background: var(--vp-c-bg);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.config-card hr {
+  border-top: 1px solid #e1e7ef;
+  margin: 0;
 }
 
 .field {
   display: grid;
   gap: 0.125rem;
-  margin-bottom: 0.75rem;
 }
 
 .field-head {
@@ -289,7 +294,7 @@ onUnmounted(() => {
 }
 
 .field-head strong {
-  font-size: 1rem;
+  font-size: 0.875rem;
 }
 
 .field input[type='range'] {
@@ -316,7 +321,7 @@ onUnmounted(() => {
   border-radius: 10px;
   background: #fff;
   color: #1c2b3f;
-  padding: 9px 10px;
+  padding: 0px;
   font-size: 0.9rem;
 
   -webkit-appearance: none;
@@ -353,9 +358,6 @@ onUnmounted(() => {
 }
 
 .toggle-row {
-  margin-top: 10px;
-  border-top: 1px solid #e1e6ee;
-  padding-top: 10px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -398,11 +400,7 @@ onUnmounted(() => {
   transform: translateX(18px);
 }
 
-.progress-box {
-  margin-top: 12px;
-  border-top: 1px solid #e1e7ef;
-  padding-top: 10px;
-}
+.progress-box {}
 
 .progress-head {
   display: flex;
@@ -423,7 +421,7 @@ onUnmounted(() => {
 .progress-fill {
   height: 100%;
   border-radius: 999px;
-  background: linear-gradient(90deg, var(--vp-c-brand-1), var(--vp-c-brand-2));
+  background: linear-gradient(90deg, var(--vp-c-brand-1), var(--vp-c-brand-1));
   transition: width 0.2s ease;
 }
 
@@ -432,6 +430,10 @@ onUnmounted(() => {
   color: var(--vp-c-brand-1);
   font-size: 0.78rem;
   font-weight: 700;
+}
+
+.landing-header__title {
+  font-size: 40px;
 }
 
 @media (max-width: 1120px) {
@@ -449,7 +451,6 @@ onUnmounted(() => {
   .preview-stage {
     min-height: 250px;
   }
-
 
   .compact-grid {
     grid-template-columns: 1fr;

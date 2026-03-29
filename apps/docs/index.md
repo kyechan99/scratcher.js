@@ -5,6 +5,8 @@ title: docs
 
 <HomePlayground />
 
+<LandingSection />
+
 <section class="centered">
 
 :::tabs
