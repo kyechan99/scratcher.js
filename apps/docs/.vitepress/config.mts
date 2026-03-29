@@ -6,6 +6,17 @@ import { tabsMarkdownPlugin } from 'vitepress-plugin-tabs';
 export default defineConfig({
   title: 'scratcher.js',
   description: 'scratcher.js docs',
+  head: [
+    ['link', { rel: 'icon', href: '/public/favicon.ico' }],
+    ['link', { rel: 'preconnect', href: 'https://fonts.googleapis.com' }],
+    [
+      'link',
+      {
+        href: 'https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"',
+        rel: 'stylesheet',
+      },
+    ],
+  ],
   vite: {
     resolve: {
       alias: {
@@ -30,6 +41,7 @@ export default defineConfig({
     },
   },
   themeConfig: {
+    logo: '/public/logo.png',
     // https://vitepress.dev/reference/default-theme-config
     nav: [
       { text: 'Home', link: '/' },

@@ -5,7 +5,7 @@ title: docs
 
 <HomePlayground />
 
-<section>
+<section class="centered">
 
 :::tabs
 == Ts
