@@ -13,16 +13,26 @@
     "format:check": "prettier --check .",
     "docs:build": "vitepress build apps\\docs",
     "docs:preview": "vitepress preview apps\\docs",
-    "test": "vitest run --coverage"
+    "test": "vitest run --coverage",
+    "prepare": "husky"
   },
   "devDependencies": {
+    "@commitlint/cli": "^20.5.0",
+    "@commitlint/config-conventional": "^20.5.0",
     "@vitest/coverage-v8": "^4.1.2",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.4.0",
     "prettier": "^3.6.2",
     "turbo": "^2.0.0",
     "typescript": "^5.8.2",
     "vitepress": "2.0.0-alpha.16",
     "vitepress-plugin-tabs": "^0.8.0",
     "vitest": "^4.1.2"
+  },
+  "lint-staged": {
+    "*.{js,ts,tsx,vue,json}": [
+      "prettier --write"
+    ]
   },
   "packageManager": "pnpm@10.17.1"
 }
