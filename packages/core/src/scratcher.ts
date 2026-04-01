@@ -79,26 +79,46 @@ export class Scratcher {
     this.setCallbacks(options.callbacks);
   }
 
+  /**
+   * Returns the current scratch snapshot state.
+   */
   get snapshot(): ScratchSnapshot {
     return this.currentSnapshot;
   }
 
+  /**
+   * Returns whether the scratcher is currently drawing (scratching).
+   */
   get isDrawing(): boolean {
     return this.pointerState === SCRATCH_POINTER.DRAWING;
   }
 
+  /**
+   * Returns whether the scratcher is completed.
+   */
   get isCompleted(): boolean {
     return this.completed;
   }
 
+  /**
+   * Returns whether the cover should be fully revealed on completion.
+   */
   get shouldRevealOnCompletion(): boolean {
     return this.revealOnCompletion;
   }
 
+  /**
+   * Returns the current brush size.
+   */
   get currentBrushSize(): number {
     return this.brushSize;
   }
 
+  /**
+   * Starts the scratch operation.
+   * @param point The starting coordinate
+   * @returns The current snapshot
+   */
   start(point: Point): ScratchSnapshot {
     this.pointerState = SCRATCH_POINTER.DRAWING;
     const snapshot = this.apply(point);
@@ -106,6 +126,11 @@ export class Scratcher {
     return snapshot;
   }
 
+  /**
+   * Handles movement during the scratch operation.
+   * @param point The move coordinate
+   * @returns The current snapshot
+   */
   move(point: Point): ScratchSnapshot {
     if (!this.isDrawing) {
       return this.currentSnapshot;
@@ -116,6 +141,10 @@ export class Scratcher {
     return snapshot;
   }
 
+  /**
+   * Ends the scratch operation.
+   * @returns The current snapshot
+   */
   end(): ScratchSnapshot {
     if (!this.isDrawing) {
       return this.currentSnapshot;
@@ -126,6 +155,10 @@ export class Scratcher {
     return this.currentSnapshot;
   }
 
+  /**
+   * Resets the scratch state and redraws the cover.
+   * @returns The reset snapshot
+   */
   reset(): ScratchSnapshot {
     this.canvasAdapter?.resetCover();
     this.pointerState = SCRATCH_POINTER.IDLE;
@@ -136,10 +169,18 @@ export class Scratcher {
     return this.currentSnapshot;
   }
 
+  /**
+   * Sets the brush size.
+   * @param size The brush size (minimum 1)
+   */
   setBrushSize(size: number): void {
     this.brushSize = Math.max(1, size);
   }
 
+  /**
+   * Sets the scratch event callbacks.
+   * @param callbacks Callback object
+   */
   setCallbacks(callbacks?: ScratchControllerCallbacks): void {
     this.clearCallbackSubscriptions();
 
@@ -155,6 +196,12 @@ export class Scratcher {
     this.bindSnapshotCallback('complete', onComplete);
   }
 
+  /**
+   * Subscribes to scratch events.
+   * @param eventName Event name
+   * @param listener Event listener
+   * @returns Unsubscribe function
+   */
   on<EventName extends ScratchRuntimeEventName>(
     eventName: EventName,
     listener: (payload: ScratchRuntimeEventMap[EventName]) => void,
@@ -170,6 +217,12 @@ export class Scratcher {
     };
   }
 
+  /**
+   * Binds the scratcher to a canvas element.
+   * @param canvas Canvas element
+   * @param options Binding options
+   * @returns Unbind function
+   */
   bindCanvas(canvas: ScratcherCanvasType, options?: ScratcherCanvasBindingOptions): () => void {
     this.unbindCanvas();
     const adapter = new ScratchCanvasAdapter({
@@ -191,6 +244,9 @@ export class Scratcher {
     };
   }
 
+  /**
+   * Unbinds the canvas from the scratcher.
+   */
   unbindCanvas(): void {
     this.canvasAdapter?.unbind();
     this.canvasAdapter = null;
