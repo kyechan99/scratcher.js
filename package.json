@@ -12,14 +12,17 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "docs:build": "vitepress build apps\\docs",
-    "docs:preview": "vitepress preview apps\\docs"
+    "docs:preview": "vitepress preview apps\\docs",
+    "test": "vitest run --coverage"
   },
   "devDependencies": {
+    "@vitest/coverage-v8": "^4.1.2",
     "prettier": "^3.6.2",
     "turbo": "^2.0.0",
     "typescript": "^5.8.2",
     "vitepress": "2.0.0-alpha.16",
-    "vitepress-plugin-tabs": "^0.8.0"
+    "vitepress-plugin-tabs": "^0.8.0",
+    "vitest": "^4.1.2"
   },
   "packageManager": "pnpm@10.17.1"
 }

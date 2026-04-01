@@ -79,6 +79,7 @@ const previewCallbacks = computed<ScratchControllerCallbacks>(() => ({
 function handleScratcherReady(nextScratcher: CoreScratcher) {
   scratcher = nextScratcher;
   snapshot.value = nextScratcher.snapshot;
+  isCompleted.value = false;
 }
 
 function resetCanvas() {
@@ -171,7 +172,7 @@ onUnmounted(() => {
             aria-valuemax="100">
             <div class="progress-fill" :style="{ width: `${progressPercent}%` }" />
           </div>
-          <p v-if="isCompleted" class="completion-status">Completed 🎉</p>
+          <p class="completion-status" :class="{ visible: isCompleted }">Completed 🎉</p>
         </div>
       </aside>
     </div>
@@ -181,7 +182,7 @@ onUnmounted(() => {
 <style scoped>
 .home-shell {
   padding: 12px 0 28px;
-  min-height: 50vh;
+  min-height: 60vh;
   display: grid;
   align-items: center;
 
@@ -430,6 +431,15 @@ onUnmounted(() => {
   color: var(--vp-c-brand-1);
   font-size: 0.78rem;
   font-weight: 700;
+  min-height: 1.2em;
+  visibility: hidden;
+  transition: visibility 0s, opacity 0.2s;
+  opacity: 0;
+}
+
+.completion-status.visible {
+  visibility: visible;
+  opacity: 1;
 }
 
 .landing-header__title {
