@@ -161,10 +161,9 @@ html.dark {
 }
 
 .btn { 
-  border-radius: 20px;
-  padding: 0 20px;
-  font-size: 14px;
-  line-height: 38px;
+  border-radius: 1.25rem;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem; 
 
   text-align: center;
   white-space: nowrap; 
@@ -181,4 +180,21 @@ html.dark {
 }
 .btn:hover {
   opacity: 0.8; 
+}
+.btn-sm {
+  padding: 0.25rem 0.75rem;
+  font-size: 0.75rem; 
+}
+
+.playground-bg { 
+  /* background-image: -webkit-radial-gradient(#ddd 1px, transparent 0), -webkit-radial-gradient(#ddd 1px, transparent 0); */
+  background-image: -moz-radial-gradient(var(--week-gray) 1px, transparent 0), -moz-radial-gradient(var(--week-gray) 1px, transparent 0);
+  background-image: -o-radial-gradient(var(--week-gray) 1px, transparent 0), -o-radial-gradient(var(--week-gray) 1px, transparent 0);
+  background-image: radial-gradient(var(--week-gray) 1px, transparent 0), radial-gradient(var(--week-gray) 1px, transparent 0);
+  background-position: 0 0, 20px 20px;
+  -webkit-background-size: 40px 40px;
+  -moz-background-size: 40px 40px;
+  -o-background-size: 40px 40px;
+  background-size: 40px 40px;
+  word-break: keep-all;
 }

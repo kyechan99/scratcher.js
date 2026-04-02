@@ -5,7 +5,6 @@ import {
   Point,
   ScratchStore,
   ScratchControllerCallbacks,
-  ScratcherCanvasBindingOptions,
   ScratcherConfig,
   ScratchSnapshot,
 } from './types';
@@ -47,6 +46,9 @@ export class Scratcher {
   private readonly cover: string | undefined;
   private readonly canvasWidth: number;
   private readonly canvasHeight: number;
+  private readonly mapPoint?: (e: any, canvas: any) => any;
+  private readonly renderAtPoint?: (x: number, y: number, brushSize: number, canvas: any) => void;
+  private readonly renderCover?: (canvas: any, width: number, height: number, cover: any) => void;
 
   constructor(options: ScratcherConfig) {
     this.cover = options.cover;
@@ -63,6 +65,9 @@ export class Scratcher {
     this.currentSnapshot = this.store.snapshot();
     this.completionThreshold = Math.min(1, Math.max(0, options.completionThreshold ?? 0.5));
     this.revealOnCompletion = options.revealOnCompletion ?? false;
+    this.mapPoint = options.mapPoint;
+    this.renderAtPoint = options.renderAtPoint;
+    this.renderCover = options.renderCover;
     this.listeners = {
       scratchStart: new Set(),
       scratchMove: new Set(),
@@ -220,10 +225,9 @@ export class Scratcher {
   /**
    * Binds the scratcher to a canvas element.
    * @param canvas Canvas element
-   * @param options Binding options
    * @returns Unbind function
    */
-  bindCanvas(canvas: ScratcherCanvasType, options?: ScratcherCanvasBindingOptions): () => void {
+  bindCanvas(canvas: ScratcherCanvasType): () => void {
     this.unbindCanvas();
     const adapter = new ScratchCanvasAdapter({
       canvas,
@@ -231,7 +235,9 @@ export class Scratcher {
       cover: this.cover,
       width: this.canvasWidth,
       height: this.canvasHeight,
-      bindingOptions: options,
+      mapPoint: this.mapPoint,
+      renderAtPoint: this.renderAtPoint,
+      renderCover: this.renderCover,
     });
     adapter.bind();
     this.canvasAdapter = adapter;
@@ -332,7 +338,6 @@ export class Scratcher {
 
 type CreateBoundScratcherOptions = ScratcherConfig & {
   canvas: ScratcherCanvasType;
-  bindingOptions?: ScratcherCanvasBindingOptions;
 };
 
 /**
@@ -358,9 +363,9 @@ export function createScratcher(options: CreateBoundScratcherOptions): {
   scratcher: Scratcher;
   unbind: () => void;
 } {
-  const { canvas, bindingOptions, ...scratcherConfig } = options;
+  const { canvas, ...scratcherConfig } = options;
   const scratcher = new Scratcher(scratcherConfig);
-  const unbind = scratcher.bindCanvas(canvas, bindingOptions);
+  const unbind = scratcher.bindCanvas(canvas);
 
   return {
     scratcher,

@@ -1,10 +1,4 @@
-import {
-  Point,
-  ScratcherCanvasBindingOptions,
-  ScratcherCanvasType,
-  ScratcherPointerEventType,
-  ScratchSnapshot,
-} from './types';
+import { Point, ScratcherCanvasType, ScratcherPointerEventType, ScratchSnapshot } from './types';
 
 export interface ScratchInteractionPort {
   readonly isDrawing: boolean;
@@ -16,29 +10,20 @@ export interface ScratchInteractionPort {
   end(): ScratchSnapshot;
 }
 
-type MapPointHandler = (e: ScratcherPointerEventType, canvas: ScratcherCanvasType) => Point;
-
-type RenderAtPointHandler = (
-  x: number,
-  y: number,
-  brushSize: number,
-  canvas: ScratcherCanvasType,
-) => void;
-
-type RenderCoverHandler = (
-  canvas: ScratcherCanvasType,
-  cover: string | undefined,
-  width: number,
-  height: number,
-) => void;
-
 export type ScratchCanvasAdapterOptions = {
   canvas: ScratcherCanvasType;
   interaction: ScratchInteractionPort;
   cover?: string;
   width: number;
   height: number;
-  bindingOptions?: ScratcherCanvasBindingOptions;
+  mapPoint?: (e: ScratcherPointerEventType, canvas: ScratcherCanvasType) => Point;
+  renderAtPoint?: (x: number, y: number, brushSize: number, canvas: ScratcherCanvasType) => void;
+  renderCover?: (
+    canvas: ScratcherCanvasType,
+    width: number,
+    height: number,
+    cover: string | undefined,
+  ) => void;
 };
 
 export class ScratchCanvasAdapter {
@@ -47,9 +32,19 @@ export class ScratchCanvasAdapter {
   private readonly cover: string | undefined;
   private readonly width: number;
   private readonly height: number;
-  private readonly mapPoint: MapPointHandler;
-  private readonly renderAtPoint: RenderAtPointHandler;
-  private readonly renderCover: RenderCoverHandler;
+  private readonly mapPoint: (e: ScratcherPointerEventType, canvas: ScratcherCanvasType) => Point;
+  private readonly renderAtPoint: (
+    x: number,
+    y: number,
+    brushSize: number,
+    canvas: ScratcherCanvasType,
+  ) => void;
+  private readonly _renderCover: (
+    canvas: ScratcherCanvasType,
+    width: number,
+    height: number,
+    cover: string | undefined,
+  ) => void;
   private cleanup: (() => void) | null;
 
   constructor(options: ScratchCanvasAdapterOptions) {
@@ -58,15 +53,15 @@ export class ScratchCanvasAdapter {
     this.cover = options.cover;
     this.width = options.width;
     this.height = options.height;
-    this.mapPoint = options.bindingOptions?.mapPoint ?? this.defaultMapPoint;
-    this.renderAtPoint = options.bindingOptions?.renderAtPoint ?? this.defaultRenderAtPoint;
-    this.renderCover = options.bindingOptions?.renderCover ?? this.defaultRenderCover;
+    this.mapPoint = options.mapPoint ?? this.defaultMapPoint;
+    this.renderAtPoint = options.renderAtPoint ?? this.defaultRenderAtPoint;
+    this._renderCover = options.renderCover ?? this.defaultRenderCover;
     this.cleanup = null;
   }
 
   bind(): void {
     this.unbind();
-    this.renderCover(this.canvas, this.cover, this.width, this.height);
+    this.renderCover(this.canvas, this.width, this.height, this.cover);
 
     const onPointerDown = (e: unknown) => {
       const event = e as ScratcherPointerEventType;
@@ -111,7 +106,7 @@ export class ScratchCanvasAdapter {
   }
 
   resetCover(): void {
-    this.renderCover(this.canvas, this.cover, this.width, this.height);
+    this.renderCover(this.canvas, this.width, this.height, this.cover);
   }
 
   unbind(): void {
@@ -166,21 +161,30 @@ export class ScratchCanvasAdapter {
 
   private defaultRenderCover(
     canvas: ScratcherCanvasType,
-    cover: string | undefined,
     width: number,
     height: number,
+    cover: string | undefined,
   ): void {
     const ctx = canvas.getContext?.('2d');
-    if (!ctx) {
-      return;
-    }
-
-    ctx.globalCompositeOperation = 'source-over';
+    if (!ctx) return;
     ctx.clearRect?.(0, 0, width, height);
     if (ctx.fillRect) {
       ctx.fillStyle = cover ?? '#b9c2ce';
       ctx.fillRect(0, 0, width, height);
     }
+  }
+
+  private renderCover(
+    canvas: ScratcherCanvasType,
+    width: number,
+    height: number,
+    cover: string | undefined,
+  ): void {
+    const ctx = canvas.getContext?.('2d');
+    if (!ctx) return;
+
+    ctx.globalCompositeOperation = 'source-over';
+    this._renderCover(canvas, width, height, cover); // call custom-renderCover or default-renderCover
     ctx.globalCompositeOperation = 'destination-out';
   }
 }

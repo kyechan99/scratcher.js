@@ -5,6 +5,7 @@ import DefaultTheme from 'vitepress/theme';
 import { enhanceAppWithTabs } from 'vitepress-plugin-tabs/client';
 import HomePlayground from './components/HomePlayground.vue';
 import LandingSection from './components/LandingSection.vue';
+import CustomCoverPlayground from './components/examples/CustomCoverPlayground.vue';
 import './style.css';
 
 export default {
@@ -18,5 +19,6 @@ export default {
     enhanceAppWithTabs(app);
     app.component('HomePlayground', HomePlayground);
     app.component('LandingSection', LandingSection);
+    app.component('CustomCoverPlayground', CustomCoverPlayground);
   },
 } satisfies Theme;

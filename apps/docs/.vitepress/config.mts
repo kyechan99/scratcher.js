@@ -45,18 +45,31 @@ export default defineConfig({
     // https://vitepress.dev/reference/default-theme-config
     nav: [
       { text: 'Home', link: '/' },
-      { text: 'Guide', link: '/markdown-examples' },
+      { text: 'Docs', link: '/docs/overview' },
     ],
 
     sidebar: [
       {
-        text: 'Examples',
+        text: 'Docs',
         items: [
-          { text: 'Markdown Examples', link: '/markdown-examples' },
-          { text: 'Runtime API Examples', link: '/api-examples' },
+          { text: 'Overview', link: '/docs/overview' },
+          { text: 'Getting Started', link: '/docs/getting-started' },
+          { text: 'Usage Examples', link: '/docs/usage-examples' },
+          { text: 'Configuration', link: '/docs/configuration' },
+          { text: 'API Reference', link: '/docs/api-reference' },
+          { text: 'FAQ', link: '/docs/faq' },
         ],
       },
+      {
+        text: 'Examples',
+        items: [{ text: 'Custom Cover', link: '/examples/custom-cover' }],
+      },
     ],
+
+    outline: {
+      level: [2, 3],
+      label: 'On this page',
+    },
 
     socialLinks: [{ icon: 'github', link: 'https://github.com/kyechan99/scratcher.js' }],
   },

@@ -78,6 +78,17 @@ export interface ScratcherConfig extends ScratchEngineOptions {
   callbacks?: ScratchControllerCallbacks;
   /** Cover color or image. */
   cover?: string;
+  /** Custom pointer mapping function. */
+  mapPoint?: (e: ScratcherPointerEventType, canvas: ScratcherCanvasType) => Point;
+  /** Custom render at point function. */
+  renderAtPoint?: (x: number, y: number, brushSize: number, canvas: ScratcherCanvasType) => void;
+  /** Custom render cover function. */
+  renderCover?: (
+    canvas: ScratcherCanvasType,
+    width: number,
+    height: number,
+    cover: string | undefined,
+  ) => void;
 }
 
 /**
@@ -117,24 +128,4 @@ export type ScratcherCanvasType = {
   getBoundingClientRect: () => ScratcherCanvasRectType;
   setPointerCapture?: (pointerId: number) => void;
   getContext?: (contextId: '2d') => ScratcherCanvasContextType | null;
-};
-
-/**
- * Optional overrides for canvas interaction and rendering behavior when a
- * scratcher is bound to a canvas-like target.
- */
-export type ScratcherCanvasBindingOptions = {
-  /** Converts pointer coordinates into local scratch-space coordinates. */
-  mapPoint?: (e: ScratcherPointerEventType, canvas: ScratcherCanvasType) => Point;
-
-  /** Draws one scratch stamp at the given point and brush size. */
-  renderAtPoint?: (x: number, y: number, brushSize: number, canvas: ScratcherCanvasType) => void;
-
-  /** Renders the initial cover layer over the scratchable area. */
-  renderCover?: (
-    canvas: ScratcherCanvasType,
-    cover: string | undefined,
-    width: number,
-    height: number,
-  ) => void;
 };

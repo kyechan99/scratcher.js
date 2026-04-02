@@ -141,10 +141,10 @@ describe('Scratcher User Input Simulation', () => {
       interaction: scratcher,
       width: 100,
       height: 100,
-      bindingOptions: { renderCover },
+      renderCover,
       cover: 'red',
     }).bind();
-    expect(renderCover).toHaveBeenCalledWith(canvas, 'red', 100, 100);
+    expect(renderCover).toHaveBeenCalledWith(canvas, 100, 100, 'red');
   });
 
   it('should clear cover when revealOnCompletion is true and completed', () => {
@@ -203,7 +203,7 @@ describe('Scratcher User Input Simulation', () => {
       interaction: scratcher,
       width: 100,
       height: 100,
-      bindingOptions: { renderCover },
+      renderCover,
     });
     adapter.resetCover();
     expect(renderCover).toHaveBeenCalled();
@@ -243,10 +243,8 @@ describe('Scratcher User Input Simulation', () => {
       interaction: scratcher,
       width: 100,
       height: 100,
-      bindingOptions: {
-        renderAtPoint,
-        renderCover,
-      },
+      renderAtPoint,
+      renderCover,
     });
     adapter.bind();
 

@@ -91,7 +91,6 @@ function resetCanvas() {
   isCompleted.value = false;
 }
 
-
 onUnmounted(() => {
   if (previewTimer !== null) {
     window.clearTimeout(previewTimer);
@@ -102,16 +101,23 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <section class="home-shell fulled">
+  <section class="home-shell fulled playground-bg">
     <div class="hero-grid">
       <div class="preview-zone">
         <div class="preview-stage">
-          <VueScratcher class="scratch-card" :width="sanitizedScratcherConfig.width"
-            :height="sanitizedScratcherConfig.height" :coverage="sanitizedScratcherConfig.coverage"
-            :brush-size="sanitizedScratcherConfig.brushSize" :cover="sanitizedScratcherConfig.cover"
-            :callbacks="previewCallbacks" :completion-threshold="sanitizedScratcherConfig.completionThreshold"
-            :reveal-on-completion="sanitizedScratcherConfig.revealOnCompletion" canvas-class="scratch-canvas"
-            :on-scratcher-ready="handleScratcherReady">
+          <VueScratcher
+            class="scratch-card"
+            :width="sanitizedScratcherConfig.width"
+            :height="sanitizedScratcherConfig.height"
+            :coverage="sanitizedScratcherConfig.coverage"
+            :brush-size="sanitizedScratcherConfig.brushSize"
+            :cover="sanitizedScratcherConfig.cover"
+            :callbacks="previewCallbacks"
+            :completion-threshold="sanitizedScratcherConfig.completionThreshold"
+            :reveal-on-completion="sanitizedScratcherConfig.revealOnCompletion"
+            canvas-class="scratch-canvas"
+            :on-scratcher-ready="handleScratcherReady"
+          >
             <div class="reward">You found it!</div>
           </VueScratcher>
         </div>
@@ -122,13 +128,18 @@ onUnmounted(() => {
       </div>
 
       <aside class="config-card">
-
         <label class="field">
           <div class="field-head">
             <span>Brush size</span>
             <strong>{{ sanitizedScratcherConfig.brushSize }}</strong>
           </div>
-          <input v-model.number="currentScratcherConfig.brushSize" type="range" min="8" max="80" step="1" />
+          <input
+            v-model.number="currentScratcherConfig.brushSize"
+            type="range"
+            min="8"
+            max="80"
+            step="1"
+          />
         </label>
 
         <label class="field">
@@ -136,13 +147,23 @@ onUnmounted(() => {
             <span>Coverage</span>
             <strong>{{ sanitizedScratcherConfig.coverage }}</strong>
           </div>
-          <input v-model.number="currentScratcherConfig.coverage" type="range" min="4" max="24" step="1" />
+          <input
+            v-model.number="currentScratcherConfig.coverage"
+            type="range"
+            min="4"
+            max="24"
+            step="1"
+          />
         </label>
 
         <label class="color-field">
           <span>Cover color</span>
           <div class="color-input-wrap">
-            <input v-model="currentScratcherConfig.cover" type="color" aria-label="Pick cover color" />
+            <input
+              v-model="currentScratcherConfig.cover"
+              type="color"
+              aria-label="Pick cover color"
+            />
           </div>
         </label>
 
@@ -153,11 +174,20 @@ onUnmounted(() => {
             <span>completionThreshold</span>
             <strong>{{ sanitizedScratcherConfig.completionThreshold?.toFixed(2) }}</strong>
           </div>
-          <input v-model.number="currentScratcherConfig.completionThreshold" type="range" min="0" max="1" step="0.01" />
+          <input
+            v-model.number="currentScratcherConfig.completionThreshold"
+            type="range"
+            min="0"
+            max="1"
+            step="0.01"
+          />
         </label>
 
         <label class="toggle-row">
-          <span>revealOnCompletion {{ sanitizedScratcherConfig.revealOnCompletion ? 'On' : 'Off' }}</span>
+          <span
+            >revealOnCompletion
+            {{ sanitizedScratcherConfig.revealOnCompletion ? 'On' : 'Off' }}</span
+          >
           <input v-model="currentScratcherConfig.revealOnCompletion" type="checkbox" />
         </label>
 
@@ -168,8 +198,13 @@ onUnmounted(() => {
             <span>Progress</span>
             <strong>{{ progressPercent }}%</strong>
           </div>
-          <div class="progress-track" role="progressbar" :aria-valuenow="Number(progressPercent)" aria-valuemin="0"
-            aria-valuemax="100">
+          <div
+            class="progress-track"
+            role="progressbar"
+            :aria-valuenow="Number(progressPercent)"
+            aria-valuemin="0"
+            aria-valuemax="100"
+          >
             <div class="progress-fill" :style="{ width: `${progressPercent}%` }" />
           </div>
           <p class="completion-status" :class="{ visible: isCompleted }">Completed 🎉</p>
@@ -185,17 +220,6 @@ onUnmounted(() => {
   min-height: 60vh;
   display: grid;
   align-items: center;
-
-  /* background-image: -webkit-radial-gradient(#ddd 1px, transparent 0), -webkit-radial-gradient(#ddd 1px, transparent 0); */
-  background-image: -moz-radial-gradient(var(--week-gray) 1px, transparent 0), -moz-radial-gradient(var(--week-gray) 1px, transparent 0);
-  background-image: -o-radial-gradient(var(--week-gray) 1px, transparent 0), -o-radial-gradient(var(--week-gray) 1px, transparent 0);
-  background-image: radial-gradient(var(--week-gray) 1px, transparent 0), radial-gradient(var(--week-gray) 1px, transparent 0);
-  background-position: 0 0, 20px 20px;
-  -webkit-background-size: 40px 40px;
-  -moz-background-size: 40px 40px;
-  -o-background-size: 40px 40px;
-  background-size: 40px 40px;
-  word-break: keep-all;
 }
 
 .hero-grid {
@@ -222,7 +246,9 @@ onUnmounted(() => {
   place-items: center;
   align-items: center;
   justify-content: center;
-  transition: box-shadow 0.18s ease, transform 0.18s ease;
+  transition:
+    box-shadow 0.18s ease,
+    transform 0.18s ease;
 }
 
 .scratch-card {
@@ -401,7 +427,8 @@ onUnmounted(() => {
   transform: translateX(18px);
 }
 
-.progress-box {}
+.progress-box {
+}
 
 .progress-head {
   display: flex;
@@ -433,7 +460,9 @@ onUnmounted(() => {
   font-weight: 700;
   min-height: 1.2em;
   visibility: hidden;
-  transition: visibility 0s, opacity 0.2s;
+  transition:
+    visibility 0s,
+    opacity 0.2s;
   opacity: 0;
 }
 

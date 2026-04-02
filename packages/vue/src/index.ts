@@ -31,6 +31,22 @@ export const Scratcher = defineComponent({
       type: Function as PropType<((scratcher: CoreScratcher) => void) | undefined>,
       required: false,
     },
+    mapPoint: {
+      type: Function as PropType<((e: any, canvas: any) => any) | undefined>,
+      required: false,
+    },
+    renderAtPoint: {
+      type: Function as PropType<
+        ((x: number, y: number, brushSize: number, canvas: any) => void) | undefined
+      >,
+      required: false,
+    },
+    renderCover: {
+      type: Function as PropType<
+        ((canvas: any, cover: any, width: number, height: number) => void) | undefined
+      >,
+      required: false,
+    },
   },
   setup(props) {
     const attrs = useAttrs();
@@ -48,6 +64,9 @@ export const Scratcher = defineComponent({
         cover: props.cover,
         completionThreshold: props.completionThreshold,
         revealOnCompletion: props.revealOnCompletion,
+        mapPoint: props.mapPoint,
+        renderAtPoint: props.renderAtPoint,
+        renderCover: props.renderCover,
       });
       scratcherRef.value = scratcher;
       scratcher.setCallbacks(props.callbacks);
@@ -61,7 +80,6 @@ export const Scratcher = defineComponent({
       if (!scratcher || !canvas) {
         return;
       }
-
       scratcher.bindCanvas(canvas);
     };
 
