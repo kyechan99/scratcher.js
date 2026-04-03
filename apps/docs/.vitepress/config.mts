@@ -62,7 +62,11 @@ export default defineConfig({
       },
       {
         text: 'Examples',
-        items: [{ text: 'Custom Cover', link: '/examples/custom-cover' }],
+        items: [
+          { text: 'Custom Cover', link: '/examples/custom-cover' },
+          { text: 'Custom Scratch', link: '/examples/custom-scratch' },
+          // { text: 'Complete Animation', link: '/examples/complete-animation' }, // TODO: draft
+        ],
       },
     ],
 

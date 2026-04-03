@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { ref, onUnmounted, computed } from 'vue';
+import { ref } from 'vue';
 import { type Scratcher as CoreScratcher } from '@scratcher/core';
 import { Scratcher as VueScratcher } from '@scratcher/vue';
-
 import PlaygroundFrame from './PlaygroundFrame.vue';
+
 let scratcher: CoreScratcher | null = null;
 
 function handleScratcherReady(nextScratcher: CoreScratcher) {
@@ -16,16 +16,27 @@ function resetCanvas() {
   scratcher.reset();
 }
 
-function renderCover(canvas: HTMLCanvasElement, width: number, height: number, _cover: string) {
+function renderAtPoint(x: number, y: number, brushSize: number, canvas: HTMLCanvasElement) {
   const ctx = canvas.getContext('2d');
   if (!ctx) return;
-
-  // custom Gradient cover
-  const grad = ctx.createLinearGradient(0, 0, width, height);
-  grad.addColorStop(0, '#7700ff');
-  grad.addColorStop(1, '#bf4587');
-  ctx.fillStyle = grad;
-  ctx.fillRect(0, 0, width, height);
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.beginPath();
+  for (let i = 0; i < 5; i++) {
+    ctx.lineTo(
+      Math.cos(((18 + i * 72) / 180) * Math.PI) * brushSize,
+      -Math.sin(((18 + i * 72) / 180) * Math.PI) * brushSize,
+    );
+    ctx.lineTo(
+      Math.cos(((54 + i * 72) / 180) * Math.PI) * (brushSize / 2),
+      -Math.sin(((54 + i * 72) / 180) * Math.PI) * (brushSize / 2),
+    );
+  }
+  ctx.closePath();
+  ctx.fillStyle = '#fff';
+  ctx.globalCompositeOperation = 'destination-out';
+  ctx.fill();
+  ctx.restore();
 }
 </script>
 
@@ -37,11 +48,11 @@ function renderCover(canvas: HTMLCanvasElement, width: number, height: number, _
         :width="400"
         :height="240"
         :brush-size="30"
-        :renderCover="renderCover"
+        :renderAtPoint="renderAtPoint"
         canvas-class="scratch-canvas"
         :on-scratcher-ready="handleScratcherReady"
       >
-        <div class="reward">Custom Cover Example</div>
+        <div class="reward">Custom Scratch Example</div>
       </VueScratcher>
     </template>
   </PlaygroundFrame>

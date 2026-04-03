@@ -43,7 +43,7 @@ export const Scratcher = defineComponent({
     },
     renderCover: {
       type: Function as PropType<
-        ((canvas: any, cover: any, width: number, height: number) => void) | undefined
+        ((canvas: any, width: number, height: number, cover: any) => void) | undefined
       >,
       required: false,
     },
