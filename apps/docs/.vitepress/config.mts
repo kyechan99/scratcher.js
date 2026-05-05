@@ -54,7 +54,6 @@ export default defineConfig({
         items: [
           { text: 'Overview', link: '/docs/overview' },
           { text: 'Getting Started', link: '/docs/getting-started' },
-          { text: 'Usage Examples', link: '/docs/usage-examples' },
           { text: 'Configuration', link: '/docs/configuration' },
           { text: 'API Reference', link: '/docs/api-reference' },
           { text: 'FAQ', link: '/docs/faq' },
@@ -65,6 +64,8 @@ export default defineConfig({
         items: [
           { text: 'Custom Cover', link: '/examples/custom-cover' },
           { text: 'Custom Scratch', link: '/examples/custom-scratch' },
+          { text: 'Async Reward', link: '/examples/async-reward' },
+          { text: 'Using Images', link: '/examples/using-images' },
           // { text: 'Complete Animation', link: '/examples/complete-animation' }, // TODO: draft
         ],
       },

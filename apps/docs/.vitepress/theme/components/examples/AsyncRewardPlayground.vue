@@ -1,42 +1,38 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, onUnmounted, computed } from 'vue';
 import { type Scratcher as CoreScratcher } from '@scratcher/core';
 import { Scratcher as VueScratcher } from '@scratcher/vue';
 import PlaygroundFrame from './PlaygroundFrame.vue';
 
+const reward = ref<string | null>(null);
+const loading = ref(false);
 let scratcher: CoreScratcher | null = null;
+
+function fakeAsyncRewardAPI() {
+  return new Promise<string>(resolve => {
+    setTimeout(() => {
+      resolve(Math.random() > 0.5 ? '당첨!' : '미당첨');
+    }, 1000);
+  });
+}
+
+function resetCanvas() {
+  if (!scratcher) return;
+  scratcher.reset();
+  reward.value = null;
+  loading.value = false;
+}
 
 function handleScratcherReady(nextScratcher: CoreScratcher) {
   scratcher = nextScratcher;
 }
-function resetCanvas() {
-  if (!scratcher) {
-    return;
-  }
-  scratcher.reset();
-}
 
-function renderAtPoint(x: number, y: number, brushSize: number, canvas: HTMLCanvasElement) {
-  const ctx = canvas.getContext('2d');
-  if (!ctx) return;
-  ctx.save();
-  ctx.translate(x, y);
-  ctx.beginPath();
-  for (let i = 0; i < 5; i++) {
-    ctx.lineTo(
-      Math.cos(((18 + i * 72) / 180) * Math.PI) * brushSize,
-      -Math.sin(((18 + i * 72) / 180) * Math.PI) * brushSize,
-    );
-    ctx.lineTo(
-      Math.cos(((54 + i * 72) / 180) * Math.PI) * (brushSize / 2),
-      -Math.sin(((54 + i * 72) / 180) * Math.PI) * (brushSize / 2),
-    );
-  }
-  ctx.closePath();
-  ctx.fillStyle = '#fff';
-  ctx.globalCompositeOperation = 'destination-out';
-  ctx.fill();
-  ctx.restore();
+async function handleComplete() {
+  loading.value = true;
+  reward.value = null;
+  reward.value = await fakeAsyncRewardAPI();
+  loading.value = false;
+  console.log('handleComplete', reward.value);
 }
 </script>
 
@@ -48,11 +44,15 @@ function renderAtPoint(x: number, y: number, brushSize: number, canvas: HTMLCanv
         :width="400"
         :height="240"
         :brush-size="50"
-        :renderAtPoint="renderAtPoint"
         canvas-class="scratch-canvas"
+        :completion-threshold="0.3"
+        :reveal-on-completion="true"
         :on-scratcher-ready="handleScratcherReady"
+        :callbacks="{ onComplete: handleComplete }"
       >
-        <div class="reward">Custom Scratch Example</div>
+        <div class="reward">
+          {{ loading ? '결과 확인 중...' : reward || '긁어서 결과 확인!' }}
+        </div>
       </VueScratcher>
     </template>
   </PlaygroundFrame>
@@ -69,12 +69,6 @@ function renderAtPoint(x: number, y: number, brushSize: number, canvas: HTMLCanv
   text-align: center;
   color: var(--vp-c-text-1);
   background-color: var(--vp-c-bg);
-}
-
-.completion-status {
-  color: #4caf50;
-  font-weight: bold;
-  margin-top: 1rem;
 }
 
 .scratch-card {

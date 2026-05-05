@@ -28,9 +28,6 @@ function resetCanvas() {
   if (!scratcher) return;
   scratcher.reset();
   isCompleted.value = false;
-
-  const el = scratchCardRef.value?.$el ?? scratchCardRef.value;
-  if (el) el.classList.remove('shake-scale');
 }
 
 function handleComplete() {
@@ -65,7 +62,7 @@ function handleComplete() {
   </PlaygroundFrame>
 </template>
 
-<style>
+<style scoped>
 .rewardClass {
   position: absolute;
   inset: 0;
@@ -75,6 +72,16 @@ function handleComplete() {
   font-weight: 800;
   text-align: center;
   color: var(--vp-c-text-1);
+  background-color: var(--vp-c-bg);
+}
+
+.scratch-card {
+  position: relative;
+  border-radius: 0.875rem;
+  overflow: hidden;
+  touch-action: none;
+  max-width: 100%;
+  box-shadow: 0 1rem 2.5rem var(--vp-c-gray-soft);
 }
 
 .scratch-card .reward {

@@ -1,47 +1,40 @@
 <script setup lang="ts">
-import { ref, onUnmounted, computed } from 'vue';
+import { ref, computed } from 'vue';
 import { type Scratcher as CoreScratcher } from '@scratcher/core';
 import { Scratcher as VueScratcher } from '@scratcher/vue';
-
 import PlaygroundFrame from './PlaygroundFrame.vue';
-let scratcher: CoreScratcher | null = null;
 
-function handleScratcherReady(nextScratcher: CoreScratcher) {
-  scratcher = nextScratcher;
-}
-function resetCanvas() {
-  if (!scratcher) {
-    return;
-  }
-  scratcher.reset();
-}
+const coverImg = 'https://images.unsplash.com/photo-1465101046530-73398c7f28ca?w=300';
 
 function renderCover(canvas: HTMLCanvasElement, width: number, height: number, _cover: string) {
   const ctx = canvas.getContext('2d');
   if (!ctx) return;
 
-  // custom Gradient cover
-  const grad = ctx.createLinearGradient(0, 0, width, height);
-  grad.addColorStop(0, '#7700ff');
-  grad.addColorStop(1, '#bf4587');
-  ctx.fillStyle = grad;
-  ctx.fillRect(0, 0, width, height);
+  const img = new window.Image();
+  img.crossOrigin = 'anonymous';
+  img.onload = () => {
+    const prev = ctx.globalCompositeOperation;
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.clearRect(0, 0, width, height);
+    ctx.drawImage(img, 0, 0, width, height);
+    ctx.globalCompositeOperation = prev;
+  };
+  img.src = coverImg;
+}
+
+let scratcher: CoreScratcher | null = null;
+
+function resetCanvas() {
+  if (!scratcher) return;
+  scratcher.reset();
 }
 </script>
 
 <template>
   <PlaygroundFrame @reset="resetCanvas">
     <template #main>
-      <VueScratcher
-        class="scratch-card"
-        :width="400"
-        :height="240"
-        :brush-size="50"
-        :renderCover="renderCover"
-        canvas-class="scratch-canvas"
-        :on-scratcher-ready="handleScratcherReady"
-      >
-        <div class="reward">Custom Cover Example</div>
+      <VueScratcher :width="300" :height="200" :brush-size="50" :renderCover="renderCover">
+        <div class="reward">Image Cover Example</div>
       </VueScratcher>
     </template>
   </PlaygroundFrame>
@@ -58,12 +51,6 @@ function renderCover(canvas: HTMLCanvasElement, width: number, height: number, _
   text-align: center;
   color: var(--vp-c-text-1);
   background-color: var(--vp-c-bg);
-}
-
-.completion-status {
-  color: #4caf50;
-  font-weight: bold;
-  margin-top: 1rem;
 }
 
 .scratch-card {
