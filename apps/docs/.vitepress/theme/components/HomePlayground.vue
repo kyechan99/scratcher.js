@@ -50,7 +50,7 @@ const areaImageTransform = ref({
 });
 
 const areaImageAlphaThreshold = ref(128);
-const areaImageStatus = ref('업로드된 이미지가 없습니다.');
+const areaImageStatus = ref('(empty)');
 
 const minAreaSize = 50;
 
@@ -196,7 +196,7 @@ async function handleAreaImageChange(event: Event) {
       URL.revokeObjectURL(areaImage.value.src);
     }
     areaImage.value = null;
-    areaImageStatus.value = '업로드된 이미지가 없습니다.';
+    areaImageStatus.value = '(empty)';
     return;
   }
 
@@ -611,7 +611,7 @@ onUnmounted(() => {
 .hero-grid {
   display: grid;
   grid-template-columns: minmax(0, 1.25fr) minmax(320px, 0.75fr);
-  align-items: start;
+  align-items: center;
   gap: 1rem;
   max-width: 1320px !important;
   margin: 0 auto;

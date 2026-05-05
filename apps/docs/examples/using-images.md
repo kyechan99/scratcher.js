@@ -92,7 +92,11 @@ scratcher.bindCanvas(canvas);
 reward에는 단순히 `<img>` 태그를 넣으면 됩니다.
 
 ```tsx
-<Scratcher ...>
-  <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=300" alt="reward" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+<Scratcher {...config}>
+  <img
+    src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=300"
+    alt="reward"
+    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+  />
 </Scratcher>
 ```
