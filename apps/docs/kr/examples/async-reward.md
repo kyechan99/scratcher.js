@@ -2,21 +2,21 @@
 title: Async-Reward
 ---
 
-# Async Reward Example
+# Async Reward 예제 (Async Reward Example)
 
-An example that calls an async API on scratch completion to display win/loss results in the `.reward` area.
+스크래치 완료 시 비동기 API를 호출하여 `.reward` 영역에 당첨/미당첨 결과를 표시하는 예제입니다.
 
-In this example, reward results are asynchronously displayed on completion. However, there are also cases where results are asynchronously fetched when Scratcher is created. In such cases, you can implement it in a similar way to this example.
+이 예제에서는 완료 시 보상 결과를 비동기적으로 표시하지만, Scratcher가 생성될 때 이미 비동기적으로 결과가 검색된 경우도 있습니다. 이러한 경우에도 이 예제와 유사한 방식으로 구현할 수 있습니다.
 
 ## Playground
 
-Below is a playground example you can try directly.
+아래 Playground는 직접 실습해볼 수 있는 예시입니다.
 
 <AsyncRewardPlayground />
 
-## Async API Function Example
+## 비동기 API 함수 예시
 
-Below is a temporary async API example that randomly returns win/loss results.
+아래는 당첨/미당첨 결과를 랜덤으로 반환하는 임시 비동기 API 예시입니다.
 
 :::tabs
 
@@ -29,7 +29,7 @@ import Scratcher from '@scratcher.js/react';
 function getAsyncRewardAPI() {
   return new Promise(resolve => {
     setTimeout(() => {
-      resolve(Math.random() > 0.5 ? 'Win!' : 'Loss');
+      resolve(Math.random() > 0.5 ? '당첨!' : '미당첨');
     }, 1000);
   });
 }
@@ -47,7 +47,7 @@ export default function AsyncRewardExample() {
 
   return (
     <Scratcher width={320} height={180} onComplete={handleComplete}>
-      <div className="reward">{loading ? 'Checking result...' : reward || 'Scratch to check!'}</div>
+      <div className="reward">{loading ? '결과 확인 중...' : reward || '긁어서 결과 확인!'}</div>
     </Scratcher>
   );
 }
@@ -66,7 +66,7 @@ const loading = ref(false);
 function getAsyncRewardAPI() {
   return new Promise<string>(resolve => {
     setTimeout(() => {
-      resolve(Math.random() > 0.5 ? 'Win!' : 'Loss');
+      resolve(Math.random() > 0.5 ? '당첨!' : '미당첨');
     }, 1000);
   });
 }
@@ -82,7 +82,7 @@ async function handleComplete() {
 <template>
   <Scratcher :width="320" :height="180" @complete="handleComplete">
     <div class="reward">
-      {{ loading ? 'Checking result...' : reward || 'Scratch to check!' }}
+      {{ loading ? '결과 확인 중...' : reward || '긁어서 결과 확인!' }}
     </div>
   </Scratcher>
 </template>
@@ -96,7 +96,7 @@ import { Scratcher } from '@scratcher.js/core';
 function getAsyncRewardAPI() {
   return new Promise(resolve => {
     setTimeout(() => {
-      resolve(Math.random() > 0.5 ? 'Win!' : 'Loss');
+      resolve(Math.random() > 0.5 ? '당첨!' : '미당첨');
     }, 1000);
   });
 }
@@ -109,7 +109,7 @@ const scratcher = new Scratcher({
   height: 180,
   callbacks: {
     onComplete: async () => {
-      rewardDiv.textContent = 'Checking result...';
+      rewardDiv.textContent = '결과 확인 중...';
       const result = await getAsyncRewardAPI();
       rewardDiv.textContent = result as string;
     },

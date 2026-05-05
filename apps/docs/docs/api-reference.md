@@ -1,18 +1,18 @@
-# API Reference / API 문서
+# API Reference
 
-Scratcher.js의 주요 클래스, 옵션, 메서드, 콜백에 대한 문서입니다.
+Documentation for the main classes, options, methods, and callbacks of Scratcher.js.
 
-Scratcher.js의 핵심 클래스인 `Scratcher`는 긁기 엔진의 모든 동작을 담당합니다. 아래는 public 생성자, 프로퍼티, 메서드, 사용 예시입니다.
+The core class `Scratcher` of Scratcher.js handles all scratch engine operations. Below are public constructors, properties, methods, and usage examples.
 
 ## snapshot
 
-긁기 상태(진행률, 긁힌 셀 수 등)를 담고 있는 객체입니다.
+An object that contains the scratch state (progress, scratched cells count, etc.).
 
 **Return value**
 
-| Type            | Description                                               |
-| --------------- | --------------------------------------------------------- |
-| ScratchSnapshot | `{ scratchedCells, totalCells, progress }` 긁기 상태 객체 |
+| Type            | Description                                                     |
+| --------------- | --------------------------------------------------------------- |
+| ScratchSnapshot | `{ scratchedCells, totalCells, progress }` Scratch state object |
 
 **Example**
 
@@ -22,57 +22,57 @@ const progress = scratcher.snapshot.progress; // 0~1
 
 ## isDrawing
 
-현재 긁기 동작이 진행 중인지 여부입니다.
+Whether scratching is currently in progress.
 
 **Return value**
 
-| Type    | Description      |
-| ------- | ---------------- |
-| boolean | 긁기 중이면 true |
+| Type    | Description        |
+| ------- | ------------------ |
+| boolean | true if scratching |
 
 **Example**
 
 ```js
 if (scratcher.isDrawing) {
-  // 긁기 중
+  // Currently scratching
 }
 ```
 
 ## isCompleted
 
-긁기 완료(설정한 completionThreshold 도달) 여부입니다.
+Whether scratching is complete (completionThreshold reached).
 
 **Return value**
 
 | Type    | Description      |
 | ------- | ---------------- |
-| boolean | 긁기 완료면 true |
+| boolean | true if complete |
 
 **Example**
 
 ```js
-if (scratcher.isCompleted) alert('완료!');
+if (scratcher.isCompleted) alert('Complete!');
 ```
 
 ## shouldRevealOnCompletion
 
-긁기 완료 시 전체를 자동으로 공개할지 여부입니다.
+Whether to auto-reveal all on scratch completion.
 
 **Return value**
 
-| Type    | Description                 |
-| ------- | --------------------------- |
-| boolean | 긁기 완료 시 전체 공개 옵션 |
+| Type    | Description                      |
+| ------- | -------------------------------- |
+| boolean | Auto-reveal on completion option |
 
 ## currentBrushSize
 
-현재 브러시 크기(px)입니다.
+Current brush size (px).
 
 **Return value**
 
-| Type   | Description          |
-| ------ | -------------------- |
-| number | 현재 브러시 크기(px) |
+| Type   | Description             |
+| ------ | ----------------------- |
+| number | Current brush size (px) |
 
 **Example**
 
@@ -81,23 +81,23 @@ scratcher.setBrushSize(40);
 console.log(scratcher.currentBrushSize); // 40
 ```
 
-각 메서드/프로퍼티의 상세 설명은 아래를 참고하세요.
+See below for detailed descriptions of each method/property.
 
 ## start
 
-긁기 동작을 시작합니다. (예: 마우스/터치 다운)
+Start scratching operation. (e.g., mouse/touch down)
 
 **Parameters**
 
-| Name  | Type       | Description    |
-| ----- | ---------- | -------------- |
-| point | `{ x, y }` | 긁기 시작 좌표 |
+| Name  | Type       | Description              |
+| ----- | ---------- | ------------------------ |
+| point | `{ x, y }` | Scratch start coordinate |
 
 **Return value**
 
-| Type            | Description         |
-| --------------- | ------------------- |
-| ScratchSnapshot | 현재 긁기 상태 객체 |
+| Type            | Description                  |
+| --------------- | ---------------------------- |
+| ScratchSnapshot | Current scratch state object |
 
 **Example**
 
@@ -107,112 +107,112 @@ scratcher.start({ x: 10, y: 20 });
 
 ## move
 
-긁는 중(마우스/터치 이동) 호출합니다.
+Called during scratching (mouse/touch move).
 
 **Parameters**
 
-| Name  | Type       | Description    |
-| ----- | ---------- | -------------- |
-| point | `{ x, y }` | 긁기 이동 좌표 |
+| Name  | Type       | Description             |
+| ----- | ---------- | ----------------------- |
+| point | `{ x, y }` | Scratch move coordinate |
 
 **Return value**
 
-| Type            | Description         |
-| --------------- | ------------------- |
-| ScratchSnapshot | 현재 긁기 상태 객체 |
+| Type            | Description                  |
+| --------------- | ---------------------------- |
+| ScratchSnapshot | Current scratch state object |
 
 ## end
 
-긁기 동작을 종료합니다. (마우스/터치 업)
+End scratching operation. (mouse/touch up)
 
 **Return value**
 
-| Type            | Description         |
-| --------------- | ------------------- |
-| ScratchSnapshot | 현재 긁기 상태 객체 |
+| Type            | Description                  |
+| --------------- | ---------------------------- |
+| ScratchSnapshot | Current scratch state object |
 
 ## reset
 
-긁기 상태를 초기화하고 커버를 다시 그립니다.
+Reset scratching state and redraw cover.
 
 **Return value**
 
-| Type            | Description             |
-| --------------- | ----------------------- |
-| ScratchSnapshot | 초기화된 긁기 상태 객체 |
+| Type            | Description                |
+| --------------- | -------------------------- |
+| ScratchSnapshot | Reset scratch state object |
 
 ## setBrushSize
 
-브러시 크기를 동적으로 변경합니다.
+Dynamically change brush size.
 
 **Parameters**
 
-| Name | Type   | Description            |
-| ---- | ------ | ---------------------- |
-| size | number | 변경할 브러시 크기(px) |
+| Name | Type   | Description               |
+| ---- | ------ | ------------------------- |
+| size | number | Brush size to change (px) |
 
 **Return value**
 
-| Type | Description |
-| ---- | ----------- |
-| void | 반환값 없음 |
+| Type | Description     |
+| ---- | --------------- |
+| void | No return value |
 
 ## setCallbacks
 
-긁기 이벤트 콜백을 등록/변경합니다.
+Register/change scratch event callbacks.
 
 **Parameters**
 
-| Name      | Type   | Description               |
-| --------- | ------ | ------------------------- |
-| callbacks | object | 콜백 객체 (이벤트 핸들러) |
+| Name      | Type   | Description                      |
+| --------- | ------ | -------------------------------- |
+| callbacks | object | Callback object (event handlers) |
 
 **Return value**
 
-| Type | Description |
-| ---- | ----------- |
-| void | 반환값 없음 |
+| Type | Description     |
+| ---- | --------------- |
+| void | No return value |
 
 ## bindCanvas
 
-캔버스에 긁기 이벤트를 바인딩합니다. 반드시 호출해야 긁기 동작이 활성화됩니다.
+Bind scratching events to canvas. Must be called for scratching to be active.
 
 **Parameters**
 
-| Name    | Type   | Description        |
-| ------- | ------ | ------------------ |
-| canvas  | Canvas | 캔버스 요소        |
-| options | object | (선택) 바인딩 옵션 |
+| Name    | Type   | Description                |
+| ------- | ------ | -------------------------- |
+| canvas  | Canvas | Canvas element             |
+| options | object | (Optional) Binding options |
 
 **Return value**
 
-| Type     | Description        |
-| -------- | ------------------ |
-| function | 언바인드 함수 반환 |
+| Type     | Description            |
+| -------- | ---------------------- |
+| function | Return unbind function |
 
 ## unbindCanvas
 
-바인딩된 캔버스를 해제합니다.
+Unbind the canvas.
 
 **Return value**
 
-| Type | Description |
-| ---- | ----------- |
-| void | 반환값 없음 |
+| Type | Description     |
+| ---- | --------------- |
+| void | No return value |
 
 ## on
 
-커스텀 이벤트(scratchStart, progress 등)를 직접 구독할 수 있습니다.
+Subscribe to custom events (scratchStart, progress, etc.).
 
 **Parameters**
 
-| Name      | Type     | Description                                                                             |
-| --------- | -------- | --------------------------------------------------------------------------------------- |
-| eventname | string   | 이벤트명 (`scratchStart`, `scratchMove`, `scratchEnd`, `reset`, `progress`, `complete`) |
-| listener  | function | 이벤트 핸들러 함수                                                                      |
+| Name      | Type     | Description                                                                               |
+| --------- | -------- | ----------------------------------------------------------------------------------------- |
+| eventname | string   | Event name (`scratchStart`, `scratchMove`, `scratchEnd`, `reset`, `progress`, `complete`) |
+| listener  | function | Event handler function                                                                    |
 
 **Return value**
 
-| Type     | Description        |
-| -------- | ------------------ |
-| function | 언바인드 함수 반환 |
+| Type     | Description            |
+| -------- | ---------------------- |
+| function | Return unbind function |

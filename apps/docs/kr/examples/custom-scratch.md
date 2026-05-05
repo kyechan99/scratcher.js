@@ -1,18 +1,18 @@
-# Custom Scratch Example
+# 커스텀 긁기 예제 (Custom Scratch Example)
 
-Scratcher.js basically provides a circular brush scratching effect, but by using the `renderAtPoint` option, you can freely customize the scratching method.
+Scratcher.js는 기본적으로 원형 브러시로 긁는 효과를 제공하지만, `renderAtPoint` 옵션을 활용하면 긁는 방식을 자유롭게 커스텀할 수 있습니다.
 
-For example, you can implement various scratching effects such as star shapes, rectangles, and images. The examples below show how to apply custom scratching effects in each environment (Vanilla JS, React, Vue).
+예를 들어, 별 모양, 사각형, 이미지 등 다양한 긁기 효과를 직접 구현할 수 있습니다. 아래 예시들은 각 환경(Vanilla JS, React, Vue)에서 커스텀 긁기 효과를 적용하는 방법을 보여줍니다.
 
 ## Playground
 
-Below is a playground example you can try directly.
+아래 Playground는 직접 실습해볼 수 있는 예시입니다.
 
 <CustomScratchPlayground />
 
-## renderAtPoint Function Example
+## renderAtPoint 함수 예시
 
-With `renderAtPoint`, you can draw the scratching shape as desired. Below is an example of scratching with a star shape.
+`renderAtPoint`를 사용하면, 긁는 모양을 원하는 대로 그릴 수 있습니다. 아래는 별 모양으로 긁는 예시입니다.
 
 ```ts
 function renderAtPoint(x: number, y: number, brushSize: number, canvas: HTMLCanvasElement) {
@@ -41,7 +41,7 @@ function renderAtPoint(x: number, y: number, brushSize: number, canvas: HTMLCanv
 
 ---
 
-Below are examples of applying custom scratching effects for each environment (Vanilla JS, React, Vue).
+아래는 환경별(바닐라 JS, React, Vue) 커스텀 긁기 적용 예시입니다.
 
 :::tabs
 

@@ -1,36 +1,32 @@
-# Overview / 소개
+# Overview
 
-Scratcher.js는 "긁어서 확인하는 경험"을 제품에 빠르게 적용할 수 있도록 만든 스크래치 인터랙션 라이브러리입니다.  
-이벤트 당첨 공개, 쿠폰 코드 노출, 게임형 보상 UI처럼 사용자 참여가 중요한 화면에서 간단한 설정으로 시작할 수 있습니다.
+Scratcher.js is a scratch interaction library that enables you to quickly implement a "scratchcard experience" into your products. You can easily get started with simple configuration on screens where user engagement is important, such as event winner reveals, coupon code exposure, and game-style reward UIs.
 
-## 어떤 문제를 해결하나요?
+## What Problem Does It Solve?
 
-스크래치 UI를 직접 구현하면 입력 이벤트 처리, 진행률 계산, 완료 임계치 판단, 렌더링 성능, 프레임워크별 재구현까지 고려해야 합니다.  
-Scratcher.js는 이 반복 문제를 공통 엔진에 모아 해결하고, 각 프레임워크에 맞는 바인딩을 제공해 구현 부담을 줄입니다.
+Implementing a scratch UI from scratch requires considering input event handling, progress calculation, completion thresholds, rendering performance, and framework-specific reimplementations. Scratcher.js solves these repetitive issues by consolidating them into a common engine and providing framework-specific bindings to reduce implementation burden.
 
-## 모노레포 패키지 구성
+## Monorepo Package Structure
 
-- `@scratcher/core`: 스크래치 로직과 상태 계산을 담당하는 핵심 엔진
-- `@scratcher/react`: React 환경용 바인딩
-- `@scratcher/vue`: Vue 환경용 바인딩
-- `@scratcher/react-native`: React Native 환경용 바인딩
+- `@scratcher/core`: The core engine that handles scratch logic and state calculation
+- `@scratcher/react`: Binding for React environments
+- `@scratcher/vue`: Binding for Vue environments
+- `@scratcher/react-native`: Binding for React Native environments
 
-이 구조 덕분에 웹에서 시작해 모바일 앱으로 확장하더라도 동작 개념을 거의 그대로 재사용할 수 있습니다.
+With this structure, you can reuse the operational concepts almost entirely when expanding from web to mobile apps.
 
-## 주요 기능
+## Key Features
 
-- 마우스/터치 기반 스크래치 인터랙션
-- 브러시 크기, 감도 등 동작 파라미터 조절
-- 커버/배경 이미지 적용 및 커스텀 렌더링
-- 진행률 추적, 완료 상태 감지, 완료 콜백 제공
-- TypeScript 타입 제공으로 안정적인 개발 경험
+- Mouse/touch-based scratch interaction
+- Adjustable behavior parameters like brush size and sensitivity
+- Cover/background image application and custom rendering
+- Progress tracking, completion state detection, and completion callbacks
+- Stable development experience with TypeScript types
 
-## 시작 가이드
+## Getting Started
 
-처음 적용한다면 [Getting Started](/docs/getting-started)에서 설치와 최소 예제를 먼저 확인하세요.  
-이후 [Configuration](/docs/configuration)에서 옵션을 조정하고, [Examples](/examples/custom-cover)에서 실제 UI 패턴을 비교해보면 프로젝트에 맞는 구성을 빠르게 찾을 수 있습니다.
+If you're implementing this for the first time, start by checking the installation and minimal example in [Getting Started](/docs/getting-started). After that, adjust the options in [Configuration](/docs/configuration), and compare actual UI patterns in [Examples](/examples/custom-cover) to quickly find a configuration that fits your project.
 
-## 기여 및 피드백
+## Contribution and Feedback
 
-Scratcher.js는 오픈소스로 운영됩니다. 사용 사례 공유, 버그 리포트, 기능 제안 모두 환영합니다.  
-개선 아이디어는 GitHub Issue로, 코드 기여는 PR로 남겨 주세요.
+Scratcher.js is operated as open source. We welcome all use case sharing, bug reports, and feature suggestions. Please submit improvement ideas as GitHub Issues and code contributions as PRs.

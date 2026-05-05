@@ -2,42 +2,42 @@
 title: Custom Area (Rect)
 ---
 
-# 커스텀 영역 예제 (Custom Area Example)
+# Custom Area Example
 
-Scratcher.js는 전체 캔버스 영역이 아닌 **특정 영역(Area)**에서의 긁기 진행도를 측정할 수 있습니다. 사각형 영역과 이미지의 알파 채널을 기반으로 한 커스텀 도형 영역을 지원합니다.
+Scratcher.js can measure scratch progress in **specific areas** rather than the entire canvas. It supports rectangular areas and custom shape areas based on image alpha channels.
 
-이를 활용하면 특정 부분만 긁어야 완료되는 스크래치 게임을 만들 수 있습니다. 예를 들어, 보상 이미지의 특정 부분만 긁어야 한다거나, 특정 도형 모양만 긁어야 미션이 완료되도록 구성할 수 있습니다.
+By using this, you can create scratch games where only specific parts need to be scratched for completion. For example, you can configure it so that only a specific part of a reward image needs to be scratched, or only a specific shape pattern needs to be scratched to complete the mission.
 
 ## Playground
 
-아래 Playground에서는 녹색 점선 박스로 표시된 사각형 영역만 측정하는 예시입니다. 파란 박스 부분을 긁어서 진행도를 확인해보세요.
+In the playground below, only a rectangular area marked with a green dashed box is measured. Try scratching the blue box area to check the progress.
 
 <RectAreaPlayground />
 
-## 사각형 영역 (Rectangular Area)
+## Rectangular Area
 
-**사각형 영역**은 가장 간단한 방식으로, x, y, width, height로 정의되는 사각형 영역에서만 진행도를 측정합니다.
+**Rectangular areas** are the simplest method, measuring progress only in a rectangular area defined by x, y, width, and height.
 
 ```ts
 type RectArea = {
-  x: number; // 영역의 왼쪽 x 좌표 (픽셀)
-  y: number; // 영역의 위쪽 y 좌표 (픽셀)
-  width: number; // 영역의 너비 (픽셀)
-  height: number; // 영역의 높이 (픽셀)
+  x: number; // Left x coordinate of the area (pixels)
+  y: number; // Top y coordinate of the area (pixels)
+  width: number; // Width of the area (pixels)
+  height: number; // Height of the area (pixels)
 };
 ```
 
-**사용 사례:**
+**Use cases:**
 
-- 카드 게임에서 카드의 특정 부분만 긁기
-- 스크래치 복권에서 당첨 번호가 있는 박스 부분만 측정
-- 특정 구역 내에서만 긁기 완료로 인정
+- Scratch only a specific part of a card in a card game
+- Measure only the box area containing winning numbers in scratch lottery
+- Recognize scratch completion only within specific zones
 
-## 사각형 영역 예시
+## Rectangular Area Example
 
-### 기본 사각형 영역
+### Basic Rectangular Area
 
-캔버스 내에서 (50, 50) 위치부터 너비 150, 높이 150인 사각형 영역을 정의합니다.
+Define a rectangular area starting from position (50, 50) with width 150 and height 150 within the canvas.
 
 :::tabs
 
@@ -55,7 +55,7 @@ const scratcher = new Scratcher({
 
 scratcher.bindCanvas(canvas);
 
-// 사각형 영역 설정
+// Set rectangular area
 scratcher.setArea({
   x: 50,
   y: 50,
@@ -63,17 +63,17 @@ scratcher.setArea({
   height: 150,
 });
 
-// 영역 진행도 모니터링
+// Monitor area progress
 scratcher.on('progress', ({ snapshot }) => {
   if (snapshot.area) {
-    console.log(`영역 진행도: ${(snapshot.area.progress * 100).toFixed(1)}%`);
-    console.log(`긁힌 셀 수: ${snapshot.area.scratchedCells} / ${snapshot.area.totalCells}`);
+    console.log(`Area progress: ${(snapshot.area.progress * 100).toFixed(1)}%`);
+    console.log(`Scratched cells: ${snapshot.area.scratchedCells} / ${snapshot.area.totalCells}`);
   }
 });
 
 scratcher.on('complete', ({ snapshot }) => {
   if (snapshot.area) {
-    console.log('영역이 완전히 긁혔습니다!');
+    console.log('Area completely scratched!');
   }
 });
 ```
@@ -90,15 +90,15 @@ export default function RectAreaExample() {
   const handleComplete = () => {
     const snapshot = scratcherRef.current?.snapshot;
     if (snapshot?.area) {
-      console.log(`영역 진행도: ${(snapshot.area.progress * 100).toFixed(1)}%`);
-      console.log('영역이 완전히 긁혔습니다!');
+      console.log(`Area progress: ${(snapshot.area.progress * 100).toFixed(1)}%`);
+      console.log('Area completely scratched!');
     }
   };
 
   const handleProgress = () => {
     const snapshot = scratcherRef.current?.snapshot;
     if (snapshot?.area) {
-      console.log(`영역 진행도: ${(snapshot.area.progress * 100).toFixed(1)}%`);
+      console.log(`Area progress: ${(snapshot.area.progress * 100).toFixed(1)}%`);
     }
   };
 
@@ -124,7 +124,7 @@ export default function RectAreaExample() {
           height: '100%',
         }}
       >
-        긁어서 결과를 확인하세요!
+        Scratch to check the result!
       </div>
     </Scratcher>
   );
@@ -143,14 +143,14 @@ const scratcherRef = ref<any>(null);
 function handleProgress() {
   const snapshot = scratcherRef.value?.snapshot;
   if (snapshot?.area) {
-    console.log(`영역 진행도: ${(snapshot.area.progress * 100).toFixed(1)}%`);
+    console.log(`Area progress: ${(snapshot.area.progress * 100).toFixed(1)}%`);
   }
 }
 
 function handleComplete() {
   const snapshot = scratcherRef.value?.snapshot;
   if (snapshot?.area) {
-    console.log('영역이 완전히 긁혔습니다!');
+    console.log('Area completely scratched!');
   }
 }
 </script>
@@ -173,7 +173,7 @@ function handleComplete() {
     <div
       style="background: linear-gradient(45deg, #FF6B6B, #4ECDC4); width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;"
     >
-      긁어서 결과를 확인하세요!
+      Scratch to check the result!
     </div>
   </Scratcher>
 </template>
@@ -183,34 +183,34 @@ function handleComplete() {
 
 ---
 
-## 영역 해제
+## Remove Area
 
-언제든지 `setArea()`에 아무 인자도 전달하지 않으면 영역 측정을 해제할 수 있습니다.
+You can remove area measurement at any time by calling `setArea()` without arguments.
 
 ```ts
-// 영역 측정 해제 - 전체 캔버스에 대한 진행도만 계산됨
+// Remove area measurement - only calculate progress for the entire canvas
 scratcher.setArea();
 
-// 또는 명시적으로 undefined 전달
+// Or explicitly pass undefined
 scratcher.setArea(undefined);
 ```
 
 ---
 
-## 진행도 정보
+## Progress Information
 
-영역이 설정되면 `snapshot.area`에 영역별 진행도 정보가 포함됩니다.
+When an area is set, area-specific progress information is included in `snapshot.area`.
 
 ```ts
 scratcher.on('progress', ({ snapshot }) => {
-  // 전체 캔버스 진행도
-  console.log(`전체: ${snapshot.progress.toFixed(2)}`);
+  // Overall canvas progress
+  console.log(`Overall: ${snapshot.progress.toFixed(2)}`);
 
-  // 영역 진행도 (area가 설정된 경우에만)
+  // Area progress (only if area is set)
   if (snapshot.area) {
-    console.log(`영역 진행도: ${snapshot.area.progress.toFixed(2)}`);
-    console.log(`영역 긁힌 셀: ${snapshot.area.scratchedCells}`);
-    console.log(`영역 전체 셀: ${snapshot.area.totalCells}`);
+    console.log(`Area progress: ${snapshot.area.progress.toFixed(2)}`);
+    console.log(`Area scratched cells: ${snapshot.area.scratchedCells}`);
+    console.log(`Area total cells: ${snapshot.area.totalCells}`);
   }
 });
 ```

@@ -2,50 +2,50 @@
 title: Custom Area (Image)
 ---
 
-# 커스텀 영역 예제 (Custom Area Example)
+# Custom Area Example
 
-Scratcher.js는 전체 캔버스 영역이 아닌 **특정 영역(Area)**에서의 긁기 진행도를 측정할 수 있습니다. 사각형 영역과 이미지의 알파 채널을 기반으로 한 커스텀 도형 영역을 지원합니다.
+Scratcher.js can measure scratch progress in **specific areas** rather than the entire canvas. It supports rectangular areas and custom shape areas based on image alpha channels.
 
-이를 활용하면 특정 부분만 긁어야 완료되는 스크래치 게임을 만들 수 있습니다. 예를 들어, 보상 이미지의 특정 부분만 긁어야 한다거나, 특정 도형 모양만 긁어야 미션이 완료되도록 구성할 수 있습니다.
+By using this, you can create scratch games where only specific parts need to be scratched for completion. For example, you can configure it so that only a specific part of a reward image needs to be scratched, or only a specific shape pattern needs to be scratched to complete the mission.
 
 ## Playground
 
-아래 Playground에서는 이미지의 알파 채널을 기반으로 영역을 정의합니다. 이미지를 업로드하고, Alpha Threshold와 위치/크기를 조정하여 실시간으로 영역의 변화를 확인할 수 있습니다.
+In the playground below, areas are defined based on the image's alpha channel. You can upload an image and adjust the Alpha Threshold and position/size to see real-time changes in the area.
 
 <ImageAreaPlayground />
 
-## 이미지 마스크 기반 영역 (Image-based Area)
+## Image Mask-based Area
 
-**이미지 마스크 기반 영역**은 이미지의 알파 채널(투명도)을 활용하여 임의의 도형을 정의합니다. 알파값이 일정 수준 이상인 픽셀들이 영역으로 인식됩니다.
+**Image mask-based areas** use the image's alpha channel (transparency) to define arbitrary shapes. Pixels with alpha values at or above a certain level are recognized as areas.
 
 ```ts
 type ImageArea = {
-  imageData: ImageData; // 캔버스 API의 ImageData 객체
-  alphaThreshold?: number; // 알파값 임계값 (0-255, 기본값: 128)
-  x?: number; // 이미지 영역의 x 위치 (기본값: 0)
-  y?: number; // 이미지 영역의 y 위치 (기본값: 0)
-  scale?: number; // 이미지 크기 배율 (기본값: 1)
+  imageData: ImageData; // Canvas API's ImageData object
+  alphaThreshold?: number; // Alpha value threshold (0-255, default: 128)
+  x?: number; // X position of image area (default: 0)
+  y?: number; // Y position of image area (default: 0)
+  scale?: number; // Image size scale (default: 1)
 };
 ```
 
-**알파 임계값(alphaThreshold) 설명:**
+**Alpha Threshold (alphaThreshold) Explanation:**
 
-- **범위:** 0 (투명)부터 255 (불투명)
-- **의미:** 픽셀의 알파값이 이 값 이상이면 영역에 포함됩니다
-- **기본값:** 128 (50% 이상 불투명한 픽셀 포함)
-- **활용:** 반투명한 이미지의 가장자리를 포함/제외할 수 있습니다
+- **Range:** 0 (transparent) to 255 (opaque)
+- **Meaning:** If a pixel's alpha value is at or above this value, it's included in the area
+- **Default:** 128 (includes pixels 50% or more opaque)
+- **Usage:** You can include/exclude edges of semi-transparent images
 
-**사용 사례:**
+**Use cases:**
 
-- 동물, 별, 하트 등 복잡한 도형을 정의하여 긁기
-- 로고나 캐릭터 모양의 특정 부분만 긁기
-- 사진의 얼굴 영역 같은 불규칙한 영역 측정
+- Define complex shapes like animals, stars, hearts, and scratch them
+- Scratch only specific parts of logo or character shapes
+- Measure irregular areas like face regions in photos
 
-## 이미지 마스크 기반 영역 예시
+## Image Mask-based Area Example
 
-### 이미지 알파 채널을 이용한 도형 영역
+### Define Shape Area Using Image Alpha Channel
 
-이미지의 알파 채널을 기반으로 복잡한 도형을 정의합니다. 예를 들어, 별 모양 PNG 이미지의 투명하지 않은 부분만 영역으로 인식됩니다.
+Define complex shapes based on image alpha channels. For example, only the non-transparent parts of a star-shaped PNG image are recognized as areas.
 
 :::tabs
 
@@ -63,7 +63,7 @@ const scratcher = new Scratcher({
 
 scratcher.bindCanvas(canvas);
 
-// 이미지를 로드하여 ImageData 추출
+// Load image and extract ImageData
 function loadImageAsImageData(imageUrl: string): Promise<ImageData> {
   return new Promise((resolve, reject) => {
     const img = new Image();
@@ -86,28 +86,28 @@ function loadImageAsImageData(imageUrl: string): Promise<ImageData> {
   });
 }
 
-// 이미지 로드 및 영역 설정
+// Load image and set area
 async function setupImageArea() {
   try {
     const imageData = await loadImageAsImageData('/star-shape.png');
     scratcher.setArea({
       imageData,
-      alphaThreshold: 128, // 50% 이상 불투명한 픽셀만 포함
-      x: 150, // x 위치
-      y: 50, // y 위치
-      scale: 1, // 크기 배율
+      alphaThreshold: 128, // Include pixels 50% or more opaque
+      x: 150, // X position
+      y: 50, // Y position
+      scale: 1, // Size scale
     });
   } catch (error) {
-    console.error('이미지 로드 실패:', error);
+    console.error('Image load failed:', error);
   }
 }
 
 setupImageArea();
 
-// 영역 진행도 모니터링
+// Monitor area progress
 scratcher.on('progress', ({ snapshot }) => {
   if (snapshot.area) {
-    console.log(`영역 진행도: ${(snapshot.area.progress * 100).toFixed(1)}%`);
+    console.log(`Area progress: ${(snapshot.area.progress * 100).toFixed(1)}%`);
   }
 });
 ```
@@ -123,7 +123,7 @@ export default function ImageAreaExample() {
   const [imageData, setImageData] = useState<ImageData | null>(null);
 
   useEffect(() => {
-    // 이미지를 로드하여 ImageData 추출
+    // Load image and extract ImageData
     const loadImage = async () => {
       const img = new Image();
       img.crossOrigin = 'anonymous';
@@ -147,7 +147,7 @@ export default function ImageAreaExample() {
   const handleProgress = () => {
     const snapshot = scratcherRef.current?.snapshot;
     if (snapshot?.area) {
-      console.log(`영역 진행도: ${(snapshot.area.progress * 100).toFixed(1)}%`);
+      console.log(`Area progress: ${(snapshot.area.progress * 100).toFixed(1)}%`);
     }
   };
 
@@ -177,7 +177,7 @@ export default function ImageAreaExample() {
           height: '100%',
         }}
       >
-        별 모양을 긁으세요!
+        Scratch the star shape!
       </div>
     </Scratcher>
   );
@@ -195,7 +195,7 @@ const scratcherRef = ref<any>(null);
 const imageData = ref<ImageData | null>(null);
 
 onMounted(async () => {
-  // 이미지를 로드하여 ImageData 추출
+  // Load image and extract ImageData
   const img = new Image();
   img.crossOrigin = 'anonymous';
   img.onload = () => {
@@ -214,7 +214,7 @@ onMounted(async () => {
 function handleProgress() {
   const snapshot = scratcherRef.value?.snapshot;
   if (snapshot?.area) {
-    console.log(`영역 진행도: ${(snapshot.area.progress * 100).toFixed(1)}%`);
+    console.log(`Area Progress: ${(snapshot.area.progress * 100).toFixed(1)}%`);
   }
 }
 </script>
@@ -241,7 +241,7 @@ function handleProgress() {
     <div
       style="background: linear-gradient(45deg, #FF6B6B, #4ECDC4); width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;"
     >
-      별 모양을 긁으세요!
+      Scratch Here!
     </div>
   </Scratcher>
 </template>
@@ -249,24 +249,24 @@ function handleProgress() {
 
 :::
 
-### 알파 임계값을 이용한 세밀한 조정
+### Fine-tuning with alpha thresholds
 
-반투명한 가장자리를 가진 이미지에서 알파 임계값을 조정하여 포함 범위를 제어할 수 있습니다.
+The inclusion range can be controlled by adjusting the alpha threshold in images with translucent edges.
 
 ```ts
-// 낮은 임계값: 반투명한 부분도 포함 (더 큰 영역)
+// Low threshold: includes translucent parts as well (larger areas)
 scratcher.setArea({
   imageData,
-  alphaThreshold: 50, // 낮은 임계값 = 더 포함적
+  alphaThreshold: 50, // Low threshold = more inclusive
   x: 150,
   y: 50,
   scale: 1,
 });
 
-// 높은 임계값: 완전 불투명한 부분만 포함 (더 작은 영역)
+// High threshold: only completely opaque areas (smaller areas)
 scratcher.setArea({
   imageData,
-  alphaThreshold: 200, // 높은 임계값 = 더 엄격함
+  alphaThreshold: 200, // High threshold = more stringent
   x: 150,
   y: 50,
   scale: 1,
@@ -275,37 +275,28 @@ scratcher.setArea({
 
 ---
 
-## 이미지 위치 및 크기 조정
+## Adjust image position and size
 
-이미지 기반 영역의 위치와 크기를 동적으로 조정할 수 있습니다.
+You can dynamically adjust the position and size of the image-based area.
 
 ```ts
-// 이미지 위치 변경
+// Change image position
 scratcher.setArea({
   imageData,
   alphaThreshold: 128,
-  x: 200, // x 위치 변경
-  y: 100, // y 위치 변경
+  x: 200, // x
+  y: 100, // y
   scale: 1,
 });
 
-// 이미지 크기 배율 조정
+// Adjust image scale
 scratcher.setArea({
   imageData,
   alphaThreshold: 128,
   x: 150,
   y: 50,
-  scale: 0.8, // 80% 크기로 축소
+  scale: 0.8, // 80%
 });
-
-// 이미지 확대
-scratcher.setArea({
-  imageData,
-  alphaThreshold: 128,
-  x: 150,
-  y: 50,
-  scale: 1.5, // 150% 크기로 확대
-});
-```
 
 ---
+```

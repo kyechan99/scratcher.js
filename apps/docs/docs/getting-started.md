@@ -1,9 +1,8 @@
-# Getting Started / 시작하기
+# Getting Started
 
-## 설치 / Installation
+## Installation
 
-Scratcher.js는 모노레포 구조로, core(공통), react, vue, react-native 패키지가 분리되어 있습니다.
-pnpm, npm, yarn 등 원하는 패키지 매니저로 설치할 수 있습니다.
+Scratcher.js uses a monorepo structure with separate core, react, vue, and react-native packages. You can install it using your preferred package manager like pnpm, npm, or yarn.
 
 :::tabs
 == Vanilla
@@ -32,31 +31,31 @@ npm i @scratcher.js/react-native
 
 :::
 
-## 빠른 시작 / Quick Start
+## Quick Start
 
-아래는 각 환경별 기본 사용 예시입니다. 실제 사용 시, config 객체에 필수 옵션(캔버스 크기, 커버/배경 등)을 지정해야 하며, 콜백 등 추가 옵션도 자유롭게 활용할 수 있습니다.
+Below are basic usage examples for each environment. When using it in practice, you need to specify required options in the config object (canvas size, cover/background, etc.), and you can freely use additional options like callbacks.
 
-config 값에 대한 자세한 설명은 [Configuration](/docs/configuration) 에서 확인해주세요.
+For detailed explanations of config values, see [Configuration](/docs/configuration).
 
-### config 예시 및 주요 옵션
+### Config Example and Key Options
 
 ```ts
 const scratcherConfig = {
-  width: 300, // 캔버스 가로
-  height: 150, // 캔버스 세로
-  brushSize: 30, // 브러시 크기
-  threshold: 0.7, // 긁기 완료 퍼센트(0~1)
-  cover: '#ccc', // 덮개 색상 또는 이미지
-  background: '/img/coupon.png', // 배경 이미지
-  // 콜백 예시
+  width: 300, // Canvas width
+  height: 150, // Canvas height
+  brushSize: 30, // Brush size
+  threshold: 0.7, // Scratch completion percentage (0~1)
+  cover: '#ccc', // Cover color or image
+  background: '/img/coupon.png', // Background image
+  // Callback example
   callbacks: {
-    onProgress: next => console.log('진행률:', next.progress),
-    onComplete: () => alert('긁기 완료!'),
+    onProgress: next => console.log('Progress:', next.progress),
+    onComplete: () => alert('Scratching complete!'),
   },
 };
 ```
 
-> width/height는 필수, cover/background는 색상 또는 이미지 모두 지원, 콜백은 필요에 따라 추가
+> width/height are required. cover/background support both color and image. Callbacks can be added as needed.
 
 ### Vanilla JS
 
@@ -85,8 +84,8 @@ import { useNativeScratchController } from '@scratcher.js/react-native';
 const { scratcher } = useNativeScratchController(scratcherConfig);
 ```
 
-## 통합 팁
+## Integration Tips
 
-- config, 콜백, 커버/배경 등은 모든 환경에서 거의 동일하게 사용 가능
-- 프레임워크별 문법만 맞추면 쉽게 이식 가능
-- 더 다양한 예제와 고급 사용법은 [Usage Examples](./usage-examples) 문서를 참고하세요.
+- Config, callbacks, cover/background, and more work almost identically across all environments
+- Easy to port by just adjusting framework-specific syntax
+- For more examples and advanced usage, see the [Usage Examples](./usage-examples) documentation.

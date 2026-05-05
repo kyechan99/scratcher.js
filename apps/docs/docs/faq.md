@@ -1,31 +1,29 @@
-# FAQ / 자주 묻는 질문
+# FAQ
 
-원하는 질문이 없다면 GitHub Issue로 남겨 주세요. 자주 들어오는 질문은 FAQ에 계속 추가합니다.
+If you don't find the answer to your question here, please submit it as a GitHub Issue. We'll continue to add frequently asked questions to this FAQ.
 
-## Q. 어떤 환경에서 사용할 수 있나요?
+## Q. What environments can I use this in?
 
-A. `@scratcher/core`를 기반으로 React, Vue, React Native 바인딩을 제공합니다.  
-웹 서비스부터 앱 환경까지 동일한 개념으로 확장할 수 있습니다.
+A. `@scratcher/core` provides React, Vue, and React Native bindings. You can extend the same concept from web services to app environments.
 
-## Q. 커스텀 브러시나 이미지도 지원하나요?
+## Q. Do you support custom brushes and images?
 
-A. 가능합니다. 브러시 크기/감도 조절, 커버/배경 이미지 적용, 콜백 처리 등 실무에서 자주 쓰는 옵션을 제공합니다.
+A. Yes. We provide commonly used options in practice, including brush size/sensitivity adjustment, cover/background image application, and callback handling.
 
-## Q. TypeScript 지원하나요?
+## Q. Do you support TypeScript?
 
-A. 네. 모든 패키지가 TypeScript 기반으로 작성되어 타입 안정성과 자동완성 지원을 받을 수 있습니다.
+A. Yes. All packages are written based on TypeScript, so you get type safety and auto-completion support.
 
-## Q. 성능은 어떤가요?
+## Q. How is the performance?
 
-A. 스크래치 진행률 계산과 상태 관리를 핵심 로직으로 분리해 성능 저하를 줄이도록 설계했습니다.  
-다만 저사양 디바이스에서는 브러시 크기, 이벤트 빈도, 이미지 해상도에 따라 성능 차이가 생길 수 있어 환경별 테스트를 권장합니다.
+A. We designed it to reduce performance degradation by separating scratch progress calculation and state management into core logic. However, on low-spec devices, performance may vary depending on brush size, event frequency, and image resolution, so testing in various environments is recommended.
 
-## Q. SSR 환경에서도 사용할 수 있나요?
+## Q. Can I use this in SSR environments?
 
-A. 가능합니다. 다만 스크래치 인터랙션은 브라우저 입력 이벤트를 사용하므로, 실제 동작 초기화는 클라이언트 사이드에서 처리해야 합니다.
+A. Yes. However, since scratch interaction uses browser input events, the actual operation initialization must be handled on the client side.
 
-## Q. 라이선스는 어떻게 되나요?
+## Q. What about the license?
 
-A. MIT 라이선스입니다.
+A. It's MIT licensed.
 
 ---

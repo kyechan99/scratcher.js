@@ -1,22 +1,22 @@
-# Using Images with Cover and Reward
+# 이미지 커버와 리워드 예시 (Custom Image Example)
 
-Scratcher.js allows you to freely apply images to reward (what's revealed after scratching) and cover (the overlay before scratching). Below are the methods for each, playgrounds, and code examples for each environment.
+Scratcher.js는 reward(긁힌 후 보상)와 cover(긁기 전 덮개)에 이미지를 자유롭게 적용할 수 있습니다. 아래는 각각의 방식과 Playground, 그리고 환경별 코드 예시입니다.
 
 ::: info
-Scratcher's cover internally adjusts the `globalCompositeOperation` value to implement the scratching effect and reward reveal. In most cases, no special settings are needed in the `renderCover` function.
+Scratcher의 cover는 내부적으로 `globalCompositeOperation` 값을 조정하여 긁기 효과와 보상 노출을 구현합니다. 대부분의 경우, `renderCover` 함수에서는 별도의 설정이 필요하지 않습니다.
 
-However, when directly implementing images or complex cover effects, the cover may not display properly or the scratching effect may not work correctly. In such cases, you can get the desired result by explicitly setting `globalCompositeOperation`.
+하지만 이미지나 복잡한 커버 효과를 직접 구현할 때, cover가 정상적으로 보이지 않거나 긁기 효과가 작동하지 않게 렌더링되는 경우가 있을 수 있습니다. 이럴 때는 `globalCompositeOperation`를 명시적으로 설정해주면 원하는 결과를 얻을 수 있습니다.
 :::
 
-## Cover Image
+## cover 이미지
 
 <CustomImageCoverPlayground />
 
-### Cover Image Example
+### cover 이미지 예시
 
-To add an image to the cover, use the `renderCover` option to draw the image on the canvas.
+cover에 이미지를 넣으려면 `renderCover` 옵션을 사용해 캔버스에 이미지를 그릴 수 있습니다.
 
-This works similarly to the [examples/Custom-Cover](/examples/custom-cover) example.
+이는 [examples/Custom-Cover](/examples/custom-cover) 예시와 유사하게 작동합니다.
 
 ```ts
 function renderCover(canvas: HTMLCanvasElement, width: number, height: number, _cover: string) {
@@ -37,7 +37,7 @@ function renderCover(canvas: HTMLCanvasElement, width: number, height: number, _
 
 ---
 
-Below are examples of applying image covers/rewards for each environment (Vanilla JS, React, Vue).
+아래는 환경별(바닐라 JS, React, Vue) 이미지 커버/리워드 적용 예시입니다.
 
 :::tabs
 
@@ -51,7 +51,7 @@ const scratcher = new Scratcher({
   width: 400,
   height: 240,
   brushSize: 30,
-  renderCover, // Image cover function
+  renderCover, // 이미지 커버 함수
 });
 scratcher.bindCanvas(canvas);
 ```
@@ -63,7 +63,7 @@ scratcher.bindCanvas(canvas);
   width={400}
   height={240}
   brushSize={30}
-  renderCover={renderCover} // Image cover function
+  renderCover={renderCover} // 이미지 커버 함수
 >
   <img
     src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=300"
@@ -83,13 +83,13 @@ scratcher.bindCanvas(canvas);
 
 :::
 
-## Reward Image
+## reward 이미지
 
 <CustomImageRewardPlayground/>
 
-### Reward Image Example
+### reward 이미지 예시
 
-For the reward, simply use an `<img>` tag.
+reward에는 단순히 `<img>` 태그를 넣으면 됩니다.
 
 ```tsx
 <Scratcher {...config}>

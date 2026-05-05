@@ -79,6 +79,11 @@ export default defineConfig({
     },
 
     socialLinks: [{ icon: 'github', link: 'https://github.com/kyechan99/scratcher.js' }],
+
+    editLink: {
+      pattern: 'https://github.com/kyechan99/scratcher.js/edit/main/apps/docs/:path',
+      text: 'Edit this page on GitHub',
+    },
   },
   locales: {
     root: {
@@ -88,7 +93,33 @@ export default defineConfig({
     kr: {
       label: '한국어',
       lang: 'kr',
-      // link: "/kr/guide",
+      // link: '/kr/docs/overview',
+      themeConfig: {
+        sidebar: [
+          {
+            text: 'Docs',
+            items: [
+              { text: 'Overview', link: '/kr/docs/overview' },
+              { text: 'Getting Started', link: '/kr/docs/getting-started' },
+              { text: 'Configuration', link: '/kr/docs/configuration' },
+              { text: 'API Reference', link: '/kr/docs/api-reference' },
+              { text: 'FAQ', link: '/kr/docs/faq' },
+            ],
+          },
+          {
+            text: 'Examples',
+            items: [
+              { text: 'Custom Cover', link: '/kr/examples/custom-cover' },
+              { text: 'Custom Scratch', link: '/kr/examples/custom-scratch' },
+              { text: 'Async Reward', link: '/kr/examples/async-reward' },
+              { text: 'Using Images', link: '/kr/examples/using-images' },
+              { text: 'Custom Area (Rect)', link: '/kr/examples/custom-area-rect' },
+              { text: 'Custom Area (Image)', link: '/kr/examples/custom-area-image' },
+              // { text: 'Complete Animation', link: '/kr/examples/complete-animation' }, // TODO: draft
+            ],
+          },
+        ],
+      },
     },
   },
 });
