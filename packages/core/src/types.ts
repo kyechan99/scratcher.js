@@ -24,12 +24,48 @@ export type ScratchEngineOptions = {
 };
 
 /**
+ * Represents a rectangular area defined by coordinates and dimensions.
+ */
+export type RectArea = {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+};
+
+/**
+ * Represents an image-based area using alpha channel as mask.
+ */
+export type ImageArea = {
+  imageData: ImageData;
+  x?: number;
+  y?: number;
+  scale?: number;
+  alphaThreshold?: number; // 0-255, default 128
+};
+
+/**
+ * Area type that can be either rectangular or image-based.
+ */
+export type Area = RectArea | ImageArea;
+
+/**
+ * Represents area-specific scratch progress.
+ */
+export type AreaSnapshot = {
+  scratchedCells: number;
+  totalCells: number;
+  progress: number;
+};
+
+/**
  * Represents the current state of the scratch area.
  */
 export type ScratchSnapshot = {
   scratchedCells: number;
   totalCells: number;
   progress: number;
+  area?: AreaSnapshot;
 };
 
 /**
@@ -44,6 +80,8 @@ export interface ScratchStore {
   snapshot(): ScratchSnapshot;
   /** Reveals all covered area. */
   revealAll(): ScratchSnapshot;
+  /** Sets an area for measuring progress. */
+  setArea(area?: Area): ScratchSnapshot;
 }
 
 /**
@@ -78,6 +116,8 @@ export interface ScratcherConfig extends ScratchEngineOptions {
   callbacks?: ScratchControllerCallbacks;
   /** Cover color or image. */
   cover?: string;
+  /** Area for measuring progress. */
+  area?: Area;
   /** Custom pointer mapping function. */
   mapPoint?: (e: ScratcherPointerEventType, canvas: ScratcherCanvasType) => Point;
   /** Custom render at point function. */

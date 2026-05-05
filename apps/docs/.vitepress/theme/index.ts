@@ -11,6 +11,8 @@ import CompleteAnimationPlayground from './components/examples/CompleteAnimation
 import AsyncRewardPlayground from './components/examples/AsyncRewardPlayground.vue';
 import CustomImageCoverPlayground from './components/examples/CustomImageCoverPlayground.vue';
 import CustomImageRewardPlayground from './components/examples/CustomImageRewardPlayground.vue';
+import RectAreaPlayground from './components/examples/RectAreaPlayground.vue';
+import ImageAreaPlayground from './components/examples/ImageAreaPlayground.vue';
 
 import './style.css';
 
@@ -31,5 +33,7 @@ export default {
     app.component('AsyncRewardPlayground', AsyncRewardPlayground);
     app.component('CustomImageCoverPlayground', CustomImageCoverPlayground);
     app.component('CustomImageRewardPlayground', CustomImageRewardPlayground);
+    app.component('RectAreaPlayground', RectAreaPlayground);
+    app.component('ImageAreaPlayground', ImageAreaPlayground);
   },
 } satisfies Theme;

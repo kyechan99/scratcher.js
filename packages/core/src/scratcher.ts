@@ -7,6 +7,7 @@ import {
   ScratchControllerCallbacks,
   ScratcherConfig,
   ScratchSnapshot,
+  Area,
 } from './types';
 
 type ScratchRuntimeEventMap = {
@@ -58,6 +59,11 @@ export class Scratcher {
       height: options.height,
       coverage: options.coverage,
     });
+
+    // Set area if provided
+    if (options.area) {
+      this.store.setArea(options.area);
+    }
 
     this.brushSize = Math.max(1, options.brushSize);
     this.pointerState = SCRATCH_POINTER.IDLE;
@@ -180,6 +186,17 @@ export class Scratcher {
    */
   setBrushSize(size: number): void {
     this.brushSize = Math.max(1, size);
+  }
+
+  /**
+   * Sets an area for measuring progress.
+   * @param area The area to measure, or undefined to disable area measurement
+   * @returns The current snapshot with area information
+   */
+  setArea(area?: Area): ScratchSnapshot {
+    this.currentSnapshot = this.store.setArea(area);
+    this.emit('progress', { snapshot: this.currentSnapshot });
+    return this.currentSnapshot;
   }
 
   /**
@@ -311,7 +328,10 @@ export class Scratcher {
     this.currentSnapshot = snapshot;
     this.emit('progress', { snapshot });
 
-    if (!this.completed && snapshot.progress >= this.completionThreshold) {
+    // Use area progress if area is set, otherwise use overall progress
+    const currentProgress = snapshot.area?.progress ?? snapshot.progress;
+
+    if (!this.completed && currentProgress >= this.completionThreshold) {
       this.completed = true;
       if (this.revealOnCompletion) {
         this.currentSnapshot = this.store.revealAll();

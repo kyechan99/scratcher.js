@@ -59,3 +59,10 @@ const scratcherConfig = {
 
 - `point`: { x, y } (2D 좌표)
 - `snapshot`: { scratchedCells, totalCells, progress } (현재 긁기 상태)
+
+## area 
+
+Scratcher.js 는 전체 캔버스 영역이 아닌 **특정 영역(Area)** 에서 긁기 진행도를 측정할 수 있습니다.더 자세한 사용법은 아래 Examples 페이지에서 확인해주세요.
+
+- [Custom Area (Rect)](/examples/custom-area-rect)
+- [Custom Area (Image)](/examples/custom-area-image)

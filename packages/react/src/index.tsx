@@ -2,6 +2,7 @@ import {
   ScratcherConfig,
   ScratchControllerCallbacks,
   Scratcher as CoreScratcher,
+  Area,
 } from '@scratcher/core';
 import { CSSProperties, ReactNode, useCallback, useEffect, useMemo, useRef } from 'react';
 
@@ -23,6 +24,7 @@ export function Scratcher({
   revealOnCompletion,
   callbacks,
   cover,
+  area,
   className,
   style,
   canvasClassName,
@@ -39,10 +41,11 @@ export function Scratcher({
         coverage,
         brushSize,
         cover,
+        area,
         completionThreshold,
         revealOnCompletion,
       }),
-    [width, height, coverage, cover, completionThreshold, revealOnCompletion],
+    [width, height, coverage, cover, area, completionThreshold, revealOnCompletion],
   );
   const callbacksRef = useRef<ScratchControllerCallbacks | undefined>(callbacks);
 
@@ -55,6 +58,10 @@ export function Scratcher({
   useEffect(() => {
     scratcher.setBrushSize(brushSize);
   }, [scratcher, brushSize]);
+
+  useEffect(() => {
+    scratcher.setArea(area);
+  }, [scratcher, area]);
 
   useEffect(() => {
     onScratcherReady?.(scratcher);

@@ -1,4 +1,4 @@
-import { ScratchControllerCallbacks, Scratcher as CoreScratcher } from '@scratcher/core';
+import { ScratchControllerCallbacks, Scratcher as CoreScratcher, Area } from '@scratcher/core';
 import {
   defineComponent,
   h,
@@ -25,6 +25,10 @@ export const Scratcher = defineComponent({
       required: false,
     },
     cover: { type: String, required: false },
+    area: {
+      type: Object as PropType<Area | undefined>,
+      required: false,
+    },
     canvasClass: { type: String, required: false },
     rewardClass: { type: String, required: false },
     onScratcherReady: {
@@ -62,6 +66,7 @@ export const Scratcher = defineComponent({
         coverage: props.coverage,
         brushSize: props.brushSize,
         cover: props.cover,
+        area: props.area,
         completionThreshold: props.completionThreshold,
         revealOnCompletion: props.revealOnCompletion,
         mapPoint: props.mapPoint,
@@ -92,6 +97,19 @@ export const Scratcher = defineComponent({
         }
         scratcher.setCallbacks(props.callbacks);
         scratcher.setBrushSize(props.brushSize);
+      },
+      { deep: true },
+    );
+
+    watch(
+      () => props.area,
+      area => {
+        const scratcher = scratcherRef.value;
+        if (!scratcher) {
+          return;
+        }
+
+        scratcher.setArea(area);
       },
       { deep: true },
     );

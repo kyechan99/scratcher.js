@@ -66,6 +66,8 @@ export default defineConfig({
           { text: 'Custom Scratch', link: '/examples/custom-scratch' },
           { text: 'Async Reward', link: '/examples/async-reward' },
           { text: 'Using Images', link: '/examples/using-images' },
+          { text: 'Custom Area (Rect)', link: '/examples/custom-area-rect' },
+          { text: 'Custom Area (Image)', link: '/examples/custom-area-image' },
           // { text: 'Complete Animation', link: '/examples/complete-animation' }, // TODO: draft
         ],
       },
