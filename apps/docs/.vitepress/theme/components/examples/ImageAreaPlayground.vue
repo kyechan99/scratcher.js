@@ -4,7 +4,6 @@ import {
   type Scratcher as CoreScratcher,
   type ScratchSnapshot,
   type ImageArea,
-  type ScratchControllerCallbacks,
 } from '@scratcher.js/core';
 import { Scratcher as VueScratcher } from '@scratcher.js/vue';
 import PlaygroundFrame from './PlaygroundFrame.vue';
@@ -243,7 +242,7 @@ onUnmounted(() => {
             :brush-size="40"
             :cover="'#b9c2ce'"
             :area="currentArea"
-            :onProgress="onProgress"
+            :on-progress="onProgress"
             canvas-class="scratch-canvas"
             :on-scratcher-ready="handleScratcherReady"
           >

@@ -48,7 +48,7 @@ async function handleComplete() {
         :completion-threshold="0.3"
         :reveal-on-completion="true"
         :on-scratcher-ready="handleScratcherReady"
-        :onComplete="handleComplete"
+        :on-complete="handleComplete"
       >
         <div class="reward">
           {{ loading ? 'Checking results...' : reward || 'Scratch and check the results!' }}
