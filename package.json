@@ -2,7 +2,10 @@
   "name": "scratcher-js",
   "private": true,
   "version": "0.1.0",
-  "description": "scratcher",
+  "description": "Cross-framework scratch interaction library for web and mobile.",
+  "author": "kyechan99 <kyechan99@gmail.com>",
+  "license": "MIT",
+  "homepage": "https://kyechan99.github.io/scratcher.js",
   "scripts": {
     "build": "turbo run build",
     "dev": "vitepress dev apps/docs",
@@ -37,5 +40,19 @@
       "prettier --write"
     ]
   },
+  "bugs": {
+    "url": "https://github.com/kyechan99/scratcher.js/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kyechan99/scratcher.js"
+  },
+  "keywords": [
+    "scratch",
+    "interaction",
+    "scratcher",
+    "scratch-card",
+    "scratch-off"
+  ],
   "packageManager": "pnpm@10.17.1"
 }

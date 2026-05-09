@@ -1,7 +1,10 @@
 {
   "name": "@scratcher.js/vue",
   "version": "0.1.0",
-  "description": "Vue bindings for scratcher core.",
+  "description": "Cross-framework scratch interaction library for web and mobile.",
+  "author": "kyechan99 <kyechan99@gmail.com>",
+  "license": "MIT",
+  "homepage": "https://kyechan99.github.io/scratcher.js",
   "type": "module",
   "main": "dist/index.cjs",
   "module": "dist/index.js",
@@ -33,5 +36,19 @@
     "tsup": "^8.0.2",
     "typescript": "^5.8.2",
     "vue": "^3.5.13"
-  }
+  },
+  "bugs": {
+    "url": "https://github.com/kyechan99/scratcher.js/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kyechan99/scratcher.js"
+  },
+  "keywords": [
+    "scratch",
+    "interaction",
+    "scratcher",
+    "scratch-card",
+    "scratch-off"
+  ]
 }
