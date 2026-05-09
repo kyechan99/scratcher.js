@@ -8,7 +8,7 @@ function createBasicConfig(): ScratcherConfig {
     width: 100,
     height: 100,
     brushSize: 10,
-    coverage: 1,
+    cellSize: 1,
     completionThreshold: 0.5,
     revealOnCompletion: false,
   };
@@ -117,7 +117,7 @@ describe('createScratcher', () => {
       width: 100,
       height: 100,
       brushSize: 10,
-      coverage: 1,
+      cellSize: 1,
     });
     // Should be instance of Scratcher
     expect(scratcher).toBeInstanceOf(Scratcher);
@@ -135,7 +135,7 @@ describe('Scratcher User Input Simulation', () => {
   it('should render cover if cover is provided', () => {
     const renderCover = vi.fn();
     const canvas = createMockCanvas();
-    const scratcher = new Scratcher({ width: 100, height: 100, brushSize: 10, coverage: 1 });
+    const scratcher = new Scratcher({ width: 100, height: 100, brushSize: 10, cellSize: 1 });
     new ScratchCanvasAdapter({
       canvas,
       interaction: scratcher,
@@ -163,7 +163,7 @@ describe('Scratcher User Input Simulation', () => {
       width: 100,
       height: 100,
       brushSize: 10,
-      coverage: 1,
+      cellSize: 1,
       revealOnCompletion: true,
       completionThreshold: 0,
     });
@@ -180,7 +180,7 @@ describe('Scratcher User Input Simulation', () => {
 
   it('should call unbind and remove listeners', () => {
     const canvas = createMockCanvas();
-    const scratcher = new Scratcher({ width: 100, height: 100, brushSize: 10, coverage: 1 });
+    const scratcher = new Scratcher({ width: 100, height: 100, brushSize: 10, cellSize: 1 });
     const adapter = new ScratchCanvasAdapter({
       canvas,
       interaction: scratcher,
@@ -197,7 +197,7 @@ describe('Scratcher User Input Simulation', () => {
   it('should call resetCover', () => {
     const renderCover = vi.fn();
     const canvas = createMockCanvas();
-    const scratcher = new Scratcher({ width: 100, height: 100, brushSize: 10, coverage: 1 });
+    const scratcher = new Scratcher({ width: 100, height: 100, brushSize: 10, cellSize: 1 });
     const adapter = new ScratchCanvasAdapter({
       canvas,
       interaction: scratcher,
@@ -211,7 +211,7 @@ describe('Scratcher User Input Simulation', () => {
 
   it('should handle pointerleave and pointercancel', () => {
     const canvas = createMockCanvas();
-    const scratcher = new Scratcher({ width: 100, height: 100, brushSize: 10, coverage: 1 });
+    const scratcher = new Scratcher({ width: 100, height: 100, brushSize: 10, cellSize: 1 });
     const adapter = new ScratchCanvasAdapter({
       canvas,
       interaction: scratcher,
@@ -236,7 +236,7 @@ describe('Scratcher User Input Simulation', () => {
       width: 100,
       height: 100,
       brushSize: 10,
-      coverage: 1,
+      cellSize: 1,
     });
     const adapter = new ScratchCanvasAdapter({
       canvas,

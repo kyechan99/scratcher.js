@@ -28,7 +28,7 @@ type LoadedImage = { src: string; imageData: ImageData };
 
 export function App() {
   const [brushSize, setBrushSize] = useState(30);
-  const [coverage, setCoverage] = useState(10);
+  const [cellSize, setCellSize] = useState(10);
   const [cover, setCover] = useState('#b9c2ce');
   const [threshold, setThreshold] = useState(0.5);
   const [revealOnCompletion, setRevealOnCompletion] = useState(false);
@@ -172,7 +172,7 @@ export function App() {
               key={mountKey}
               width={FRAME_WIDTH}
               height={FRAME_HEIGHT}
-              coverage={coverage}
+              cellSize={cellSize}
               brushSize={brushSize}
               cover={cover}
               area={area}
@@ -226,13 +226,13 @@ export function App() {
               onChange={e => setBrushSize(Number(e.target.value))}
             />
           </Field>
-          <Field label="Coverage" value={coverage}>
+          <Field label="Cell size" value={`${cellSize}px`}>
             <input
               type="range"
               min={2}
               max={24}
-              value={coverage}
-              onChange={e => setCoverage(Number(e.target.value))}
+              value={cellSize}
+              onChange={e => setCellSize(Number(e.target.value))}
             />
           </Field>
           <Field label="Cover color" value={cover}>

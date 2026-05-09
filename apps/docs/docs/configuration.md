@@ -9,7 +9,7 @@ This guide covers the main configuration methods and options for Scratcher.js an
 | width \*            | number       | Canvas width (px)                          | -       |
 | height \*           | number       | Canvas height (px)                         | -       |
 | brushSize           | number       | Brush size for scratching (px)             | 30      |
-| coverage            | number (0~1) | Initial cover ratio (0=none, 1=full cover) | 1       |
+| cellSize            | number       | Grid cell size (px) for progress tracking. Lower = finer resolution. | 16      |
 | completionThreshold | number (0~1) | Percentage threshold for completion        | 0.7     |
 | revealOnCompletion  | boolean      | Auto-reveal all on completion              | false   |
 | cover               | string       | Cover color or image URL                   | #ccc    |
@@ -25,7 +25,7 @@ const scratcherConfig = {
   width: 300,
   height: 150,
   brushSize: 30,
-  coverage: 1, // 1=full cover, 0.5=half cover, etc.
+  cellSize: 16, // Progress tracking grid cell size (px). Lower = finer.
   completionThreshold: 0.7, // Completion percentage (0~1)
   revealOnCompletion: true, // Auto-reveal all on completion
   cover: '#ccc', // Cover color or image URL

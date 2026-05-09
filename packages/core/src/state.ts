@@ -25,7 +25,7 @@ export type ScratchGridState = {
 function createGridState(options: ScratchEngineOptions): ScratchGridState {
   const width = options.width;
   const height = options.height;
-  const cellSize = Math.max(1, options.coverage ?? 16);
+  const cellSize = Math.max(1, options.cellSize ?? 16);
   const cols = Math.max(1, Math.ceil(width / cellSize));
   const rows = Math.max(1, Math.ceil(height / cellSize));
 

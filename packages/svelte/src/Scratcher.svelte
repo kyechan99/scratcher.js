@@ -10,7 +10,7 @@
   type Props = {
     width: number;
     height: number;
-    coverage?: number;
+    cellSize?: number;
     brushSize: number;
     completionThreshold?: number;
     revealOnCompletion?: boolean;
@@ -30,7 +30,7 @@
   let {
     width,
     height,
-    coverage,
+    cellSize,
     brushSize,
     completionThreshold,
     revealOnCompletion,
@@ -54,14 +54,14 @@
   // Other props (brushSize/callbacks/area/render fns) are read via untrack
   // so they don't trigger recreation; live updates are handled below.
   $effect(() => {
-    void [width, height, coverage, cover, completionThreshold, revealOnCompletion, canvas];
+    void [width, height, cellSize, cover, completionThreshold, revealOnCompletion, canvas];
 
     if (!canvas) return;
 
     const next = new CoreScratcher({
       width,
       height,
-      coverage,
+      cellSize,
       brushSize: untrack(() => brushSize),
       cover,
       area: untrack(() => area),

@@ -20,7 +20,14 @@ export type BrushStroke = {
 export type ScratchEngineOptions = {
   width: number;
   height: number;
-  coverage?: number;
+  /**
+   * Grid cell size (px) used for progress tracking. Lower values give finer
+   * progress resolution and smoother completion detection at the cost of more
+   * cells to track. Has no visual effect on the cover layer.
+   *
+   * @default 16
+   */
+  cellSize?: number;
 };
 
 /**

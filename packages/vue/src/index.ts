@@ -16,7 +16,7 @@ export const Scratcher = defineComponent({
   props: {
     width: { type: Number, required: true },
     height: { type: Number, required: true },
-    coverage: { type: Number, required: false },
+    cellSize: { type: Number, required: false },
     brushSize: { type: Number, required: true },
     completionThreshold: { type: Number, required: false },
     revealOnCompletion: { type: Boolean, required: false },
@@ -63,7 +63,7 @@ export const Scratcher = defineComponent({
       const scratcher = new CoreScratcher({
         width: props.width,
         height: props.height,
-        coverage: props.coverage,
+        cellSize: props.cellSize,
         brushSize: props.brushSize,
         cover: props.cover,
         area: props.area,
@@ -118,7 +118,7 @@ export const Scratcher = defineComponent({
       () => [
         props.width,
         props.height,
-        props.coverage,
+        props.cellSize,
         props.cover,
         props.completionThreshold,
         props.revealOnCompletion,

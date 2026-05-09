@@ -17,7 +17,7 @@ export interface ScratcherProps extends ScratcherConfig {
 export function Scratcher({
   width,
   height,
-  coverage,
+  cellSize,
   brushSize,
   completionThreshold,
   revealOnCompletion,
@@ -40,7 +40,7 @@ export function Scratcher({
       new CoreScratcher({
         width,
         height,
-        coverage,
+        cellSize,
         brushSize,
         cover,
         area,
@@ -53,7 +53,7 @@ export function Scratcher({
     // area / mapPoint / renderAtPoint / renderCover are intentionally excluded:
     // area is updated via the setArea effect below; the render fns are captured
     // at construction time to match the Vue binding's behavior.
-    [width, height, coverage, cover, completionThreshold, revealOnCompletion],
+    [width, height, cellSize, cover, completionThreshold, revealOnCompletion],
   );
   const callbacksRef = useRef<ScratchControllerCallbacks | undefined>(callbacks);
 

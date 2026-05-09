@@ -13,7 +13,7 @@ import { computed, onUnmounted, ref } from 'vue';
 interface PlaygroundScratcherConfig extends CoreScratcherConfig {
   width: number;
   height: number;
-  coverage: number;
+  cellSize: number;
   brushSize: number;
   cover: string;
   completionThreshold?: number;
@@ -57,7 +57,7 @@ const minAreaSize = 50;
 const currentScratcherConfig = ref<PlaygroundScratcherConfig>({
   width: 400,
   height: 400,
-  coverage: 10,
+  cellSize: 16,
   brushSize: 55,
   cover: '#b9c2ce',
   completionThreshold: 0.3,
@@ -87,7 +87,7 @@ const sanitizedScratcherConfig = computed<PlaygroundScratcherConfig>(() => {
   return {
     width: Math.max(180, safeNumber(raw.width, 360)),
     height: Math.max(120, safeNumber(raw.height, 200)),
-    coverage: Math.max(4, safeNumber(raw.coverage, 10)),
+    cellSize: Math.max(4, safeNumber(raw.cellSize, 10)),
     brushSize: Math.max(8, safeNumber(raw.brushSize, 30)),
     cover: normalizeCoverColor(raw.cover, '#d6d9df'),
     completionThreshold: Math.min(1, Math.max(0, safeNumber(raw.completionThreshold, 0.2))),
@@ -294,7 +294,7 @@ onUnmounted(() => {
               class="scratch-card"
               :width="sanitizedScratcherConfig.width"
               :height="sanitizedScratcherConfig.height"
-              :coverage="sanitizedScratcherConfig.coverage"
+              :cell-size="sanitizedScratcherConfig.cellSize"
               :brush-size="sanitizedScratcherConfig.brushSize"
               :cover="sanitizedScratcherConfig.cover"
               :area="currentArea"
@@ -350,11 +350,11 @@ onUnmounted(() => {
 
         <label class="field">
           <div class="field-head">
-            <span>Coverage</span>
-            <strong>{{ sanitizedScratcherConfig.coverage }}</strong>
+            <span>Cell size</span>
+            <strong>{{ sanitizedScratcherConfig.cellSize }}px</strong>
           </div>
           <input
-            v-model.number="currentScratcherConfig.coverage"
+            v-model.number="currentScratcherConfig.cellSize"
             type="range"
             min="4"
             max="24"

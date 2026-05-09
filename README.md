@@ -116,7 +116,7 @@ scratcher.bindCanvas(canvas);
 | `width` \*            | `number`       | Canvas width (px)                              | —       |
 | `height` \*           | `number`       | Canvas height (px)                             | —       |
 | `brushSize`           | `number`       | Brush size (px)                                | `30`    |
-| `coverage`            | `number (0~1)` | Initial cover ratio                            | `1`     |
+| `cellSize`            | `number`       | Grid cell size (px) for progress tracking      | `16`    |
 | `completionThreshold` | `number (0~1)` | Progress at which `onComplete` fires           | `0.7`   |
 | `revealOnCompletion`  | `boolean`      | Auto-reveal everything once threshold is hit   | `false` |
 | `cover`               | `string`       | Cover color or image URL                       | `#ccc`  |

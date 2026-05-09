@@ -190,7 +190,7 @@ function resetCanvas() {
 
 async function loadDefaultImage() {
   try {
-    const loadedImage = await loadImage('/area_mask_sample.png');
+    const loadedImage = await loadImage('/scratcher.js/area_mask_sample.png');
     const canvas = document.createElement('canvas');
     canvas.width = loadedImage.width;
     canvas.height = loadedImage.height;
@@ -205,7 +205,7 @@ async function loadDefaultImage() {
     const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
 
     areaImage.value = {
-      src: '/area_mask_sample.png',
+      src: '/scratcher.js/area_mask_sample.png',
       imageData,
     };
     areaImageStatus.value = `area_mask_sample.png (${loadedImage.width}×${loadedImage.height})`;

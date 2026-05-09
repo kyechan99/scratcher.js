@@ -57,7 +57,7 @@ export class Scratcher {
     this.store = createScratchStore({
       width: options.width,
       height: options.height,
-      coverage: options.coverage,
+      cellSize: options.cellSize,
     });
 
     // Set area if provided

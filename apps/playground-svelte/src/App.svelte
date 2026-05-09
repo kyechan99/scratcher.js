@@ -20,7 +20,7 @@
   type LoadedImage = { src: string; imageData: ImageData };
 
   let brushSize = $state(30);
-  let coverage = $state(10);
+  let cellSize = $state(10);
   let cover = $state('#b9c2ce');
   let threshold = $state(0.5);
   let revealOnCompletion = $state(false);
@@ -204,7 +204,7 @@
           <Scratcher
             width={FRAME_WIDTH}
             height={FRAME_HEIGHT}
-            {coverage}
+            {cellSize}
             {brushSize}
             {cover}
             {area}
@@ -250,8 +250,8 @@
         <input type="range" min="4" max="80" bind:value={brushSize} />
       </label>
       <label class="field">
-        <div class="field-head"><span>Coverage</span><strong>{coverage}</strong></div>
-        <input type="range" min="2" max="24" bind:value={coverage} />
+        <div class="field-head"><span>Cell size</span><strong>{cellSize}px</strong></div>
+        <input type="range" min="2" max="24" bind:value={cellSize} />
       </label>
       <label class="field">
         <div class="field-head"><span>Cover color</span><strong>{cover}</strong></div>

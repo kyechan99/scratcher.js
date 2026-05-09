@@ -9,7 +9,7 @@ Scratcher.js 및 각 프레임워크별 패키지의 주요 설정 방법과 옵
 | width \*            | number       | 캔버스 가로(px)                            | -      |
 | height \*           | number       | 캔버스 세로(px)                            | -      |
 | brushSize           | number       | 긁기 브러시 크기(px)                       | 30     |
-| coverage            | number (0~1) | 초기 덮개 비율(0=없음, 1=전체 덮개)        | 1      |
+| cellSize            | number       | 진행률 추적용 격자 셀 크기(px). 작을수록 세밀함. | 16     |
 | completionThreshold | number (0~1) | 긁기 완료로 간주할 퍼센트(진행률)          | 0.7    |
 | revealOnCompletion  | boolean      | 긁기 완료 시 전체를 자동으로 공개할지 여부 | false  |
 | cover               | string       | 덮을 색상 또는 이미지 URL                  | #ccc   |
@@ -25,7 +25,7 @@ const scratcherConfig = {
   width: 300,
   height: 150,
   brushSize: 30,
-  coverage: 1, // 1=전체 덮개, 0.5=절반만 덮개 등
+  cellSize: 16, // 진행률 추적용 격자 셀 크기(px). 작을수록 세밀함.
   completionThreshold: 0.7, // 긁기 완료 퍼센트(0~1)
   revealOnCompletion: true, // 긁기 완료 시 전체 자동 공개
   cover: '#ccc', // 덮개 색상 또는 이미지 URL

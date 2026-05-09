@@ -9,4 +9,3 @@ export type {
   AreaSnapshot,
   Point,
 } from '@scratcher/core';
-//# sourceMappingURL=index.d.ts.map

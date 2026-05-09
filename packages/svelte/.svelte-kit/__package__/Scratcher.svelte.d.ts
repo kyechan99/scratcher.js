@@ -8,7 +8,7 @@ import {
 type Props = {
   width: number;
   height: number;
-  coverage?: number;
+  cellSize?: number;
   brushSize: number;
   completionThreshold?: number;
   revealOnCompletion?: boolean;
@@ -27,4 +27,3 @@ type Props = {
 declare const Scratcher: import('svelte').Component<Props, {}, ''>;
 type Scratcher = ReturnType<typeof Scratcher>;
 export default Scratcher;
-//# sourceMappingURL=Scratcher.svelte.d.ts.map
