@@ -95,6 +95,10 @@ export default defineConfig({
       lang: 'kr',
       // link: '/kr/docs/overview',
       themeConfig: {
+        nav: [
+          { text: 'Home', link: '/' },
+          { text: 'Docs', link: '/kr/docs/overview' },
+        ],
         sidebar: [
           {
             text: 'Docs',

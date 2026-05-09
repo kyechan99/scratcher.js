@@ -30,7 +30,7 @@ title: docs
   brushSize={30}
   renderCover={renderCover}
 >
-  <div class="reward">Custom Cover Example</div>
+  <div class="reward">You found it!</div>
 </Scratcher>
 ```
 
@@ -44,7 +44,7 @@ title: docs
   :brushSize="30"
   :renderCover="renderCover"
 >
-  <div class="reward">Custom Cover Example</div>
+  <div class="reward">You found it!</div>
 </Scratcher>
 ```
 

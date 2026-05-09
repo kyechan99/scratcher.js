@@ -11,9 +11,9 @@ title: docs
   <div class="ease-left">
     <img src="/public/intro.gif" alt="intro" class="ease-intro" />
     <b class="ease-lead">
-      Scratcher.js is surprisingly easy to use.
+      Scratcher.js는 놀라울 만큼 쉽게 사용할 수 있습니다.
     </b>
-    <p class="ease-desc">Make your service more interactive.</p>
+    <p class="ease-desc">서비스를 더 인터랙티브하게 만들어 보세요.</p>
   </div>
 
   <div class="ease-right">
@@ -30,7 +30,7 @@ title: docs
   brushSize={30}
   renderCover={renderCover}
 >
-  <div class="reward">Custom Cover Example</div>
+  <div class="reward">You found it!</div>
 </Scratcher>
 ```
 
@@ -44,7 +44,7 @@ title: docs
   :brushSize="30"
   :renderCover="renderCover"
 >
-  <div class="reward">Custom Cover Example</div>
+  <div class="reward">You found it!</div>
 </Scratcher>
 ```
 
@@ -82,8 +82,8 @@ scratcher.bindCanvas(canvas);
         <p>Cross-framework scratch interaction library for web and mobile.</p>
         </div>
         <nav class="app-footer-links" aria-label="Footer links">
-        <a href="/docs/overview">Docs</a>
-        <a href="/examples/custom-cover">Examples</a>
+        <a href="/kr/docs/overview">Docs</a>
+        <a href="/kr/examples/custom-cover">Examples</a>
         <a href="https://github.com/kyechan99/scratcher.js" target="_blank" rel="noreferrer">GitHub</a>
         <a href="https://github.com/kyechan99/scratcher.js/issues" target="_blank" rel="noreferrer">Issues</a>
         </nav>
