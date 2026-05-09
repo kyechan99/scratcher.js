@@ -330,3 +330,7 @@ html.dark {
 .VPHome {
   margin-bottom: 0px !important;
 }
+
+.scratch-canvas {
+  cursor: crosshair;
+}
