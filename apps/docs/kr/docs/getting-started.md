@@ -89,4 +89,4 @@ const { scratcher } = useNativeScratchController(scratcherConfig);
 
 - config, 콜백, 커버/배경 등은 모든 환경에서 거의 동일하게 사용 가능
 - 프레임워크별 문법만 맞추면 쉽게 이식 가능
-- 더 다양한 예제와 고급 사용법은 [Usage Examples](./usage-examples) 문서를 참고하세요.
+- 더 다양한 예제와 고급 사용법은 [Examples](/kr/examples/custom-cover) 문서를 참고하세요.

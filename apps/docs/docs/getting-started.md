@@ -88,4 +88,4 @@ const { scratcher } = useNativeScratchController(scratcherConfig);
 
 - Config, callbacks, cover/background, and more work almost identically across all environments
 - Easy to port by just adjusting framework-specific syntax
-- For more examples and advanced usage, see the [Usage Examples](./usage-examples) documentation.
+- For more examples and advanced usage, see the [Examples](/examples/custom-cover) documentation.
