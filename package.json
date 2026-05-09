@@ -5,14 +5,14 @@
   "description": "scratcher",
   "scripts": {
     "build": "turbo run build",
-    "dev": "vitepress dev apps\\docs",
+    "dev": "vitepress dev apps/docs",
     "lint": "turbo run lint",
     "clean": "turbo run clean",
     "typecheck": "turbo run typecheck",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "docs:build": "vitepress build apps\\docs",
-    "docs:preview": "vitepress preview apps\\docs",
+    "docs:build": "vitepress build apps/docs",
+    "docs:preview": "vitepress preview apps/docs",
     "test": "vitest run --coverage",
     "version:all": "node scripts/bump-all-versions.mjs",
     "prepare": "husky"
