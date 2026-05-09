@@ -1,8 +1,8 @@
-<img src="/apps/docs/public/logo.png" width="150" height="150" alt="scratcher.js"/>
+<img src="https://github.com/kyechan99/scratcher.js/raw/main/apps/docs/public/logo.png" width="150" height="150" alt="scratcher.js"/>
 
 # @scratcher.js/vue
 
-Vue 3 bindings for [scratcher.js](https://github.com/kyechan99/scratcher.js) — a cross-framework scratch interaction library for web and mobile.
+Vue 3 bindings for [scratcher.js](https://github.com/kyechan99/scratcher.js) — a A lightweight library for building expressive Scratch interactions.
 
 ## Documentation
 

@@ -2,16 +2,20 @@
 
 # @scratcher.js
 
-[![npm](https://img.shields.io/npm/v/@scratcher.js/core?style=flat&color=cb3837&logo=npm)](https://www.npmjs.com/package/@scratcher.js/core)
+[![@scratcher.js/core](https://img.shields.io/npm/v/@scratcher.js/core?style=flat&color=cb3837&logo=npm&label=core)](https://www.npmjs.com/package/@scratcher.js/core)
+[![@scratcher.js/react](https://img.shields.io/npm/v/@scratcher.js/react?style=flat&color=cb3837&logo=npm&label=%40scratcher.js%2Freact)](https://www.npmjs.com/package/@scratcher.js/react)
+[![@scratcher.js/vue](https://img.shields.io/npm/v/@scratcher.js/vue?style=flat&color=cb3837&logo=npm&label=%40scratcher.js%2Fsvelte)](https://www.npmjs.com/package/@scratcher.js/vue)
+[![@scratcher.js/svelte](https://img.shields.io/npm/v/@scratcher.js/svelte?style=flat&color=cb3837&logo=npm&label=%40scratcher.js%2Fsvelte)](https://www.npmjs.com/package/@scratcher.js/svelte)
+<br/>
 [![codecov](https://img.shields.io/codecov/c/github/kyechan99/scratcher.js?style=flat&logo=codecov&logoColor=white)](https://codecov.io/gh/kyechan99/scratcher.js)
 [![license](https://img.shields.io/npm/l/@scratcher.js/core?style=flat&color=green)](./LICENSE)
 [![TypeScript](https://img.shields.io/badge/TypeScript-Ready-3178C6?style=flat&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 
-Cross-framework scratch interaction library for web and mobile.
+A lightweight library for building expressive Scratch interactions.
 
 Scratcher.js lets you drop a "scratchcard experience" into your product with a few lines of config — event reveals, coupon codes, game-style reward UIs, anywhere user engagement matters.
 
-**Docs:** [English](https://kyechan99.github.io/scratcher.js/) · [한국어](https://kyechan99.github.io/scratcher.js/kr/)
+**Docs:** [English](https://kyechan99.github.io/scratcher.js/) · [한국어](https://kyechan99.github.io/scratcher.js/kr/) · ...
 
 ## Why?
 
@@ -111,17 +115,17 @@ scratcher.bindCanvas(canvas);
 
 ## Configuration
 
-| Option                | Type                    | Required | Description                                               | Default     |
-| --------------------- | ----------------------- | :------: | --------------------------------------------------------- | ----------- |
-| `width`               | `number`                |    ✓     | Canvas width (px)                                         | —           |
-| `height`              | `number`                |    ✓     | Canvas height (px)                                        | —           |
-| `brushSize`           | `number`                |    ✓     | Brush diameter (px)                                       | —           |
-| `cellSize`            | `number`                |          | Grid cell size (px) for progress tracking. Lower = finer. | `16`        |
-| `completionThreshold` | `number (0~1)`          |          | Progress at which `onComplete` fires                      | `0.5`       |
-| `revealOnCompletion`  | `boolean`               |          | Auto-clear the cover when threshold is reached            | `false`     |
-| `cover`               | `string`                |          | Cover color or image URL                                  | `'#b9c2ce'` |
-| `area`                | `RectArea \| ImageArea` |          | Restrict progress measurement to a region                 | —           |
-| `callbacks`           | `object`                |          | `onProgress`, `onComplete`, `onScratchStart`, …           | —           |
+| Option                | Type                    | Description                                                                                                                                    | Default     |
+| --------------------- | ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
+| `width` \*            | `number`                | Canvas width (px)                                                                                                                              | —           |
+| `height` \*           | `number`                | Canvas height (px)                                                                                                                             | —           |
+| `brushSize` \*        | `number`                | Brush diameter (px)                                                                                                                            | —           |
+| `cellSize`            | `number`                | Grid cell size (px) for progress tracking. Lower = finer.                                                                                      | `16`        |
+| `completionThreshold` | `number (0~1)`          | Progress at which `onComplete` fires                                                                                                           | `0.5`       |
+| `revealOnCompletion`  | `boolean`               | Auto-clear the cover when threshold is reached                                                                                                 | `false`     |
+| `cover`               | `string`                | Cover color or image URL                                                                                                                       | `'#b9c2ce'` |
+| `area`                | `RectArea \| ImageArea` | Restrict progress measurement to a region                                                                                                      | —           |
+| `callbacks`           | `object`                | `onProgress`, `onComplete`, `onScratchStart`, [etc](https://kyechan99.github.io/scratcher.js/docs/configuration.html#callbacks-option-details) | —           |
 
 See the [Configuration guide](https://kyechan99.github.io/scratcher.js/docs/configuration) and [API Reference](https://kyechan99.github.io/scratcher.js/docs/api-reference) for the full list.
 

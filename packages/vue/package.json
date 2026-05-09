@@ -1,7 +1,7 @@
 {
   "name": "@scratcher.js/vue",
   "version": "0.1.1",
-  "description": "Cross-framework scratch interaction library for web and mobile.",
+  "description": "A lightweight library for building expressive Scratch interactions.",
   "author": "kyechan99 <kyechan99@gmail.com>",
   "license": "MIT",
   "homepage": "https://kyechan99.github.io/scratcher.js",

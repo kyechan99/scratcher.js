@@ -88,4 +88,18 @@ scratcher.bindCanvas(canvas);
 </Scratcher>
 ```
 
+== Svelte
+
+```svelte
+<Scratcher
+  class="svelte-scratch-card"
+  width={400}
+  height={240}
+  brushSize={30}
+  {renderAtPoint}
+>
+  <div class="reward">Custom Scratch Example</div>
+</Scratcher>
+```
+
 :::

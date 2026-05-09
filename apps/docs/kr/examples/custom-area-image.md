@@ -198,4 +198,103 @@ onMounted(async () => {
   // 이미지를 로드하여 ImageData 추출
   const img = new Image();
   img.crossOrigin = 'anonymous';
+  img.onload = () => {
+    const tempCanvas = document.createElement('canvas');
+    tempCanvas.width = img.width;
+    tempCanvas.height = img.height;
+    const ctx = tempCanvas.getContext('2d');
+    if (ctx) {
+      ctx.drawImage(img, 0, 0);
+      imageData.value = ctx.getImageData(0, 0, img.width, img.height);
+    }
+  };
+  img.src = '/star-shape.png';
+});
+
+function handleProgress() {
+  const snapshot = scratcherRef.value?.snapshot;
+  if (snapshot?.area) {
+    console.log(`영역 진행률: ${(snapshot.area.progress * 100).toFixed(1)}%`);
+  }
+}
+</script>
+
+<template>
+  <Scratcher
+    ref="scratcherRef"
+    :width="400"
+    :height="240"
+    :brushSize="30"
+    :area="
+      imageData
+        ? {
+            imageData,
+            alphaThreshold: 128,
+            x: 150,
+            y: 50,
+            scale: 1,
+          }
+        : undefined
+    "
+    @progress="handleProgress"
+  >
+    <div
+      style="background: linear-gradient(45deg, #FF6B6B, #4ECDC4); width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;"
+    >
+      별 모양을 긁으세요!
+    </div>
+  </Scratcher>
+</template>
 ```
+
+== Svelte
+
+```svelte
+<script lang="ts">
+  import { onMount } from 'svelte';
+  import { Scratcher } from '@scratcher.js/svelte';
+  import type { ScratchSnapshot } from '@scratcher.js/core';
+
+  let imageData: ImageData | null = $state(null);
+
+  onMount(() => {
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = () => {
+      const tempCanvas = document.createElement('canvas');
+      tempCanvas.width = img.width;
+      tempCanvas.height = img.height;
+      const ctx = tempCanvas.getContext('2d');
+      if (ctx) {
+        ctx.drawImage(img, 0, 0);
+        imageData = ctx.getImageData(0, 0, img.width, img.height);
+      }
+    };
+    img.src = '/star-shape.png';
+  });
+
+  function handleProgress(snapshot: ScratchSnapshot) {
+    if (snapshot.area) {
+      console.log(`영역 진행률: ${(snapshot.area.progress * 100).toFixed(1)}%`);
+    }
+  }
+</script>
+
+<Scratcher
+  width={400}
+  height={240}
+  brushSize={30}
+  area={imageData
+    ? { imageData, alphaThreshold: 128, x: 150, y: 50, scale: 1 }
+    : undefined}
+  callbacks={{ onProgress: handleProgress }}
+>
+  <div
+    style="background: linear-gradient(45deg, #FF6B6B, #4ECDC4); width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;"
+  >
+    별 모양을 긁으세요!
+  </div>
+</Scratcher>
+```
+
+:::

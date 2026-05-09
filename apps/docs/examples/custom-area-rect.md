@@ -179,6 +179,51 @@ function handleComplete() {
 </template>
 ```
 
+== Svelte
+
+```svelte
+<script lang="ts">
+  import { Scratcher } from '@scratcher.js/svelte';
+  import type {
+    Scratcher as CoreScratcher,
+    ScratchSnapshot,
+  } from '@scratcher.js/core';
+
+  let scratcher: CoreScratcher | null = null;
+
+  function handleReady(s: CoreScratcher) {
+    scratcher = s;
+  }
+
+  function handleProgress(snapshot: ScratchSnapshot) {
+    if (snapshot.area) {
+      console.log(`Area progress: ${(snapshot.area.progress * 100).toFixed(1)}%`);
+    }
+  }
+
+  function handleComplete(snapshot: ScratchSnapshot) {
+    if (snapshot.area) {
+      console.log('Area completely scratched!');
+    }
+  }
+</script>
+
+<Scratcher
+  width={400}
+  height={240}
+  brushSize={30}
+  area={{ x: 50, y: 50, width: 150, height: 150 }}
+  callbacks={{ onProgress: handleProgress, onComplete: handleComplete }}
+  onScratcherReady={handleReady}
+>
+  <div
+    style="background: linear-gradient(45deg, #FF6B6B, #4ECDC4); width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;"
+  >
+    Scratch to check the result!
+  </div>
+</Scratcher>
+```
+
 :::
 
 ---

@@ -81,6 +81,18 @@ scratcher.bindCanvas(canvas);
 </Scratcher>
 ```
 
+== Svelte
+
+```svelte
+<Scratcher width={400} height={240} brushSize={30} {renderCover}>
+  <img
+    src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=300"
+    alt="reward"
+    style="width: 100%; height: 100%; object-fit: cover;"
+  />
+</Scratcher>
+```
+
 :::
 
 ## Reward Image

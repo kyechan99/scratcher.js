@@ -88,6 +88,38 @@ async function handleComplete() {
 </template>
 ```
 
+== Svelte
+
+```svelte
+<script lang="ts">
+  import { Scratcher } from '@scratcher.js/svelte';
+
+  let reward: string | null = $state(null);
+  let loading = $state(false);
+
+  function getAsyncRewardAPI(): Promise<string> {
+    return new Promise(resolve => {
+      setTimeout(() => {
+        resolve(Math.random() > 0.5 ? '당첨!' : '미당첨');
+      }, 1000);
+    });
+  }
+
+  async function handleComplete() {
+    loading = true;
+    reward = null;
+    reward = await getAsyncRewardAPI();
+    loading = false;
+  }
+</script>
+
+<Scratcher width={320} height={180} callbacks={{ onComplete: handleComplete }}>
+  <div class="reward">
+    {loading ? '결과 확인 중...' : (reward ?? '긁어서 결과 확인!')}
+  </div>
+</Scratcher>
+```
+
 == Vanilla
 
 ```ts

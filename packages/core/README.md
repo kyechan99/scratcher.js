@@ -1,4 +1,4 @@
-<img src="/apps/docs/public/logo.png" width="150" height="150" alt="scratcher.js"/>
+<img src="https://github.com/kyechan99/scratcher.js/raw/main/apps/docs/public/logo.png" width="150" height="150" alt="scratcher.js"/>
 
 # @scratcher.js/core
 

@@ -48,6 +48,20 @@ title: docs
 </Scratcher>
 ```
 
+== Svelte
+
+```svelte
+<Scratcher
+  class="svelte-scratch-card"
+  width={400}
+  height={240}
+  brushSize={30}
+  {renderCover}
+>
+  <div class="reward">You found it!</div>
+</Scratcher>
+```
+
 == Vanilla
 
 ```ts
@@ -79,7 +93,7 @@ scratcher.bindCanvas(canvas);
     <div class="app-footer-inner">
         <div class="app-footer-brand">
         <strong>scratcher.js</strong>
-        <p>Cross-framework scratch interaction library for web and mobile.</p>
+        <p>A lightweight library for building expressive Scratch interactions.</p>
         </div>
         <nav class="app-footer-links" aria-label="Footer links">
         <a href="/scratcher.js/kr/docs/overview">Docs</a>
