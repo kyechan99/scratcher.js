@@ -5,6 +5,10 @@ dist
 coverage
 *.log
 .DS_Store
+
+# VitePress build artifacts
+apps/docs/.vitepress/cache/
+apps/docs/.vitepress/.temp/
 apps/docs/.docs/.nuxt/
 apps/docs/.docs/.output/
 apps/docs/.docs/.data/

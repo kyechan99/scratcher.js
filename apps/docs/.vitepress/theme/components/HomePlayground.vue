@@ -646,6 +646,7 @@ onUnmounted(() => {
   overflow: hidden;
   touch-action: none;
   box-shadow: 0 1rem 2.5rem var(--vp-c-gray-soft);
+  cursor: crosshair;
 }
 
 .area-overlay {
@@ -679,14 +680,6 @@ onUnmounted(() => {
     radial-gradient(circle at 32% 22%, #fff4a5 0 64px, transparent 65px),
     radial-gradient(circle at 72% 38%, #9db9f2 0 100px, transparent 101px),
     linear-gradient(135deg, #d7f1ef, #fde9d7);
-}
-
-.scratch-canvas {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  cursor: crosshair;
 }
 
 .action-row {
@@ -896,9 +889,6 @@ onUnmounted(() => {
   background: rgba(139, 92, 246, 0.05);
   border-radius: 0.5rem;
   border: 1px solid rgba(139, 92, 246, 0.2);
-}
-
-.progress-box {
 }
 
 .progress-head {
