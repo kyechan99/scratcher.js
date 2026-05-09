@@ -2,9 +2,8 @@ import {
   ScratcherConfig,
   ScratchControllerCallbacks,
   Scratcher as CoreScratcher,
-  Area,
 } from '@scratcher/core';
-import { CSSProperties, ReactNode, useCallback, useEffect, useMemo, useRef } from 'react';
+import { CSSProperties, ReactNode, useEffect, useMemo, useRef } from 'react';
 
 export interface ScratcherProps extends ScratcherConfig {
   className?: string;
@@ -25,6 +24,9 @@ export function Scratcher({
   callbacks,
   cover,
   area,
+  mapPoint,
+  renderAtPoint,
+  renderCover,
   className,
   style,
   canvasClassName,
@@ -44,8 +46,14 @@ export function Scratcher({
         area,
         completionThreshold,
         revealOnCompletion,
+        mapPoint,
+        renderAtPoint,
+        renderCover,
       }),
-    [width, height, coverage, cover, area, completionThreshold, revealOnCompletion],
+    // area / mapPoint / renderAtPoint / renderCover are intentionally excluded:
+    // area is updated via the setArea effect below; the render fns are captured
+    // at construction time to match the Vue binding's behavior.
+    [width, height, coverage, cover, completionThreshold, revealOnCompletion],
   );
   const callbacksRef = useRef<ScratchControllerCallbacks | undefined>(callbacks);
 

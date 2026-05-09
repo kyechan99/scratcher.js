@@ -27,8 +27,8 @@ export default defineConfig({
         '@scratcher/react': fileURLToPath(
           new URL('../../../packages/react/src/index.tsx', import.meta.url),
         ),
-        '@scratcher/react-native': fileURLToPath(
-          new URL('../../../packages/react-native/src/index.tsx', import.meta.url),
+        '@scratcher/svelte': fileURLToPath(
+          new URL('../../../packages/svelte/src/index.ts', import.meta.url),
         ),
         '@scratcher/vue': fileURLToPath(
           new URL('../../../packages/vue/src/index.ts', import.meta.url),

@@ -2,7 +2,7 @@
 
 ## 설치 / Installation
 
-Scratcher.js는 모노레포 구조로, core(공통), react, vue, react-native 패키지가 분리되어 있습니다.
+Scratcher.js는 모노레포 구조로, core(공통), react, vue, svelte 패키지가 분리되어 있습니다.
 pnpm, npm, yarn 등 원하는 패키지 매니저로 설치할 수 있습니다.
 
 :::tabs
@@ -24,10 +24,10 @@ npm i @scratcher.js/react
 npm i @scratcher.js/vue
 ```
 
-== React Native
+== Svelte
 
 ```bash
-npm i @scratcher.js/react-native
+npm i @scratcher.js/svelte
 ```
 
 :::
@@ -78,11 +78,14 @@ import { Scratcher } from '@scratcher.js/react';
 <Scratcher v-bind="scratcherConfig" />
 ```
 
-### React Native
+### Svelte
 
-```ts
-import { useNativeScratchController } from '@scratcher.js/react-native';
-const { scratcher } = useNativeScratchController(scratcherConfig);
+```svelte
+<script>
+  import { Scratcher } from '@scratcher.js/svelte';
+</script>
+
+<Scratcher {...scratcherConfig} />
 ```
 
 ## 통합 팁

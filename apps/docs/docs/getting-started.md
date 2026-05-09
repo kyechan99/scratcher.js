@@ -2,7 +2,7 @@
 
 ## Installation
 
-Scratcher.js uses a monorepo structure with separate core, react, vue, and react-native packages. You can install it using your preferred package manager like pnpm, npm, or yarn.
+Scratcher.js uses a monorepo structure with separate core, react, vue, and svelte packages. You can install it using your preferred package manager like pnpm, npm, or yarn.
 
 :::tabs
 == Vanilla
@@ -23,10 +23,10 @@ npm i @scratcher.js/react
 npm i @scratcher.js/vue
 ```
 
-== React Native
+== Svelte
 
 ```bash
-npm i @scratcher.js/react-native
+npm i @scratcher.js/svelte
 ```
 
 :::
@@ -77,11 +77,14 @@ import { Scratcher } from '@scratcher.js/react';
 <Scratcher v-bind="scratcherConfig" />
 ```
 
-### React Native
+### Svelte
 
-```ts
-import { useNativeScratchController } from '@scratcher.js/react-native';
-const { scratcher } = useNativeScratchController(scratcherConfig);
+```svelte
+<script>
+  import { Scratcher } from '@scratcher.js/svelte';
+</script>
+
+<Scratcher {...scratcherConfig} />
 ```
 
 ## Integration Tips

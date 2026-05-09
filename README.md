@@ -33,7 +33,7 @@ Building a scratch UI from scratch means handling input events, progress calcula
 | `@scratcher.js/core`         | Framework-agnostic scratch engine and types |
 | `@scratcher.js/react`        | React bindings                              |
 | `@scratcher.js/vue`          | Vue bindings                                |
-| `@scratcher.js/react-native` | React Native bindings                       |
+| `@scratcher.js/svelte`       | Svelte bindings                             |
 
 ## Installation
 
@@ -47,8 +47,8 @@ npm i @scratcher.js/react
 # Vue
 npm i @scratcher.js/vue
 
-# React Native
-npm i @scratcher.js/react-native
+# Svelte
+npm i @scratcher.js/svelte
 ```
 
 ## Quick Start
@@ -87,6 +87,18 @@ import { Scratcher } from '@scratcher.js/react';
 </Scratcher>
 ```
 
+### Svelte
+
+```svelte
+<script lang="ts">
+  import { Scratcher } from '@scratcher.js/svelte';
+</script>
+
+<Scratcher {...scratcherConfig}>
+  <div class="reward">You found it!</div>
+</Scratcher>
+```
+
 ### Vanilla JS
 
 ```ts
@@ -95,14 +107,6 @@ import { Scratcher } from '@scratcher.js/core';
 const canvas = document.getElementById('my-canvas') as HTMLCanvasElement;
 const scratcher = new Scratcher(scratcherConfig);
 scratcher.bindCanvas(canvas);
-```
-
-### React Native
-
-```ts
-import { useNativeScratchController } from '@scratcher.js/react-native';
-
-const { scratcher } = useNativeScratchController(scratcherConfig);
 ```
 
 ## Configuration

@@ -42,7 +42,7 @@ const scratcherConfig = {
 - **Vanilla JS**: `new Scratcher(config)`
 - **React**: `<Scratcher {...config} />`
 - **Vue**: `<Scratcher v-bind="config" />`
-- **React Native**: `useNativeScratchController(config)`
+- **Svelte**: `<Scratcher {...config} />`
 
 ## 콜백(callbacks) 옵션 상세
 

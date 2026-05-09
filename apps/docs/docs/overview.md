@@ -11,7 +11,7 @@ Implementing a scratch UI from scratch requires considering input event handling
 - `@scratcher/core`: The core engine that handles scratch logic and state calculation
 - `@scratcher/react`: Binding for React environments
 - `@scratcher/vue`: Binding for Vue environments
-- `@scratcher/react-native`: Binding for React Native environments
+- `@scratcher/svelte`: Binding for Svelte environments
 
 With this structure, you can reuse the operational concepts almost entirely when expanding from web to mobile apps.
 
