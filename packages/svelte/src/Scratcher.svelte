@@ -3,7 +3,8 @@
   import {
     Scratcher as CoreScratcher,
     type Area,
-    type ScratchControllerCallbacks,
+    type Point,
+    type ScratchSnapshot,
     type ScratcherConfig,
   } from '@scratcher.js/core';
 
@@ -14,9 +15,14 @@
     brushSize: number;
     completionThreshold?: number;
     revealOnCompletion?: boolean;
-    callbacks?: ScratchControllerCallbacks;
     cover?: string;
     area?: Area;
+    onScratchStart?: (point: Point, snapshot: ScratchSnapshot) => void;
+    onScratchMove?: (point: Point, snapshot: ScratchSnapshot) => void;
+    onScratchEnd?: (snapshot: ScratchSnapshot) => void;
+    onReset?: (snapshot: ScratchSnapshot) => void;
+    onProgress?: (snapshot: ScratchSnapshot) => void;
+    onComplete?: (snapshot: ScratchSnapshot) => void;
     mapPoint?: ScratcherConfig['mapPoint'];
     renderAtPoint?: ScratcherConfig['renderAtPoint'];
     renderCover?: ScratcherConfig['renderCover'];
@@ -34,9 +40,14 @@
     brushSize,
     completionThreshold,
     revealOnCompletion,
-    callbacks,
     cover,
     area,
+    onScratchStart,
+    onScratchMove,
+    onScratchEnd,
+    onReset,
+    onProgress,
+    onComplete,
     mapPoint,
     renderAtPoint,
     renderCover,
@@ -67,12 +78,17 @@
       area: untrack(() => area),
       completionThreshold,
       revealOnCompletion,
+      onScratchStart: untrack(() => onScratchStart),
+      onScratchMove: untrack(() => onScratchMove),
+      onScratchEnd: untrack(() => onScratchEnd),
+      onReset: untrack(() => onReset),
+      onProgress: untrack(() => onProgress),
+      onComplete: untrack(() => onComplete),
       mapPoint: untrack(() => mapPoint),
       renderAtPoint: untrack(() => renderAtPoint),
       renderCover: untrack(() => renderCover),
     });
     scratcher = next;
-    next.setCallbacks(untrack(() => callbacks));
     untrack(() => onScratcherReady)?.(next);
     const cleanup = next.bindCanvas(canvas);
 
@@ -91,7 +107,14 @@
   });
 
   $effect(() => {
-    scratcher?.setCallbacks(callbacks);
+    scratcher?.setCallbacks({
+      onScratchStart,
+      onScratchMove,
+      onScratchEnd,
+      onReset,
+      onProgress,
+      onComplete,
+    });
   });
 
   $effect(() => {

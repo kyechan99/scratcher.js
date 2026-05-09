@@ -66,10 +66,8 @@ const scratcherConfig = {
   brushSize: 30,
   completionThreshold: 0.7,
   cover: '#ccc',
-  callbacks: {
-    onProgress: snap => console.log('Progress:', snap.progress),
-    onComplete: () => alert('Scratching complete!'),
-  },
+  onProgress: snap => console.log('Progress:', snap.progress),
+  onComplete: () => alert('Scratching complete!'),
 };
 ```
 

@@ -87,7 +87,14 @@ export class Scratcher {
     this.canvasWidth = options.width;
     this.canvasHeight = options.height;
 
-    this.setCallbacks(options.callbacks);
+    this.setCallbacks({
+      onScratchStart: options.onScratchStart,
+      onScratchMove: options.onScratchMove,
+      onScratchEnd: options.onScratchEnd,
+      onReset: options.onReset,
+      onProgress: options.onProgress,
+      onComplete: options.onComplete,
+    });
   }
 
   /**

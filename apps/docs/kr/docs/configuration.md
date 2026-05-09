@@ -4,17 +4,17 @@ Scratcher.js 및 각 프레임워크별 패키지의 주요 설정 방법과 옵
 
 ## 공통 옵션 (Core)
 
-| 옵션명              | 타입         | 설명                                       | 기본값 |
-| ------------------- | ------------ | ------------------------------------------ | ------ |
-| width \*            | number       | 캔버스 가로(px)                            | -      |
-| height \*           | number       | 캔버스 세로(px)                            | -      |
-| brushSize           | number       | 긁기 브러시 크기(px)                       | 30     |
-| cellSize            | number       | 진행률 추적용 격자 셀 크기(px). 작을수록 세밀함. | 16     |
-| completionThreshold | number (0~1) | 긁기 완료로 간주할 퍼센트(진행률)          | 0.7    |
-| revealOnCompletion  | boolean      | 긁기 완료 시 전체를 자동으로 공개할지 여부 | false  |
-| cover               | string       | 덮을 색상 또는 이미지 URL                  | #ccc   |
-| disabled            | boolean      | 긁기 비활성화 여부                         | false  |
-| callbacks           | object       | 콜백(onProgress, onComplete 등)            | -      |
+| 옵션명              | 타입         | 설명                                                | 기본값 |
+| ------------------- | ------------ | --------------------------------------------------- | ------ |
+| width \*            | number       | 캔버스 가로(px)                                     | -      |
+| height \*           | number       | 캔버스 세로(px)                                     | -      |
+| brushSize           | number       | 긁기 브러시 크기(px)                                | 30     |
+| cellSize            | number       | 진행률 추적용 격자 셀 크기(px). 작을수록 세밀함.    | 16     |
+| completionThreshold | number (0~1) | 긁기 완료로 간주할 퍼센트(진행률)                   | 0.7    |
+| revealOnCompletion  | boolean      | 긁기 완료 시 전체를 자동으로 공개할지 여부          | false  |
+| cover               | string       | 덮을 색상 또는 이미지 URL                           | #ccc   |
+| disabled            | boolean      | 긁기 비활성화 여부                                  | false  |
+| callbacks           | function     | 자세히보기 : [Callbacks](#callbacks-option-details) | -      |
 
 - [Area](#area): 특정 영역만 측정
 
@@ -30,10 +30,8 @@ const scratcherConfig = {
   revealOnCompletion: true, // 긁기 완료 시 전체 자동 공개
   cover: '#ccc', // 덮개 색상 또는 이미지 URL
   disabled: false,
-  callbacks: {
-    onProgress: next => console.log(next.progress),
-    onComplete: () => alert('긁기 완료!'),
-  },
+  onProgress: next => console.log(next.progress),
+  onComplete: () => alert('긁기 완료!'),
 };
 ```
 

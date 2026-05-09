@@ -113,7 +113,7 @@ async function handleComplete() {
   }
 </script>
 
-<Scratcher width={320} height={180} callbacks={{ onComplete: handleComplete }}>
+<Scratcher width={320} height={180} onComplete={handleComplete}>
   <div class="reward">
     {loading ? 'Checking result...' : (reward ?? 'Scratch to check!')}
   </div>
@@ -139,12 +139,10 @@ const rewardDiv = document.getElementById('reward')!;
 const scratcher = new Scratcher({
   width: 320,
   height: 180,
-  callbacks: {
-    onComplete: async () => {
-      rewardDiv.textContent = 'Checking result...';
-      const result = await getAsyncRewardAPI();
-      rewardDiv.textContent = result as string;
-    },
+  onComplete: async () => {
+    rewardDiv.textContent = 'Checking result...';
+    const result = await getAsyncRewardAPI();
+    rewardDiv.textContent = result as string;
   },
 });
 scratcher.bindCanvas(canvas);

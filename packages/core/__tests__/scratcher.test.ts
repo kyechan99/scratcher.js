@@ -58,20 +58,18 @@ describe('Scratcher Logic', () => {
     const points: Point[] = [];
     const config: ScratcherConfig = {
       ...createBasicConfig(),
-      callbacks: {
-        onScratchStart: point => {
-          events.push('start');
-          points.push(point);
-        },
-        onScratchMove: point => {
-          events.push('move');
-          points.push(point);
-        },
-        onScratchEnd: () => events.push('end'),
-        onReset: () => events.push('reset'),
-        onProgress: () => events.push('progress'),
-        onComplete: () => events.push('complete'),
+      onScratchStart: point => {
+        events.push('start');
+        points.push(point);
       },
+      onScratchMove: point => {
+        events.push('move');
+        points.push(point);
+      },
+      onScratchEnd: () => events.push('end'),
+      onReset: () => events.push('reset'),
+      onProgress: () => events.push('progress'),
+      onComplete: () => events.push('complete'),
     };
     const s = new Scratcher(config);
     s.start({ x: 1, y: 2 });

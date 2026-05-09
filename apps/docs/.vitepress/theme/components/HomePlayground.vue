@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import {
   type Scratcher as CoreScratcher,
-  type ScratchControllerCallbacks,
   type ScratchSnapshot,
   type ScratcherConfig as CoreScratcherConfig,
   type Area,
@@ -95,14 +94,13 @@ const sanitizedScratcherConfig = computed<PlaygroundScratcherConfig>(() => {
   };
 });
 
-const previewCallbacks = computed<ScratchControllerCallbacks>(() => ({
-  onProgress: (next: any) => {
-    snapshot.value = next;
-  },
-  onComplete: () => {
-    isCompleted.value = true;
-  },
-}));
+function handlePreviewProgress(next: ScratchSnapshot) {
+  snapshot.value = next;
+}
+
+function handlePreviewComplete() {
+  isCompleted.value = true;
+}
 
 const currentArea = computed<Area | undefined>(() => {
   if (!isAreaEnabled.value) {
@@ -298,7 +296,8 @@ onUnmounted(() => {
               :brush-size="sanitizedScratcherConfig.brushSize"
               :cover="sanitizedScratcherConfig.cover"
               :area="currentArea"
-              :callbacks="previewCallbacks"
+              :on-progress="handlePreviewProgress"
+              :on-complete="handlePreviewComplete"
               :completion-threshold="sanitizedScratcherConfig.completionThreshold"
               :reveal-on-completion="sanitizedScratcherConfig.revealOnCompletion"
               canvas-class="scratch-canvas"

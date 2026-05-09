@@ -21,9 +21,14 @@ export function Scratcher({
   brushSize,
   completionThreshold,
   revealOnCompletion,
-  callbacks,
   cover,
   area,
+  onScratchStart,
+  onScratchMove,
+  onScratchEnd,
+  onReset,
+  onProgress,
+  onComplete,
   mapPoint,
   renderAtPoint,
   renderCover,
@@ -46,22 +51,34 @@ export function Scratcher({
         area,
         completionThreshold,
         revealOnCompletion,
+        onScratchStart,
+        onScratchMove,
+        onScratchEnd,
+        onReset,
+        onProgress,
+        onComplete,
         mapPoint,
         renderAtPoint,
         renderCover,
       }),
-    // area / mapPoint / renderAtPoint / renderCover are intentionally excluded:
-    // area is updated via the setArea effect below; the render fns are captured
-    // at construction time to match the Vue binding's behavior.
+    // area / callbacks / mapPoint / renderAtPoint / renderCover are intentionally
+    // excluded — area is updated via setArea, callbacks are updated via
+    // setCallbacks, and the render fns are captured at construction time to
+    // match the Vue binding's behavior.
     [width, height, cellSize, cover, completionThreshold, revealOnCompletion],
   );
-  const callbacksRef = useRef<ScratchControllerCallbacks | undefined>(callbacks);
-
-  callbacksRef.current = callbacks;
 
   useEffect(() => {
-    scratcher.setCallbacks(callbacksRef.current);
-  }, [scratcher, callbacks]);
+    const callbacks: ScratchControllerCallbacks = {
+      onScratchStart,
+      onScratchMove,
+      onScratchEnd,
+      onReset,
+      onProgress,
+      onComplete,
+    };
+    scratcher.setCallbacks(callbacks);
+  }, [scratcher, onScratchStart, onScratchMove, onScratchEnd, onReset, onProgress, onComplete]);
 
   useEffect(() => {
     scratcher.setBrushSize(brushSize);

@@ -49,10 +49,8 @@ const scratcherConfig = {
   cover: '#ccc', // 덮개 색상 또는 이미지
   background: '/img/coupon.png', // 배경 이미지
   // 콜백 예시
-  callbacks: {
-    onProgress: next => console.log('진행률:', next.progress),
-    onComplete: () => alert('긁기 완료!'),
-  },
+  onProgress: next => console.log('진행률:', next.progress),
+  onComplete: () => alert('긁기 완료!'),
 };
 ```
 

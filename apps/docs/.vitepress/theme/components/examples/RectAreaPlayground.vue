@@ -4,7 +4,6 @@ import {
   type Scratcher as CoreScratcher,
   type ScratchSnapshot,
   type RectArea,
-  type ScratchControllerCallbacks,
 } from '@scratcher.js/core';
 import { Scratcher as VueScratcher } from '@scratcher.js/vue';
 import PlaygroundFrame from './PlaygroundFrame.vue';
@@ -29,11 +28,9 @@ const areaProgressPercent = computed(() => {
   return (snapshot.value.area.progress * 100).toFixed(1);
 });
 
-const scratcherCallbacks = computed(() => ({
-  onProgress: (next: ScratchSnapshot) => {
-    snapshot.value = next;
-  },
-}));
+const onProgress = (next: ScratchSnapshot) => {
+  snapshot.value = next;
+};
 
 function handleScratcherReady(nextScratcher: CoreScratcher) {
   scratcher = nextScratcher;
@@ -87,7 +84,7 @@ function updateAreaHeight(value: number) {
           :brush-size="40"
           :cover="'#b9c2ce'"
           :area="areaConfig"
-          :callbacks="scratcherCallbacks"
+          :on-progress="onProgress"
           canvas-class="scratch-canvas"
           :on-scratcher-ready="handleScratcherReady"
         >

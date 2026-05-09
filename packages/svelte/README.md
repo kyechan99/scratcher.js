@@ -28,10 +28,8 @@ Requires `svelte >= 5` as a peer dependency.
     brushSize: 30,
     cover: '#ccc',
     completionThreshold: 0.5,
-    callbacks: {
-      onProgress: (snap) => console.log('Progress:', snap.progress),
-      onComplete: () => alert('Scratching complete!'),
-    },
+    onProgress: (snap) => console.log('Progress:', snap.progress),
+    onComplete: () => alert('Scratching complete!'),
   };
 </script>
 

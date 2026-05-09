@@ -1,4 +1,10 @@
-import { ScratchControllerCallbacks, Scratcher as CoreScratcher, Area } from '@scratcher.js/core';
+import {
+  ScratchControllerCallbacks,
+  Scratcher as CoreScratcher,
+  Area,
+  Point,
+  ScratchSnapshot,
+} from '@scratcher.js/core';
 import {
   defineComponent,
   h,
@@ -20,10 +26,6 @@ export const Scratcher = defineComponent({
     brushSize: { type: Number, required: true },
     completionThreshold: { type: Number, required: false },
     revealOnCompletion: { type: Boolean, required: false },
-    callbacks: {
-      type: Object as PropType<ScratchControllerCallbacks | undefined>,
-      required: false,
-    },
     cover: { type: String, required: false },
     area: {
       type: Object as PropType<Area | undefined>,
@@ -33,6 +35,30 @@ export const Scratcher = defineComponent({
     rewardClass: { type: String, required: false },
     onScratcherReady: {
       type: Function as PropType<((scratcher: CoreScratcher) => void) | undefined>,
+      required: false,
+    },
+    onScratchStart: {
+      type: Function as PropType<((point: Point, snapshot: ScratchSnapshot) => void) | undefined>,
+      required: false,
+    },
+    onScratchMove: {
+      type: Function as PropType<((point: Point, snapshot: ScratchSnapshot) => void) | undefined>,
+      required: false,
+    },
+    onScratchEnd: {
+      type: Function as PropType<((snapshot: ScratchSnapshot) => void) | undefined>,
+      required: false,
+    },
+    onReset: {
+      type: Function as PropType<((snapshot: ScratchSnapshot) => void) | undefined>,
+      required: false,
+    },
+    onProgress: {
+      type: Function as PropType<((snapshot: ScratchSnapshot) => void) | undefined>,
+      required: false,
+    },
+    onComplete: {
+      type: Function as PropType<((snapshot: ScratchSnapshot) => void) | undefined>,
       required: false,
     },
     mapPoint: {
@@ -58,6 +84,15 @@ export const Scratcher = defineComponent({
     const canvasRef = ref<HTMLCanvasElement | null>(null);
     const scratcherRef = ref<CoreScratcher | null>(null);
 
+    const collectCallbacks = (): ScratchControllerCallbacks => ({
+      onScratchStart: props.onScratchStart,
+      onScratchMove: props.onScratchMove,
+      onScratchEnd: props.onScratchEnd,
+      onReset: props.onReset,
+      onProgress: props.onProgress,
+      onComplete: props.onComplete,
+    });
+
     const initScratcher = () => {
       scratcherRef.value?.unbindCanvas();
       const scratcher = new CoreScratcher({
@@ -69,12 +104,12 @@ export const Scratcher = defineComponent({
         area: props.area,
         completionThreshold: props.completionThreshold,
         revealOnCompletion: props.revealOnCompletion,
+        ...collectCallbacks(),
         mapPoint: props.mapPoint,
         renderAtPoint: props.renderAtPoint,
         renderCover: props.renderCover,
       });
       scratcherRef.value = scratcher;
-      scratcher.setCallbacks(props.callbacks);
       props.onScratcherReady?.(scratcher);
       return scratcher;
     };
@@ -89,16 +124,23 @@ export const Scratcher = defineComponent({
     };
 
     watch(
-      () => [props.callbacks, props.brushSize],
+      () => [
+        props.onScratchStart,
+        props.onScratchMove,
+        props.onScratchEnd,
+        props.onReset,
+        props.onProgress,
+        props.onComplete,
+        props.brushSize,
+      ],
       () => {
         const scratcher = scratcherRef.value;
         if (!scratcher) {
           return;
         }
-        scratcher.setCallbacks(props.callbacks);
+        scratcher.setCallbacks(collectCallbacks());
         scratcher.setBrushSize(props.brushSize);
       },
-      { deep: true },
     );
 
     watch(

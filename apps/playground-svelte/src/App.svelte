@@ -57,11 +57,15 @@
   );
 
   const imageXMax = $derived(
-    !areaImage ? FRAME_WIDTH : Math.max(0, FRAME_WIDTH - areaImage.imageData.width * areaImageScale),
+    !areaImage
+      ? FRAME_WIDTH
+      : Math.max(0, FRAME_WIDTH - areaImage.imageData.width * areaImageScale),
   );
 
   const imageYMax = $derived(
-    !areaImage ? FRAME_HEIGHT : Math.max(0, FRAME_HEIGHT - areaImage.imageData.height * areaImageScale),
+    !areaImage
+      ? FRAME_HEIGHT
+      : Math.max(0, FRAME_HEIGHT - areaImage.imageData.height * areaImageScale),
   );
 
   const area = $derived<Area | undefined>(
@@ -210,10 +214,10 @@
             {area}
             completionThreshold={threshold}
             {revealOnCompletion}
-            {callbacks}
             {renderCover}
             canvasClass="scratch-canvas"
             onScratcherReady={handleReady}
+            {...callbacks}
           >
             <div class="reward">You found it!</div>
           </Scratcher>
@@ -349,7 +353,7 @@
                 min="0"
                 max={imageXMax}
                 value={areaImageX}
-                oninput={(e) => (areaImageX = clamp(Number(e.currentTarget.value), 0, imageXMax))}
+                oninput={e => (areaImageX = clamp(Number(e.currentTarget.value), 0, imageXMax))}
               />
             </label>
             <label class="field">
@@ -359,7 +363,7 @@
                 min="0"
                 max={imageYMax}
                 value={areaImageY}
-                oninput={(e) => (areaImageY = clamp(Number(e.currentTarget.value), 0, imageYMax))}
+                oninput={e => (areaImageY = clamp(Number(e.currentTarget.value), 0, imageYMax))}
               />
             </label>
             <label class="field">
@@ -372,7 +376,7 @@
                 max={imageScaleMax}
                 step="0.01"
                 value={areaImageScale}
-                oninput={(e) =>
+                oninput={e =>
                   (areaImageScale = clamp(Number(e.currentTarget.value), 0.1, imageScaleMax))}
               />
             </label>
@@ -388,11 +392,7 @@
           <strong>{(progress * 100).toFixed(1)}%</strong>
         </div>
         <div class="progress-track">
-          <div
-            class="progress-fill"
-            class:area={areaEnabled}
-            style:width="{progress * 100}%"
-          ></div>
+          <div class="progress-fill" class:area={areaEnabled} style:width="{progress * 100}%"></div>
         </div>
       </div>
       <p class="completion" class:visible={completed}>Completed 🎉</p>
