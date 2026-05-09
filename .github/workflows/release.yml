@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       release_type:
-        description: "Version bump type"
+        description: 'Version bump type'
         required: true
         type: choice
         options:
@@ -37,6 +37,16 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+
+      - name: Verify npm authentication
+        run: |
+          if [ -z "$NODE_AUTH_TOKEN" ]; then
+            echo "::error::NPM_TOKEN secret is empty or not set. Add a granular npm token (with bypass 2FA enabled) to the repo secrets before re-running."
+            exit 1
+          fi
+          npm whoami
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Build packages
         run: pnpm build
