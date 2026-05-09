@@ -16,6 +16,8 @@ This guide covers the main configuration methods and options for Scratcher.js an
 | disabled            | boolean      | Whether scratching is disabled             | false   |
 | callbacks           | object       | Callbacks (onProgress, onComplete, etc.)   | -       |
 
+- [Area](#area): measure specific areas
+
 ### Config Example
 
 ```ts

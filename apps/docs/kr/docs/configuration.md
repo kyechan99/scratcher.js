@@ -16,6 +16,8 @@ Scratcher.js 및 각 프레임워크별 패키지의 주요 설정 방법과 옵
 | disabled            | boolean      | 긁기 비활성화 여부                         | false  |
 | callbacks           | object       | 콜백(onProgress, onComplete 등)            | -      |
 
+- [Area](#area): 특정 영역만 측정
+
 ### config 예시
 
 ```ts

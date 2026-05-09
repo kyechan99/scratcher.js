@@ -8,7 +8,7 @@ export default defineConfig({
   title: 'scratcher.js',
   description: 'scratcher.js docs',
   head: [
-    ['link', { rel: 'icon', href: '/public/favicon.ico' }],
+    ['link', { rel: 'icon', href: '/scratcher.js/favicon.ico' }],
     ['link', { rel: 'preconnect', href: 'https://fonts.googleapis.com' }],
     [
       'link',
@@ -42,7 +42,7 @@ export default defineConfig({
     },
   },
   themeConfig: {
-    logo: '/public/logo.png',
+    logo: '/logo.png',
     // https://vitepress.dev/reference/default-theme-config
     nav: [
       { text: 'Home', link: '/' },

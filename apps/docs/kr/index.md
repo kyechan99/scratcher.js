@@ -82,8 +82,8 @@ scratcher.bindCanvas(canvas);
         <p>Cross-framework scratch interaction library for web and mobile.</p>
         </div>
         <nav class="app-footer-links" aria-label="Footer links">
-        <a href="/kr/docs/overview">Docs</a>
-        <a href="/kr/examples/custom-cover">Examples</a>
+        <a href="/scratcher.js/kr/docs/overview">Docs</a>
+        <a href="/scratcher.js/kr/examples/custom-cover">Examples</a>
         <a href="https://github.com/kyechan99/scratcher.js" target="_blank" rel="noreferrer">GitHub</a>
         <a href="https://github.com/kyechan99/scratcher.js/issues" target="_blank" rel="noreferrer">Issues</a>
         </nav>

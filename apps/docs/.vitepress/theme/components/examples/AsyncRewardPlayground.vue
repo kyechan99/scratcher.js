@@ -11,7 +11,7 @@ let scratcher: CoreScratcher | null = null;
 function fakeAsyncRewardAPI() {
   return new Promise<string>(resolve => {
     setTimeout(() => {
-      resolve(Math.random() > 0.5 ? '당첨!' : '미당첨');
+      resolve(Math.random() > 0.5 ? 'Winning!!!!' : 'Booooom!');
     }, 1000);
   });
 }
@@ -51,7 +51,7 @@ async function handleComplete() {
         :callbacks="{ onComplete: handleComplete }"
       >
         <div class="reward">
-          {{ loading ? '결과 확인 중...' : reward || '긁어서 결과 확인!' }}
+          {{ loading ? 'Checking results...' : reward || 'Scratch and check the results!' }}
         </div>
       </VueScratcher>
     </template>

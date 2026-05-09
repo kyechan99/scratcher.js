@@ -1,4 +1,8 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { useData, withBase } from 'vitepress';
+
+const { localeIndex } = useData();
+</script>
 
 <template>
   <section class="landing-section centered">
@@ -22,7 +26,12 @@
           <li class="landing__ua-item">Supports frameworks</li>
         </ul>
       </div>
-      <a class="landing__started-btn" href="/docs/getting-started">
+      <a
+        class="landing__started-btn"
+        :href="
+          withBase((localeIndex === 'root' ? '' : `/${localeIndex}`) + '/docs/getting-started')
+        "
+      >
         <button class="btn btn-primary">Get Started</button>
       </a>
     </div>
