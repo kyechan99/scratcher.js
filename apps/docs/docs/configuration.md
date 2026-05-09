@@ -4,17 +4,17 @@ This guide covers the main configuration methods and options for Scratcher.js an
 
 ## Common Options (Core)
 
-| Option Name         | Type         | Description                                | Default |
-| ------------------- | ------------ | ------------------------------------------ | ------- |
-| width \*            | number       | Canvas width (px)                          | -       |
-| height \*           | number       | Canvas height (px)                         | -       |
-| brushSize           | number       | Brush size for scratching (px)             | 30      |
+| Option Name         | Type         | Description                                                          | Default |
+| ------------------- | ------------ | -------------------------------------------------------------------- | ------- |
+| width \*            | number       | Canvas width (px)                                                    | -       |
+| height \*           | number       | Canvas height (px)                                                   | -       |
+| brushSize           | number       | Brush size for scratching (px)                                       | 30      |
 | cellSize            | number       | Grid cell size (px) for progress tracking. Lower = finer resolution. | 16      |
-| completionThreshold | number (0~1) | Percentage threshold for completion        | 0.7     |
-| revealOnCompletion  | boolean      | Auto-reveal all on completion              | false   |
-| cover               | string       | Cover color or image URL                   | #ccc    |
-| disabled            | boolean      | Whether scratching is disabled             | false   |
-| callbacks           | object       | Callbacks (onProgress, onComplete, etc.)   | -       |
+| completionThreshold | number (0~1) | Percentage threshold for completion                                  | 0.7     |
+| revealOnCompletion  | boolean      | Auto-reveal all on completion                                        | false   |
+| cover               | string       | Cover color or image URL                                             | #ccc    |
+| disabled            | boolean      | Whether scratching is disabled                                       | false   |
+| callbacks           | function     | See more detail : [Callbacks](#callbacks-option-details)             | -       |
 
 - [Area](#area): measure specific areas
 
@@ -30,10 +30,8 @@ const scratcherConfig = {
   revealOnCompletion: true, // Auto-reveal all on completion
   cover: '#ccc', // Cover color or image URL
   disabled: false,
-  callbacks: {
-    onProgress: next => console.log(next.progress),
-    onComplete: () => alert('Scratching complete!'),
-  },
+  onProgress: next => console.log(next.progress),
+  onComplete: () => alert('Scratching complete!'),
 };
 ```
 

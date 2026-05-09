@@ -48,10 +48,8 @@ const scratcherConfig = {
   cover: '#ccc', // Cover color or image
   background: '/img/coupon.png', // Background image
   // Callback example
-  callbacks: {
-    onProgress: next => console.log('Progress:', next.progress),
-    onComplete: () => alert('Scratching complete!'),
-  },
+  onProgress: next => console.log('Progress:', next.progress),
+  onComplete: () => alert('Scratching complete!'),
 };
 ```
 

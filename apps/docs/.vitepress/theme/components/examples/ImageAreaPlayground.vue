@@ -91,11 +91,9 @@ const areaProgressPercent = computed(() => {
   return (snapshot.value.area.progress * 100).toFixed(1);
 });
 
-const scratcherCallbacks = computed<ScratchControllerCallbacks>(() => ({
-  onProgress: (next: ScratchSnapshot) => {
-    snapshot.value = next;
-  },
-}));
+const onProgress = (next: ScratchSnapshot) => {
+  snapshot.value = next;
+};
 
 function clamp(value: number, min: number, max: number): number {
   return Math.min(max, Math.max(min, value));
@@ -245,7 +243,7 @@ onUnmounted(() => {
             :brush-size="40"
             :cover="'#b9c2ce'"
             :area="currentArea"
-            :callbacks="scratcherCallbacks"
+            :onProgress="onProgress"
             canvas-class="scratch-canvas"
             :on-scratcher-ready="handleScratcherReady"
           >

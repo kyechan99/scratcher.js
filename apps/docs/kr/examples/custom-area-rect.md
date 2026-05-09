@@ -213,7 +213,8 @@ function handleComplete() {
   height={240}
   brushSize={30}
   area={{ x: 50, y: 50, width: 150, height: 150 }}
-  callbacks={{ onProgress: handleProgress, onComplete: handleComplete }}
+  onProgress={handleProgress}
+  onComplete={handleComplete}
   onScratcherReady={handleReady}
 >
   <div

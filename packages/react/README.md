@@ -29,10 +29,8 @@ export function Coupon() {
       brushSize={30}
       cover="#ccc"
       completionThreshold={0.5}
-      callbacks={{
-        onProgress: snap => console.log('Progress:', snap.progress),
-        onComplete: () => alert('Scratching complete!'),
-      }}
+      onProgress={snap => console.log('Progress:', snap.progress)}
+      onComplete={() => alert('Scratching complete!')}
     >
       <div className="reward">You found it!</div>
     </Scratcher>

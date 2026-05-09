@@ -111,16 +111,18 @@ export interface ScratchControllerCallbacks {
 
 /**
  * Configuration options for the Scratcher instance.
+ *
+ * Lifecycle callbacks (`onScratchStart`, `onProgress`, `onComplete`, …) are
+ * inherited from {@link ScratchControllerCallbacks} and accepted directly at
+ * the top level — no nested `callbacks` object required.
  */
-export interface ScratcherConfig extends ScratchEngineOptions {
+export interface ScratcherConfig extends ScratchEngineOptions, ScratchControllerCallbacks {
   /** Brush size in pixels. */
   brushSize: number;
   /** Progress threshold (0~1) to trigger completion. */
   completionThreshold?: number;
   /** Whether to reveal all on completion. */
   revealOnCompletion?: boolean;
-  /** Event callbacks. */
-  callbacks?: ScratchControllerCallbacks;
   /** Cover color or image. */
   cover?: string;
   /** Area for measuring progress. */

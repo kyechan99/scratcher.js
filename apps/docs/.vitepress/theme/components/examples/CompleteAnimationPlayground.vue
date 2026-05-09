@@ -53,7 +53,7 @@ function handleComplete() {
         :completion-threshold="0.3"
         :reveal-on-completion="false"
         :on-scratcher-ready="handleScratcherReady"
-        :callbacks="{ onComplete: handleComplete }"
+        :onComplete="handleComplete"
         :reward-class="rewardClass"
       >
         <div>Complete Animation Example</div>

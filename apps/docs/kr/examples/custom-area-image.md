@@ -287,7 +287,7 @@ function handleProgress() {
   area={imageData
     ? { imageData, alphaThreshold: 128, x: 150, y: 50, scale: 1 }
     : undefined}
-  callbacks={{ onProgress: handleProgress }}
+  onProgress={handleProgress}
 >
   <div
     style="background: linear-gradient(45deg, #FF6B6B, #4ECDC4); width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;"

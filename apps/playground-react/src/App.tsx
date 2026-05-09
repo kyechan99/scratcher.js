@@ -178,10 +178,10 @@ export function App() {
               area={area}
               completionThreshold={threshold}
               revealOnCompletion={revealOnCompletion}
-              callbacks={callbacks}
               renderCover={renderCover}
               canvasClassName="scratch-canvas"
               onScratcherReady={handleReady}
+              {...callbacks}
             >
               <div className="reward">You found it!</div>
             </Scratcher>
