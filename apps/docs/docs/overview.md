@@ -8,10 +8,10 @@ Implementing a scratch UI from scratch requires considering input event handling
 
 ## Monorepo Package Structure
 
-- `@scratcher/core`: The core engine that handles scratch logic and state calculation
-- `@scratcher/react`: Binding for React environments
-- `@scratcher/vue`: Binding for Vue environments
-- `@scratcher/svelte`: Binding for Svelte environments
+- `@scratcher.js/core`: The core engine that handles scratch logic and state calculation
+- `@scratcher.js/react`: Binding for React environments
+- `@scratcher.js/vue`: Binding for Vue environments
+- `@scratcher.js/svelte`: Binding for Svelte environments
 
 With this structure, you can reuse the operational concepts almost entirely when expanding from web to mobile apps.
 

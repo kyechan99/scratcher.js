@@ -6,8 +6,8 @@ import {
   type ScratcherConfig as CoreScratcherConfig,
   type Area,
   type RectArea,
-} from '@scratcher/core';
-import { Scratcher as VueScratcher } from '@scratcher/vue';
+} from '@scratcher.js/core';
+import { Scratcher as VueScratcher } from '@scratcher.js/vue';
 import { computed, onUnmounted, ref } from 'vue';
 
 interface PlaygroundScratcherConfig extends CoreScratcherConfig {

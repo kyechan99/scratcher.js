@@ -1,5 +1,5 @@
 {
-  "name": "@scratcher/svelte",
+  "name": "@scratcher.js/svelte",
   "version": "0.1.0",
   "description": "Svelte bindings for scratcher core.",
   "type": "module",
@@ -26,7 +26,7 @@
     "svelte": ">=5"
   },
   "dependencies": {
-    "@scratcher/core": "workspace:*"
+    "@scratcher.js/core": "workspace:*"
   },
   "devDependencies": {
     "@sveltejs/package": "^2.3.7",

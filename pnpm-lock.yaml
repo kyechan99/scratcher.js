@@ -44,10 +44,10 @@ importers:
 
   apps/playground-react:
     dependencies:
-      '@scratcher/core':
+      '@scratcher.js/core':
         specifier: workspace:*
         version: link:../../packages/core
-      '@scratcher/react':
+      '@scratcher.js/react':
         specifier: workspace:*
         version: link:../../packages/react
       react:
@@ -75,10 +75,10 @@ importers:
 
   apps/playground-svelte:
     dependencies:
-      '@scratcher/core':
+      '@scratcher.js/core':
         specifier: workspace:*
         version: link:../../packages/core
-      '@scratcher/svelte':
+      '@scratcher.js/svelte':
         specifier: workspace:*
         version: link:../../packages/svelte
       svelte:
@@ -109,7 +109,7 @@ importers:
 
   packages/react:
     dependencies:
-      '@scratcher/core':
+      '@scratcher.js/core':
         specifier: workspace:*
         version: link:../core
       react:
@@ -128,7 +128,7 @@ importers:
 
   packages/svelte:
     dependencies:
-      '@scratcher/core':
+      '@scratcher.js/core':
         specifier: workspace:*
         version: link:../core
     devDependencies:
@@ -147,7 +147,7 @@ importers:
 
   packages/vue:
     dependencies:
-      '@scratcher/core':
+      '@scratcher.js/core':
         specifier: workspace:*
         version: link:../core
     devDependencies:

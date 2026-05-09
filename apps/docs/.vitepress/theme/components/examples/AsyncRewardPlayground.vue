@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, onUnmounted, computed } from 'vue';
-import { type Scratcher as CoreScratcher } from '@scratcher/core';
-import { Scratcher as VueScratcher } from '@scratcher/vue';
+import { type Scratcher as CoreScratcher } from '@scratcher.js/core';
+import { Scratcher as VueScratcher } from '@scratcher.js/vue';
 import PlaygroundFrame from './PlaygroundFrame.vue';
 
 const reward = ref<string | null>(null);

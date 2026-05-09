@@ -5,8 +5,8 @@ import {
   type ScratchSnapshot,
   type RectArea,
   type ScratchControllerCallbacks,
-} from '@scratcher/core';
-import { Scratcher as VueScratcher } from '@scratcher/vue';
+} from '@scratcher.js/core';
+import { Scratcher as VueScratcher } from '@scratcher.js/vue';
 import PlaygroundFrame from './PlaygroundFrame.vue';
 
 let scratcher: CoreScratcher | null = null;

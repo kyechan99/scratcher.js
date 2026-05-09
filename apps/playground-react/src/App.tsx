@@ -7,7 +7,7 @@ import {
   useRef,
   useState,
 } from 'react';
-import { Scratcher } from '@scratcher/react';
+import { Scratcher } from '@scratcher.js/react';
 import type {
   Area,
   ImageArea,
@@ -17,7 +17,7 @@ import type {
   Scratcher as CoreScratcher,
   ScratcherCanvasType,
   ScratcherConfig,
-} from '@scratcher/core';
+} from '@scratcher.js/core';
 
 const FRAME_WIDTH = 400;
 const FRAME_HEIGHT = 280;
@@ -160,7 +160,7 @@ export function App() {
       <header>
         <h1>scratcher.js · React playground</h1>
         <p>
-          Smoke test for <code>@scratcher/react</code>. Live updates: brush, callbacks, area
+          Smoke test for <code>@scratcher.js/react</code>. Live updates: brush, callbacks, area
           (rect/image), custom render.
         </p>
       </header>

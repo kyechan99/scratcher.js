@@ -1,5 +1,5 @@
 {
-  "name": "@scratcher/core",
+  "name": "@scratcher.js/core",
   "version": "0.1.0",
   "description": "Framework-agnostic scratch engine and types.",
   "type": "module",

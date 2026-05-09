@@ -2,7 +2,7 @@
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "paths": {
-      "@scratcher/core": ["../core/src/index.ts"]
+      "@scratcher.js/core": ["../core/src/index.ts"]
     }
   },
   "include": ["src"]

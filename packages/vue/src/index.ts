@@ -1,4 +1,4 @@
-import { ScratchControllerCallbacks, Scratcher as CoreScratcher, Area } from '@scratcher/core';
+import { ScratchControllerCallbacks, Scratcher as CoreScratcher, Area } from '@scratcher.js/core';
 import {
   defineComponent,
   h,

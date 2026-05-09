@@ -21,16 +21,16 @@ export default defineConfig({
   vite: {
     resolve: {
       alias: {
-        '@scratcher/core': fileURLToPath(
+        '@scratcher.js/core': fileURLToPath(
           new URL('../../../packages/core/src/index.ts', import.meta.url),
         ),
-        '@scratcher/react': fileURLToPath(
+        '@scratcher.js/react': fileURLToPath(
           new URL('../../../packages/react/src/index.tsx', import.meta.url),
         ),
-        '@scratcher/svelte': fileURLToPath(
+        '@scratcher.js/svelte': fileURLToPath(
           new URL('../../../packages/svelte/src/index.ts', import.meta.url),
         ),
-        '@scratcher/vue': fileURLToPath(
+        '@scratcher.js/vue': fileURLToPath(
           new URL('../../../packages/vue/src/index.ts', import.meta.url),
         ),
       },

@@ -5,7 +5,7 @@
     type Area,
     type ScratchControllerCallbacks,
     type ScratcherConfig,
-  } from '@scratcher/core';
+  } from '@scratcher.js/core';
 
   type Props = {
     width: number;

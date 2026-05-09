@@ -1,5 +1,5 @@
 {
-  "name": "@scratcher/vue",
+  "name": "@scratcher.js/vue",
   "version": "0.1.0",
   "description": "Vue bindings for scratcher core.",
   "type": "module",
@@ -27,7 +27,7 @@
     "vue": ">=3.4"
   },
   "dependencies": {
-    "@scratcher/core": "workspace:*"
+    "@scratcher.js/core": "workspace:*"
   },
   "devDependencies": {
     "tsup": "^8.0.2",

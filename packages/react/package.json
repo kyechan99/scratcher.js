@@ -1,5 +1,5 @@
 {
-  "name": "@scratcher/react",
+  "name": "@scratcher.js/react",
   "version": "0.1.0",
   "description": "React bindings for scratcher core.",
   "type": "module",
@@ -27,7 +27,7 @@
     "react": ">=18"
   },
   "dependencies": {
-    "@scratcher/core": "workspace:*"
+    "@scratcher.js/core": "workspace:*"
   },
   "devDependencies": {
     "@types/react": "^18.3.12",

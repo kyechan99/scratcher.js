@@ -8,4 +8,4 @@ export type {
   ImageArea,
   AreaSnapshot,
   Point,
-} from '@scratcher/core';
+} from '@scratcher.js/core';

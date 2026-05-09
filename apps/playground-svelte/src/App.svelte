@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onDestroy } from 'svelte';
-  import { Scratcher } from '@scratcher/svelte';
+  import { Scratcher } from '@scratcher.js/svelte';
   import type {
     Area,
     ImageArea,
@@ -10,7 +10,7 @@
     Scratcher as CoreScratcher,
     ScratcherCanvasType,
     ScratcherConfig,
-  } from '@scratcher/core';
+  } from '@scratcher.js/core';
 
   const FRAME_WIDTH = 400;
   const FRAME_HEIGHT = 280;
@@ -192,7 +192,7 @@
   <header>
     <h1>scratcher.js · Svelte playground</h1>
     <p>
-      Smoke test for <code>@scratcher/svelte</code>. Live updates: brush, callbacks, area
+      Smoke test for <code>@scratcher.js/svelte</code>. Live updates: brush, callbacks, area
       (rect/image), custom render.
     </p>
   </header>

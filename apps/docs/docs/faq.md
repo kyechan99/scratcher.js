@@ -4,7 +4,7 @@ If you don't find the answer to your question here, please submit it as a GitHub
 
 ## Q. What environments can I use this in?
 
-A. `@scratcher/core` provides React, Vue, and Svelte bindings, so you can apply the same scratch interaction in any of these frameworks.
+A. `@scratcher.js/core` provides React, Vue, and Svelte bindings, so you can apply the same scratch interaction in any of these frameworks.
 
 ## Q. Do you support custom brushes and images?
 

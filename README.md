@@ -1,6 +1,6 @@
 <img src="/apps/docs/public/logo.png" width="150" height="150" alt="scratcher.js"/>
 
-# scratcher.js
+# @scratcher.js
 
 [![npm](https://img.shields.io/npm/v/@scratcher.js/core?style=flat&color=cb3837&logo=npm)](https://www.npmjs.com/package/@scratcher.js/core)
 [![codecov](https://img.shields.io/codecov/c/github/kyechan99/scratcher.js?style=flat&logo=codecov&logoColor=white)](https://codecov.io/gh/kyechan99/scratcher.js)
@@ -28,12 +28,12 @@ Building a scratch UI from scratch means handling input events, progress calcula
 
 ## Packages
 
-| Package                      | Description                                 |
-| ---------------------------- | ------------------------------------------- |
-| `@scratcher.js/core`         | Framework-agnostic scratch engine and types |
-| `@scratcher.js/react`        | React bindings                              |
-| `@scratcher.js/vue`          | Vue bindings                                |
-| `@scratcher.js/svelte`       | Svelte bindings                             |
+| Package                | Description                                 |
+| ---------------------- | ------------------------------------------- |
+| `@scratcher.js/core`   | Framework-agnostic scratch engine and types |
+| `@scratcher.js/react`  | React bindings                              |
+| `@scratcher.js/vue`    | Vue bindings                                |
+| `@scratcher.js/svelte` | Svelte bindings                             |
 
 ## Installation
 
@@ -111,17 +111,17 @@ scratcher.bindCanvas(canvas);
 
 ## Configuration
 
-| Option                | Type           | Description                                    | Default |
-| --------------------- | -------------- | ---------------------------------------------- | ------- |
-| `width` \*            | `number`       | Canvas width (px)                              | —       |
-| `height` \*           | `number`       | Canvas height (px)                             | —       |
-| `brushSize`           | `number`       | Brush size (px)                                | `30`    |
-| `cellSize`            | `number`       | Grid cell size (px) for progress tracking      | `16`    |
-| `completionThreshold` | `number (0~1)` | Progress at which `onComplete` fires           | `0.7`   |
-| `revealOnCompletion`  | `boolean`      | Auto-reveal everything once threshold is hit   | `false` |
-| `cover`               | `string`       | Cover color or image URL                       | `#ccc`  |
-| `disabled`            | `boolean`      | Disable scratching                             | `false` |
-| `callbacks`           | `object`       | `onProgress`, `onComplete`, `onScratchStart` … | —       |
+| Option                | Type                    | Required | Description                                               | Default     |
+| --------------------- | ----------------------- | :------: | --------------------------------------------------------- | ----------- |
+| `width`               | `number`                |    ✓     | Canvas width (px)                                         | —           |
+| `height`              | `number`                |    ✓     | Canvas height (px)                                        | —           |
+| `brushSize`           | `number`                |    ✓     | Brush diameter (px)                                       | —           |
+| `cellSize`            | `number`                |          | Grid cell size (px) for progress tracking. Lower = finer. | `16`        |
+| `completionThreshold` | `number (0~1)`          |          | Progress at which `onComplete` fires                      | `0.5`       |
+| `revealOnCompletion`  | `boolean`               |          | Auto-clear the cover when threshold is reached            | `false`     |
+| `cover`               | `string`                |          | Cover color or image URL                                  | `'#b9c2ce'` |
+| `area`                | `RectArea \| ImageArea` |          | Restrict progress measurement to a region                 | —           |
+| `callbacks`           | `object`                |          | `onProgress`, `onComplete`, `onScratchStart`, …           | —           |
 
 See the [Configuration guide](https://kyechan99.github.io/scratcher.js/docs/configuration) and [API Reference](https://kyechan99.github.io/scratcher.js/docs/api-reference) for the full list.
 

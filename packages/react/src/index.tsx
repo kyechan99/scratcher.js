@@ -2,7 +2,7 @@ import {
   ScratcherConfig,
   ScratchControllerCallbacks,
   Scratcher as CoreScratcher,
-} from '@scratcher/core';
+} from '@scratcher.js/core';
 import { CSSProperties, ReactNode, useEffect, useMemo, useRef } from 'react';
 
 export interface ScratcherProps extends ScratcherConfig {
