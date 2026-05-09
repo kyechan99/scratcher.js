@@ -1,7 +1,7 @@
 {
   "name": "scratcher-js",
   "private": true,
-  "version": "0.1.1",
+  "version": "1.0.0",
   "description": "A lightweight library for building expressive Scratch interactions.",
   "author": "kyechan99 <kyechan99@gmail.com>",
   "license": "MIT",
