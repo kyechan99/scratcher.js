@@ -17,6 +17,7 @@ type ScratchRuntimeEventMap = {
   reset: { snapshot: ScratchSnapshot };
   progress: { snapshot: ScratchSnapshot };
   complete: { snapshot: ScratchSnapshot };
+  coverReady: { snapshot: ScratchSnapshot };
 };
 
 type ScratchRuntimeEventName = keyof ScratchRuntimeEventMap;
@@ -36,6 +37,7 @@ export class Scratcher {
   private brushSize: number;
   private pointerState: ScratchPointerState;
   private completed: boolean;
+  private coverReady: boolean;
   private currentSnapshot: ScratchSnapshot;
   private completionThreshold: number;
   private revealOnCompletion: boolean;
@@ -68,6 +70,7 @@ export class Scratcher {
     this.brushSize = Math.max(1, options.brushSize);
     this.pointerState = SCRATCH_POINTER.IDLE;
     this.completed = false;
+    this.coverReady = false;
     this.currentSnapshot = this.store.snapshot();
     this.completionThreshold = Math.min(1, Math.max(0, options.completionThreshold ?? 0.5));
     this.revealOnCompletion = options.revealOnCompletion ?? false;
@@ -81,6 +84,7 @@ export class Scratcher {
       reset: new Set(),
       progress: new Set(),
       complete: new Set(),
+      coverReady: new Set(),
     };
     this.callbackSubscriptions = [];
     this.canvasAdapter = null;
@@ -94,6 +98,7 @@ export class Scratcher {
       onReset: options.onReset,
       onProgress: options.onProgress,
       onComplete: options.onComplete,
+      onCoverReady: options.onCoverReady,
     });
   }
 
@@ -116,6 +121,18 @@ export class Scratcher {
    */
   get isCompleted(): boolean {
     return this.completed;
+  }
+
+  /**
+   * Returns whether the cover has finished painting on the bound canvas.
+   *
+   * False until {@link bindCanvas} has been called and the cover render —
+   * synchronous or asynchronous — has completed. Flips back to false on
+   * `unbindCanvas`. Wrappers gate the reward layer on this signal so the
+   * reward never flashes before the cover is on screen.
+   */
+  get isCoverReady(): boolean {
+    return this.coverReady;
   }
 
   /**
@@ -214,8 +231,15 @@ export class Scratcher {
     this.clearCallbackSubscriptions();
 
     const nextCallbacks = callbacks ?? {};
-    const { onScratchStart, onScratchMove, onScratchEnd, onReset, onProgress, onComplete } =
-      nextCallbacks;
+    const {
+      onScratchStart,
+      onScratchMove,
+      onScratchEnd,
+      onReset,
+      onProgress,
+      onComplete,
+      onCoverReady,
+    } = nextCallbacks;
 
     this.bindPointSnapshotCallback('scratchStart', onScratchStart);
     this.bindPointSnapshotCallback('scratchMove', onScratchMove);
@@ -223,6 +247,7 @@ export class Scratcher {
     this.bindSnapshotCallback('reset', onReset);
     this.bindSnapshotCallback('progress', onProgress);
     this.bindSnapshotCallback('complete', onComplete);
+    this.bindSnapshotCallback('coverReady', onCoverReady);
   }
 
   /**
@@ -262,14 +287,16 @@ export class Scratcher {
       mapPoint: this.mapPoint,
       renderAtPoint: this.renderAtPoint,
       renderCover: this.renderCover,
+      onCoverReady: () => this.handleCoverReady(),
     });
-    adapter.bind();
     this.canvasAdapter = adapter;
+    adapter.bind();
 
     return () => {
       adapter.unbind();
       if (this.canvasAdapter === adapter) {
         this.canvasAdapter = null;
+        this.coverReady = false;
       }
     };
   }
@@ -280,6 +307,7 @@ export class Scratcher {
   unbindCanvas(): void {
     this.canvasAdapter?.unbind();
     this.canvasAdapter = null;
+    this.coverReady = false;
   }
 
   private clearCallbackSubscriptions(): void {
@@ -316,7 +344,7 @@ export class Scratcher {
   }
 
   private bindSnapshotCallback(
-    eventName: 'scratchEnd' | 'reset' | 'progress' | 'complete',
+    eventName: 'scratchEnd' | 'reset' | 'progress' | 'complete' | 'coverReady',
     callback: ScratchSnapshotCallback | undefined,
   ): void {
     this.registerCallback(callback, nextCallback =>
@@ -347,6 +375,11 @@ export class Scratcher {
     }
 
     return this.currentSnapshot;
+  }
+
+  private handleCoverReady(): void {
+    this.coverReady = true;
+    this.emit('coverReady', { snapshot: this.currentSnapshot });
   }
 
   private emit<EventName extends ScratchRuntimeEventName>(

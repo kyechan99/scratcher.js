@@ -60,6 +60,7 @@
 
   let canvas = $state<HTMLCanvasElement | null>(null);
   let scratcher: CoreScratcher | null = null;
+  let isCoverReady = $state(false);
 
   // Recreate the core scratcher when structural props change.
   // Other props (brushSize/callbacks/area/render fns) are read via untrack
@@ -90,14 +91,24 @@
     });
     scratcher = next;
     untrack(() => onScratcherReady)?.(next);
+
+    // Subscribe before bind so the synchronous coverReady emit (default cover
+    // render is sync) is observed and the reward layer never flashes through
+    // an empty canvas on first paint.
+    isCoverReady = next.isCoverReady;
+    const offCoverReady = next.on('coverReady', () => {
+      isCoverReady = true;
+    });
     const cleanup = next.bindCanvas(canvas);
 
     return () => {
+      offCoverReady();
       cleanup();
       next.unbindCanvas();
       if (scratcher === next) {
         scratcher = null;
       }
+      isCoverReady = false;
     };
   });
 
@@ -131,7 +142,13 @@
   style:touch-action="none"
 >
   {#if children}
-    <div class={rewardClass} style:position="absolute" style:inset="0">
+    <div
+      class={rewardClass}
+      style:position="absolute"
+      style:inset="0"
+      style:visibility={isCoverReady ? 'visible' : 'hidden'}
+      aria-hidden={!isCoverReady}
+    >
       {@render children()}
     </div>
   {/if}

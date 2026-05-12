@@ -23,7 +23,14 @@ export type ScratchCanvasAdapterOptions = {
     width: number,
     height: number,
     cover: string | undefined,
-  ) => void;
+  ) => void | Promise<void>;
+  /**
+   * Notified after the cover finishes painting on the canvas. Invoked
+   * synchronously for sync render functions and after the returned promise
+   * settles for async ones. Stale invocations (e.g. after `unbind` or another
+   * `renderCover` call) are suppressed.
+   */
+  onCoverReady?: () => void;
 };
 
 export class ScratchCanvasAdapter {
@@ -44,7 +51,9 @@ export class ScratchCanvasAdapter {
     width: number,
     height: number,
     cover: string | undefined,
-  ) => void;
+  ) => void | Promise<void>;
+  private readonly onCoverReady?: () => void;
+  private renderGeneration: number;
   private cleanup: (() => void) | null;
 
   constructor(options: ScratchCanvasAdapterOptions) {
@@ -56,6 +65,8 @@ export class ScratchCanvasAdapter {
     this.mapPoint = options.mapPoint ?? this.defaultMapPoint;
     this.renderAtPoint = options.renderAtPoint ?? this.defaultRenderAtPoint;
     this._renderCover = options.renderCover ?? this.defaultRenderCover;
+    this.onCoverReady = options.onCoverReady;
+    this.renderGeneration = 0;
     this.cleanup = null;
   }
 
@@ -110,6 +121,7 @@ export class ScratchCanvasAdapter {
   }
 
   unbind(): void {
+    this.renderGeneration++;
     this.cleanup?.();
     this.cleanup = null;
   }
@@ -183,8 +195,21 @@ export class ScratchCanvasAdapter {
     const ctx = canvas.getContext?.('2d');
     if (!ctx) return;
 
+    const generation = ++this.renderGeneration;
     ctx.globalCompositeOperation = 'source-over';
-    this._renderCover(canvas, width, height, cover); // call custom-renderCover or default-renderCover
-    ctx.globalCompositeOperation = 'destination-out';
+    const result = this._renderCover(canvas, width, height, cover); // call custom-renderCover or default-renderCover
+
+    const finalize = () => {
+      // Suppress stale callbacks from a superseded or unbound render.
+      if (generation !== this.renderGeneration) return;
+      ctx.globalCompositeOperation = 'destination-out';
+      this.onCoverReady?.();
+    };
+
+    if (result && typeof (result as Promise<void>).then === 'function') {
+      (result as Promise<void>).then(finalize, finalize);
+    } else {
+      finalize();
+    }
   }
 }

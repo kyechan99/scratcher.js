@@ -87,6 +87,46 @@ describe('Scratcher Logic', () => {
     ]);
   });
 
+  it('should expose isCoverReady and emit coverReady once the cover paints', () => {
+    const s = new Scratcher(createBasicConfig());
+    expect(s.isCoverReady).toBe(false);
+
+    const events: boolean[] = [];
+    s.on('coverReady', () => events.push(s.isCoverReady));
+
+    const canvas = createMockCanvas();
+    s.bindCanvas(canvas);
+
+    expect(s.isCoverReady).toBe(true);
+    expect(events).toEqual([true]);
+
+    s.unbindCanvas();
+    expect(s.isCoverReady).toBe(false);
+  });
+
+  it('should defer coverReady until async renderCover resolves', async () => {
+    let resolveRender: (() => void) | null = null;
+    const s = new Scratcher({
+      ...createBasicConfig(),
+      renderCover: () =>
+        new Promise<void>(resolve => {
+          resolveRender = resolve;
+        }),
+    });
+    const onCoverReady = vi.fn();
+    s.on('coverReady', onCoverReady);
+
+    s.bindCanvas(createMockCanvas());
+    expect(s.isCoverReady).toBe(false);
+    expect(onCoverReady).not.toHaveBeenCalled();
+
+    resolveRender!();
+    await Promise.resolve();
+
+    expect(s.isCoverReady).toBe(true);
+    expect(onCoverReady).toHaveBeenCalledTimes(1);
+  });
+
   it('should support .on() event subscription', () => {
     const called: { [k: string]: boolean } = {};
     scratcher.on('scratchStart', () => {
@@ -205,6 +245,73 @@ describe('Scratcher User Input Simulation', () => {
     });
     adapter.resetCover();
     expect(renderCover).toHaveBeenCalled();
+  });
+
+  it('should fire onCoverReady synchronously for sync renderCover', () => {
+    const onCoverReady = vi.fn();
+    const canvas = createMockCanvas();
+    const scratcher = new Scratcher({ width: 100, height: 100, brushSize: 10, cellSize: 1 });
+    const adapter = new ScratchCanvasAdapter({
+      canvas,
+      interaction: scratcher,
+      width: 100,
+      height: 100,
+      onCoverReady,
+    });
+    adapter.bind();
+    expect(onCoverReady).toHaveBeenCalledTimes(1);
+  });
+
+  it('should fire onCoverReady only after async renderCover resolves', async () => {
+    const onCoverReady = vi.fn();
+    let resolveRender: (() => void) | null = null;
+    const renderCover = vi.fn(
+      () =>
+        new Promise<void>(resolve => {
+          resolveRender = resolve;
+        }),
+    );
+    const canvas = createMockCanvas();
+    const scratcher = new Scratcher({ width: 100, height: 100, brushSize: 10, cellSize: 1 });
+    const adapter = new ScratchCanvasAdapter({
+      canvas,
+      interaction: scratcher,
+      width: 100,
+      height: 100,
+      renderCover,
+      onCoverReady,
+    });
+    adapter.bind();
+    expect(onCoverReady).not.toHaveBeenCalled();
+    resolveRender!();
+    await Promise.resolve();
+    expect(onCoverReady).toHaveBeenCalledTimes(1);
+  });
+
+  it('should suppress onCoverReady when unbound before async render resolves', async () => {
+    const onCoverReady = vi.fn();
+    let resolveRender: (() => void) | null = null;
+    const renderCover = vi.fn(
+      () =>
+        new Promise<void>(resolve => {
+          resolveRender = resolve;
+        }),
+    );
+    const canvas = createMockCanvas();
+    const scratcher = new Scratcher({ width: 100, height: 100, brushSize: 10, cellSize: 1 });
+    const adapter = new ScratchCanvasAdapter({
+      canvas,
+      interaction: scratcher,
+      width: 100,
+      height: 100,
+      renderCover,
+      onCoverReady,
+    });
+    adapter.bind();
+    adapter.unbind();
+    resolveRender!();
+    await Promise.resolve();
+    expect(onCoverReady).not.toHaveBeenCalled();
   });
 
   it('should handle pointerleave and pointercancel', () => {

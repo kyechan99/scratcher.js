@@ -3,7 +3,19 @@ import {
   ScratchControllerCallbacks,
   Scratcher as CoreScratcher,
 } from '@scratcher.js/core';
-import { CSSProperties, ReactNode, useEffect, useMemo, useRef } from 'react';
+import {
+  CSSProperties,
+  ReactNode,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
+
+// Avoid the `useLayoutEffect` SSR warning while still painting the cover in
+// the same frame as the canvas commit on the client.
+const useIsomorphicLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect;
 
 export interface ScratcherProps extends ScratcherConfig {
   className?: string;
@@ -40,6 +52,7 @@ export function Scratcher({
   children,
 }: ScratcherProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const [isCoverReady, setIsCoverReady] = useState(false);
   const scratcher = useMemo(
     () =>
       new CoreScratcher({
@@ -92,17 +105,24 @@ export function Scratcher({
     onScratcherReady?.(scratcher);
   }, [onScratcherReady, scratcher]);
 
-  useEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) {
       return;
     }
 
+    // Subscribe before bind so the synchronous coverReady emit (default cover
+    // render is sync) is observed and the reward layer never flashes through
+    // an empty canvas on first paint.
+    setIsCoverReady(scratcher.isCoverReady);
+    const offCoverReady = scratcher.on('coverReady', () => setIsCoverReady(true));
     const cleanup = scratcher.bindCanvas(canvas);
 
     return () => {
+      offCoverReady();
       cleanup();
       scratcher.unbindCanvas();
+      setIsCoverReady(false);
     };
   }, [scratcher]);
 
@@ -125,12 +145,13 @@ export function Scratcher({
   const rewardLayerStyle: CSSProperties = {
     position: 'absolute',
     inset: 0,
+    visibility: isCoverReady ? 'visible' : 'hidden',
   };
 
   return (
     <div className={className} style={wrapperStyle}>
       {children && (
-        <div className={rewardClassName} style={rewardLayerStyle}>
+        <div className={rewardClassName} style={rewardLayerStyle} aria-hidden={!isCoverReady}>
           {children}
         </div>
       )}
