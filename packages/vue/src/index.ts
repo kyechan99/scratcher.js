@@ -83,6 +83,8 @@ export const Scratcher = defineComponent({
     const slots = useSlots();
     const canvasRef = ref<HTMLCanvasElement | null>(null);
     const scratcherRef = ref<CoreScratcher | null>(null);
+    const isCoverReady = ref(false);
+    let offCoverReady: (() => void) | null = null;
 
     const collectCallbacks = (): ScratchControllerCallbacks => ({
       onScratchStart: props.onScratchStart,
@@ -93,8 +95,15 @@ export const Scratcher = defineComponent({
       onComplete: props.onComplete,
     });
 
+    const detachCoverReady = () => {
+      offCoverReady?.();
+      offCoverReady = null;
+    };
+
     const initScratcher = () => {
+      detachCoverReady();
       scratcherRef.value?.unbindCanvas();
+      isCoverReady.value = false;
       const scratcher = new CoreScratcher({
         width: props.width,
         height: props.height,
@@ -120,6 +129,14 @@ export const Scratcher = defineComponent({
       if (!scratcher || !canvas) {
         return;
       }
+      // Subscribe before bind so the synchronous coverReady emit (default
+      // cover render is sync) is observed and the reward layer never flashes
+      // through an empty canvas on first paint.
+      detachCoverReady();
+      isCoverReady.value = scratcher.isCoverReady;
+      offCoverReady = scratcher.on('coverReady', () => {
+        isCoverReady.value = true;
+      });
       scratcher.bindCanvas(canvas);
     };
 
@@ -178,13 +195,16 @@ export const Scratcher = defineComponent({
     });
 
     onBeforeUnmount(() => {
+      detachCoverReady();
       scratcherRef.value?.unbindCanvas();
+      isCoverReady.value = false;
     });
 
     return () => {
       const rewardLayerStyle = {
         position: 'absolute',
         inset: 0,
+        visibility: isCoverReady.value ? 'visible' : 'hidden',
       };
 
       return h(
@@ -209,6 +229,7 @@ export const Scratcher = defineComponent({
                 {
                   class: props.rewardClass,
                   style: rewardLayerStyle,
+                  'aria-hidden': !isCoverReady.value,
                 },
                 slots.default(),
               )

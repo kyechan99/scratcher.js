@@ -107,6 +107,14 @@ export interface ScratchControllerCallbacks {
   onProgress?: (snapshot: ScratchSnapshot) => void;
   /** Called when scratching is complete. */
   onComplete?: (snapshot: ScratchSnapshot) => void;
+  /**
+   * Called once the cover layer has finished painting on the canvas.
+   *
+   * Wrappers use this signal to delay revealing the reward layer so it never
+   * flashes before the cover is on screen — applicable to both synchronous
+   * (e.g. `fillRect`) and asynchronous (e.g. image loading) cover renders.
+   */
+  onCoverReady?: (snapshot: ScratchSnapshot) => void;
 }
 
 /**
@@ -131,13 +139,20 @@ export interface ScratcherConfig extends ScratchEngineOptions, ScratchController
   mapPoint?: (e: ScratcherPointerEventType, canvas: ScratcherCanvasType) => Point;
   /** Custom render at point function. */
   renderAtPoint?: (x: number, y: number, brushSize: number, canvas: ScratcherCanvasType) => void;
-  /** Custom render cover function. */
+  /**
+   * Custom render cover function.
+   *
+   * May return a `Promise` that resolves once the cover has finished drawing
+   * (e.g. after an image has loaded). The cover-ready signal fires after the
+   * returned promise settles so wrappers can keep the reward hidden until
+   * then.
+   */
   renderCover?: (
     canvas: ScratcherCanvasType,
     width: number,
     height: number,
     cover: string | undefined,
-  ) => void;
+  ) => void | Promise<void>;
 }
 
 /**
