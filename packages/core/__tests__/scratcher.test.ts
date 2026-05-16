@@ -288,6 +288,42 @@ describe('Scratcher User Input Simulation', () => {
     expect(onCoverReady).toHaveBeenCalledTimes(1);
   });
 
+  it('should drop pointer strokes while an async cover render is pending', async () => {
+    let resolveRender: (() => void) | null = null;
+    const renderCover = vi.fn(
+      () =>
+        new Promise<void>(resolve => {
+          resolveRender = resolve;
+        }),
+    );
+    const renderAtPoint = vi.fn();
+    const canvas = createMockCanvas();
+    const scratcher = new Scratcher({ width: 100, height: 100, brushSize: 10, cellSize: 1 });
+    const adapter = new ScratchCanvasAdapter({
+      canvas,
+      interaction: scratcher,
+      width: 100,
+      height: 100,
+      renderCover,
+      renderAtPoint,
+    });
+    adapter.bind();
+
+    // Stroke arrives before cover finalizes — must be dropped to avoid
+    // painting on a `source-over` canvas.
+    canvas.__listeners['pointerdown'][0]({ clientX: 5, clientY: 5, pointerId: 1 });
+    expect(renderAtPoint).not.toHaveBeenCalled();
+    expect(scratcher.isDrawing).toBe(false);
+
+    resolveRender!();
+    await Promise.resolve();
+
+    // Once the cover is ready, strokes flow through normally.
+    canvas.__listeners['pointerdown'][0]({ clientX: 5, clientY: 5, pointerId: 1 });
+    expect(renderAtPoint).toHaveBeenCalledWith(5, 5, 10, canvas);
+    expect(scratcher.isDrawing).toBe(true);
+  });
+
   it('should suppress onCoverReady when unbound before async render resolves', async () => {
     const onCoverReady = vi.fn();
     let resolveRender: (() => void) | null = null;
