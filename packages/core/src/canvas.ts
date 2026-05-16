@@ -54,6 +54,7 @@ export class ScratchCanvasAdapter {
   ) => void | Promise<void>;
   private readonly onCoverReady?: () => void;
   private renderGeneration: number;
+  private coverReady: boolean;
   private cleanup: (() => void) | null;
 
   constructor(options: ScratchCanvasAdapterOptions) {
@@ -67,6 +68,7 @@ export class ScratchCanvasAdapter {
     this._renderCover = options.renderCover ?? this.defaultRenderCover;
     this.onCoverReady = options.onCoverReady;
     this.renderGeneration = 0;
+    this.coverReady = false;
     this.cleanup = null;
   }
 
@@ -75,6 +77,10 @@ export class ScratchCanvasAdapter {
     this.renderCover(this.canvas, this.width, this.height, this.cover);
 
     const onPointerDown = (e: unknown) => {
+      // Drop strokes that arrive before the cover render has finalized: the
+      // composite mode is still `source-over`, so renderAtPoint would paint
+      if (!this.coverReady) return;
+
       const event = e as ScratcherPointerEventType;
       this.canvas.setPointerCapture?.(event.pointerId);
       const point = this.mapPoint(event, this.canvas);
@@ -85,6 +91,7 @@ export class ScratchCanvasAdapter {
     };
 
     const onPointerMove = (e: unknown) => {
+      if (!this.coverReady) return;
       if (!this.interaction.isDrawing) {
         return;
       }
@@ -122,6 +129,7 @@ export class ScratchCanvasAdapter {
 
   unbind(): void {
     this.renderGeneration++;
+    this.coverReady = false;
     this.cleanup?.();
     this.cleanup = null;
   }
@@ -196,6 +204,7 @@ export class ScratchCanvasAdapter {
     if (!ctx) return;
 
     const generation = ++this.renderGeneration;
+    this.coverReady = false;
     ctx.globalCompositeOperation = 'source-over';
     const result = this._renderCover(canvas, width, height, cover); // call custom-renderCover or default-renderCover
 
@@ -203,6 +212,7 @@ export class ScratchCanvasAdapter {
       // Suppress stale callbacks from a superseded or unbound render.
       if (generation !== this.renderGeneration) return;
       ctx.globalCompositeOperation = 'destination-out';
+      this.coverReady = true;
       this.onCoverReady?.();
     };
 
