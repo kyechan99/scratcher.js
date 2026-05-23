@@ -54,6 +54,8 @@ const scratcherConfig = {
 ```
 
 > width/height are required. cover/background support both color and image. Callbacks can be added as needed.
+>
+> `width`/`height` set the canvas drawing-buffer size. In the React/Vue/Svelte wrappers, they also act as the max display size — the wrapper shrinks to fit narrower parent containers while preserving its aspect ratio. See [Responsive sizing](/docs/configuration#responsive-sizing).
 
 ### Vanilla JS
 

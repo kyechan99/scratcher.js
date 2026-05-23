@@ -10,6 +10,9 @@ import PlaygroundFrame from './PlaygroundFrame.vue';
 
 let scratcher: CoreScratcher | null = null;
 
+const CANVAS_WIDTH = 400;
+const CANVAS_HEIGHT = 400;
+
 const snapshot = ref<ScratchSnapshot>({
   scratchedCells: 0,
   totalCells: 1,
@@ -22,6 +25,13 @@ const areaConfig = ref<RectArea>({
   width: 250,
   height: 250,
 });
+
+const areaOverlayStyle = computed(() => ({
+  left: `${(areaConfig.value.x / CANVAS_WIDTH) * 100}%`,
+  top: `${(areaConfig.value.y / CANVAS_HEIGHT) * 100}%`,
+  width: `${(areaConfig.value.width / CANVAS_WIDTH) * 100}%`,
+  height: `${(areaConfig.value.height / CANVAS_HEIGHT) * 100}%`,
+}));
 
 const areaProgressPercent = computed(() => {
   if (!snapshot.value.area) return '0.0';
@@ -79,8 +89,8 @@ function updateAreaHeight(value: number) {
       <div class="scratch-frame">
         <VueScratcher
           class="scratch-card"
-          :width="400"
-          :height="400"
+          :width="CANVAS_WIDTH"
+          :height="CANVAS_HEIGHT"
           :brush-size="40"
           :cover="'#b9c2ce'"
           :area="areaConfig"
@@ -91,15 +101,7 @@ function updateAreaHeight(value: number) {
           <div class="reward">Scratch the blue area!</div>
         </VueScratcher>
 
-        <div
-          class="area-overlay"
-          :style="{
-            left: `${areaConfig.x}px`,
-            top: `${areaConfig.y}px`,
-            width: `${areaConfig.width}px`,
-            height: `${areaConfig.height}px`,
-          }"
-        />
+        <div class="area-overlay" :style="areaOverlayStyle" />
       </div>
 
       <div class="area-info">
@@ -118,7 +120,9 @@ function updateAreaHeight(value: number) {
 <style scoped>
 .scratch-frame {
   position: relative;
-  display: inline-block;
+  width: 100%;
+  max-width: 400px;
+  aspect-ratio: 1 / 1;
 }
 
 .reward {

@@ -137,9 +137,13 @@ export class ScratchCanvasAdapter {
 
   private defaultMapPoint(e: ScratcherPointerEventType, target: ScratcherCanvasType): Point {
     const rect = target.getBoundingClientRect();
+    // Map CSS coords to drawing-buffer coords so strokes stay aligned with the
+    // pointer when the canvas is CSS-scaled (e.g. responsive layouts).
+    const scaleX = rect.width > 0 ? this.width / rect.width : 1;
+    const scaleY = rect.height > 0 ? this.height / rect.height : 1;
     return {
-      x: e.clientX - rect.left,
-      y: e.clientY - rect.top,
+      x: (e.clientX - rect.left) * scaleX,
+      y: (e.clientY - rect.top) * scaleY,
     };
   }
 

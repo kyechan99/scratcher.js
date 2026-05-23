@@ -50,8 +50,8 @@ scratcher.bindCanvas(canvas);
 
 | Option                | Type                         | Required | Description                                               | Default     |
 | --------------------- | ---------------------------- | :------: | --------------------------------------------------------- | ----------- |
-| `width`               | `number`                     |    ✓     | Canvas width (px)                                         | —           |
-| `height`              | `number`                     |    ✓     | Canvas height (px)                                        | —           |
+| `width`               | `number`                     |    ✓     | Canvas drawing-buffer width (px). The engine scales pointer coordinates internally, so the bound `<canvas>` may be CSS-sized independently. | —           |
+| `height`              | `number`                     |    ✓     | Canvas drawing-buffer height (px).                                                                                                          | —           |
 | `brushSize`           | `number`                     |    ✓     | Brush diameter (px)                                       | —           |
 | `cellSize`            | `number`                     |          | Grid cell size (px) for progress tracking. Lower = finer. | `16`        |
 | `completionThreshold` | `number (0~1)`               |          | Progress at which `onComplete` fires                      | `0.5`       |

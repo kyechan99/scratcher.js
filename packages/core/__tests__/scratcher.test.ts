@@ -273,7 +273,7 @@ function createMockCanvas() {
     removeEventListener: (type: string, listener: (e: any) => void) => {
       listeners[type] = (listeners[type] || []).filter(l => l !== listener);
     },
-    getBoundingClientRect: () => ({ left: 0, top: 0 }),
+    getBoundingClientRect: () => ({ left: 0, top: 0, width: 100, height: 100 }),
     getContext: () => ({
       beginPath: vi.fn(),
       arc: vi.fn(),

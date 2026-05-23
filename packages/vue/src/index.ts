@@ -195,7 +195,9 @@ export const Scratcher = defineComponent({
             {
               position: 'relative',
               width: `${props.width}px`,
-              height: `${props.height}px`,
+              maxWidth: '100%',
+              minWidth: 0,
+              aspectRatio: `${props.width} / ${props.height}`,
               overflow: 'hidden',
               touchAction: 'none',
             },

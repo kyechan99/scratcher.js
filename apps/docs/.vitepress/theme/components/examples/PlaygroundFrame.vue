@@ -19,6 +19,7 @@ defineEmits(['reset']);
   justify-content: center;
   align-items: flex-start;
   padding: 2rem 0;
+  max-width: 100%;
 }
 
 .preview-zone {
@@ -27,5 +28,7 @@ defineEmits(['reset']);
   align-items: center;
   gap: 1rem;
   border-radius: 1rem;
+  width: 100%;
+  min-width: 0;
 }
 </style>

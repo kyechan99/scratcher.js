@@ -55,6 +55,8 @@ const scratcherConfig = {
 ```
 
 > width/height는 필수, cover/background는 색상 또는 이미지 모두 지원, 콜백은 필요에 따라 추가
+>
+> `width`/`height`는 캔버스 드로잉 버퍼 크기를 지정합니다. React/Vue/Svelte 래퍼에서는 동시에 최대 표시 크기로도 동작하며, 부모 컨테이너가 더 좁으면 비율을 유지하며 자동 축소됩니다. 자세한 내용은 [반응형 크기 조정](/kr/docs/configuration#반응형-크기-조정) 참고.
 
 ### Vanilla JS
 

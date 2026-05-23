@@ -44,8 +44,8 @@ All `ScratcherConfig` options from [`@scratcher.js/core`](https://www.npmjs.com/
 
 | Prop                  | Type                         | Required | Description                                               | Default     |
 | --------------------- | ---------------------------- | :------: | --------------------------------------------------------- | ----------- |
-| `width`               | `number`                     |    ✓     | Canvas width (px)                                         | —           |
-| `height`              | `number`                     |    ✓     | Canvas height (px)                                        | —           |
+| `width`               | `number`                     |    ✓     | Canvas drawing-buffer width (px). Also the wrapper's max display width — see [Responsive sizing](#responsive-sizing).  | —           |
+| `height`              | `number`                     |    ✓     | Canvas drawing-buffer height (px). Display height follows `width` via `aspect-ratio`.                                   | —           |
 | `brushSize`           | `number`                     |    ✓     | Brush diameter (px)                                       | —           |
 | `cellSize`            | `number`                     |          | Grid cell size (px) for progress tracking. Lower = finer. | `16`        |
 | `completionThreshold` | `number (0~1)`               |          | Progress at which `onComplete` fires                      | `0.5`       |
@@ -69,6 +69,21 @@ All callbacks receive `ScratchSnapshot` — `{ scratchedCells, totalCells, progr
 | `onReset`        | `(snapshot) => void`        | `reset()` called            |
 | `onProgress`     | `(snapshot) => void`        | Any progress change         |
 | `onComplete`     | `(snapshot) => void`        | Threshold first reached     |
+
+### Responsive sizing
+
+The wrapper renders with `width: ${width}px; maxWidth: 100%; aspectRatio: ${width} / ${height}`, so it fits its parent container while preserving its aspect ratio. Pointer coordinates are scaled internally, so scratches stay aligned with the cursor even when the canvas is CSS-scaled.
+
+- Parent ≥ `width`: rendered at the exact `width × height` (same as a fixed-size wrapper).
+- Parent < `width`: shrinks proportionally to the parent's width.
+
+To opt out and force the wrapper to its natural pixel size, override via the `style` prop:
+
+```tsx
+<Scratcher {...config} style={{ maxWidth: 'none' }} />
+```
+
+If you place custom overlays (e.g. area markers) inside the wrapper, prefer percentage coordinates (`left: '18.75%'`) over pixels so they scale with the canvas.
 
 ### React-specific props
 

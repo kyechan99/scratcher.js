@@ -6,8 +6,8 @@ Scratcher.js 및 각 프레임워크별 패키지의 주요 설정 방법과 옵
 
 | 옵션명              | 타입         | 설명                                                | 기본값 |
 | ------------------- | ------------ | --------------------------------------------------- | ------ |
-| width \*            | number       | 캔버스 가로(px)                                     | -      |
-| height \*           | number       | 캔버스 세로(px)                                     | -      |
+| width \*            | number       | 캔버스 드로잉 버퍼 가로(px). 래퍼의 최대 표시 폭이기도 합니다 — [반응형 크기 조정](#반응형-크기-조정) 참고. | -      |
+| height \*           | number       | 캔버스 드로잉 버퍼 세로(px). 표시 높이는 `width`에 따라 `aspect-ratio`로 자동 계산됩니다.                  | -      |
 | brushSize           | number       | 긁기 브러시 크기(px)                                | 30     |
 | cellSize            | number       | 진행률 추적용 격자 셀 크기(px). 작을수록 세밀함.    | 16     |
 | completionThreshold | number (0~1) | 긁기 완료로 간주할 퍼센트(진행률)                   | 0.7    |
@@ -34,6 +34,29 @@ const scratcherConfig = {
   onComplete: () => alert('긁기 완료!'),
 };
 ```
+
+## 반응형 크기 조정
+
+React, Vue, Svelte 래퍼는 `width: ${width}px; max-width: 100%; aspect-ratio: ${width} / ${height}` 스타일로 렌더링되어 부모 컨테이너에 맞게 비율을 유지하며 크기가 조정됩니다.
+
+- 부모가 `width` 이상: 지정한 `width × height` 그대로 렌더링 (기존 고정 크기와 동일).
+- 부모가 `width` 미만: 부모 폭에 맞춰 비율을 유지하며 축소.
+
+포인터 좌표는 Core 엔진에서 자동 보정되므로, 캔버스가 CSS로 축소되어도 스크래치 위치가 정확히 따라옵니다 — Vanilla JS에서 직접 캔버스 CSS 크기를 조정하는 경우에도 동일하게 적용됩니다.
+
+고정 크기 동작을 유지하려면 래퍼의 `max-width`를 오버라이드하세요:
+
+```tsx
+// React
+<Scratcher {...config} style={{ maxWidth: 'none' }} />
+```
+
+```vue
+<!-- Vue -->
+<Scratcher v-bind="config" :style="{ maxWidth: 'none' }" />
+```
+
+래퍼 안에 커스텀 오버레이(영역 마커 등)를 배치한다면 픽셀 좌표 대신 % 좌표를 사용하는 것을 권장합니다. 그래야 캔버스가 축소될 때 함께 움직입니다.
 
 ## 프레임워크별 전달 방식
 

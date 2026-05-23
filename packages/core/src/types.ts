@@ -155,6 +155,8 @@ export interface ScratcherPointerEventType {
 export type ScratcherCanvasRectType = {
   left: number;
   top: number;
+  width: number;
+  height: number;
 };
 
 type ScratcherCanvasContextType = {

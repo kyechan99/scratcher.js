@@ -63,11 +63,14 @@ const areaImagePreviewStyle = computed(() => {
     return {};
   }
 
+  const overlayWidth = areaImage.value.imageData.width * areaImageTransform.value.scale;
+  const overlayHeight = areaImage.value.imageData.height * areaImageTransform.value.scale;
+
   return {
-    left: `${areaImageTransform.value.x}px`,
-    top: `${areaImageTransform.value.y}px`,
-    width: `${areaImage.value.imageData.width * areaImageTransform.value.scale}px`,
-    height: `${areaImage.value.imageData.height * areaImageTransform.value.scale}px`,
+    left: `${(areaImageTransform.value.x / canvasSize.width) * 100}%`,
+    top: `${(areaImageTransform.value.y / canvasSize.height) * 100}%`,
+    width: `${(overlayWidth / canvasSize.width) * 100}%`,
+    height: `${(overlayHeight / canvasSize.height) * 100}%`,
   };
 });
 
@@ -365,7 +368,9 @@ onUnmounted(() => {
 
 .scratch-frame {
   position: relative;
-  display: inline-block;
+  width: 100%;
+  max-width: 400px;
+  aspect-ratio: 1 / 1;
 }
 
 .reward {
