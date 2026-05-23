@@ -137,7 +137,9 @@
   class={className}
   style:position="relative"
   style:width="{width}px"
-  style:height="{height}px"
+  style:max-width="100%"
+  style:min-width="0"
+  style:aspect-ratio="{width} / {height}"
   style:overflow="hidden"
   style:touch-action="none"
 >

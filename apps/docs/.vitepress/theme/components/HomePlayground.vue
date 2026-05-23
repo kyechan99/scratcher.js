@@ -134,11 +134,34 @@ const areaImagePreviewStyle = computed(() => {
     return {};
   }
 
+  const canvas = sanitizedScratcherConfig.value;
+  const overlayWidth = areaImage.value.imageData.width * areaImageTransform.value.scale;
+  const overlayHeight = areaImage.value.imageData.height * areaImageTransform.value.scale;
+
   return {
-    left: `${areaImageTransform.value.x}px`,
-    top: `${areaImageTransform.value.y}px`,
-    width: `${areaImage.value.imageData.width * areaImageTransform.value.scale}px`,
-    height: `${areaImage.value.imageData.height * areaImageTransform.value.scale}px`,
+    left: `${(areaImageTransform.value.x / canvas.width) * 100}%`,
+    top: `${(areaImageTransform.value.y / canvas.height) * 100}%`,
+    width: `${(overlayWidth / canvas.width) * 100}%`,
+    height: `${(overlayHeight / canvas.height) * 100}%`,
+  };
+});
+
+const rectOverlayStyle = computed(() => {
+  const canvas = sanitizedScratcherConfig.value;
+  return {
+    left: `${(areaConfig.value.x / canvas.width) * 100}%`,
+    top: `${(areaConfig.value.y / canvas.height) * 100}%`,
+    width: `${(areaConfig.value.width / canvas.width) * 100}%`,
+    height: `${(areaConfig.value.height / canvas.height) * 100}%`,
+  };
+});
+
+const scratchFrameStyle = computed(() => {
+  const canvas = sanitizedScratcherConfig.value;
+  return {
+    width: `${canvas.width}px`,
+    maxWidth: '100%',
+    aspectRatio: `${canvas.width} / ${canvas.height}`,
   };
 });
 
@@ -281,13 +304,7 @@ onUnmounted(() => {
     <div class="hero-grid">
       <div class="preview-zone">
         <div class="preview-stage">
-          <div
-            class="scratch-frame"
-            :style="{
-              width: `${sanitizedScratcherConfig.width}px`,
-              height: `${sanitizedScratcherConfig.height}px`,
-            }"
-          >
+          <div class="scratch-frame" :style="scratchFrameStyle">
             <VueScratcher
               class="scratch-card"
               :width="sanitizedScratcherConfig.width"
@@ -309,12 +326,7 @@ onUnmounted(() => {
             <div
               v-if="isAreaEnabled && areaMode === 'rect'"
               class="area-overlay"
-              :style="{
-                left: `${areaConfig.x}px`,
-                top: `${areaConfig.y}px`,
-                width: `${areaConfig.width}px`,
-                height: `${areaConfig.height}px`,
-              }"
+              :style="rectOverlayStyle"
             />
 
             <img
@@ -622,6 +634,7 @@ onUnmounted(() => {
   display: flex;
   flex-direction: column;
   gap: 0.875rem;
+  min-width: 0;
 }
 
 .preview-stage {
@@ -630,6 +643,7 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   justify-content: center;
+  min-width: 0;
   transition:
     box-shadow 0.18s ease,
     transform 0.18s ease;

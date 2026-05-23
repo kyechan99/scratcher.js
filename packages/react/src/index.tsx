@@ -129,7 +129,9 @@ export function Scratcher({
   const wrapperStyle: CSSProperties = {
     position: 'relative',
     width,
-    height,
+    maxWidth: '100%',
+    minWidth: 0,
+    aspectRatio: `${width} / ${height}`,
     overflow: 'hidden',
     touchAction: 'none',
     ...style,

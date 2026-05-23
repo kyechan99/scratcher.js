@@ -115,8 +115,8 @@ scratcher.bindCanvas(canvas);
 
 | Option                | Type                    | Description                                                                                                                                    | Default     |
 | --------------------- | ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
-| `width` \*            | `number`                | Canvas width (px)                                                                                                                              | —           |
-| `height` \*           | `number`                | Canvas height (px)                                                                                                                             | —           |
+| `width` \*            | `number`                | Canvas drawing-buffer width (px). In the framework wrappers, also the max display width — the wrapper shrinks to fit narrower parents while preserving aspect ratio. | —           |
+| `height` \*           | `number`                | Canvas drawing-buffer height (px). In the framework wrappers, display height follows `width` via `aspect-ratio`.                                                     | —           |
 | `brushSize` \*        | `number`                | Brush diameter (px)                                                                                                                            | —           |
 | `cellSize`            | `number`                | Grid cell size (px) for progress tracking. Lower = finer.                                                                                      | `16`        |
 | `completionThreshold` | `number (0~1)`          | Progress at which `onComplete` fires                                                                                                           | `0.5`       |
