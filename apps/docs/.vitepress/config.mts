@@ -7,6 +7,7 @@ export default defineConfig({
   base: '/scratcher.js/',
   title: 'scratcher.js',
   description: 'scratcher.js docs',
+  cleanUrls: true,
   head: [
     ['link', { rel: 'icon', href: '/scratcher.js/favicon.ico' }],
     ['link', { rel: 'preconnect', href: 'https://fonts.googleapis.com' }],
