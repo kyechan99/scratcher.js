@@ -307,6 +307,7 @@ onUnmounted(() => {
           <div class="scratch-frame" :style="scratchFrameStyle">
             <VueScratcher
               class="scratch-card"
+              responsive
               :width="sanitizedScratcherConfig.width"
               :height="sanitizedScratcherConfig.height"
               :cell-size="sanitizedScratcherConfig.cellSize"

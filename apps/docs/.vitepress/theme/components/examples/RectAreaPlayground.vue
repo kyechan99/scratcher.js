@@ -89,6 +89,7 @@ function updateAreaHeight(value: number) {
       <div class="scratch-frame">
         <VueScratcher
           class="scratch-card"
+          responsive
           :width="CANVAS_WIDTH"
           :height="CANVAS_HEIGHT"
           :brush-size="40"

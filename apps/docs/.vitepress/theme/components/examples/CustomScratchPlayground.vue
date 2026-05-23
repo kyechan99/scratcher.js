@@ -45,6 +45,7 @@ function renderAtPoint(x: number, y: number, brushSize: number, canvas: HTMLCanv
     <template #main>
       <VueScratcher
         class="scratch-card"
+        responsive
         :width="400"
         :height="240"
         :brush-size="50"

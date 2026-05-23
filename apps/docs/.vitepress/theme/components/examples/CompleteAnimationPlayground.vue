@@ -46,6 +46,7 @@ function handleComplete() {
       <VueScratcher
         ref="scratchCardRef"
         class="scratch-card"
+        responsive
         :width="400"
         :height="240"
         :brush-size="50"

@@ -34,6 +34,7 @@ function renderCover(canvas: HTMLCanvasElement, width: number, height: number, _
     <template #main>
       <VueScratcher
         class="scratch-card"
+        responsive
         :width="400"
         :height="240"
         :brush-size="50"

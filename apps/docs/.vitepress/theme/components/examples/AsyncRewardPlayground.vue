@@ -41,6 +41,7 @@ async function handleComplete() {
     <template #main>
       <VueScratcher
         class="scratch-card"
+        responsive
         :width="400"
         :height="240"
         :brush-size="50"

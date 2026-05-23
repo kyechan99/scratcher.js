@@ -10,6 +10,7 @@ export interface ScratcherProps extends ScratcherConfig {
   style?: CSSProperties;
   canvasClassName?: string;
   rewardClassName?: string;
+  responsive?: boolean;
   onScratcherReady?: (scratcher: CoreScratcher) => void;
   children?: ReactNode;
 }
@@ -36,6 +37,7 @@ export function Scratcher({
   style,
   canvasClassName,
   rewardClassName,
+  responsive = false,
   onScratcherReady,
   children,
 }: ScratcherProps) {
@@ -106,16 +108,25 @@ export function Scratcher({
     };
   }, [scratcher]);
 
-  const wrapperStyle: CSSProperties = {
-    position: 'relative',
-    width,
-    maxWidth: '100%',
-    minWidth: 0,
-    aspectRatio: `${width} / ${height}`,
-    overflow: 'hidden',
-    touchAction: 'none',
-    ...style,
-  };
+  const wrapperStyle: CSSProperties = responsive
+    ? {
+        position: 'relative',
+        width,
+        maxWidth: '100%',
+        minWidth: 0,
+        aspectRatio: `${width} / ${height}`,
+        overflow: 'hidden',
+        touchAction: 'none',
+        ...style,
+      }
+    : {
+        position: 'relative',
+        width,
+        height,
+        overflow: 'hidden',
+        touchAction: 'none',
+        ...style,
+      };
 
   const canvasStyle: CSSProperties = {
     position: 'absolute',
