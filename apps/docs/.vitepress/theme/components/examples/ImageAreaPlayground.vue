@@ -240,6 +240,7 @@ onUnmounted(() => {
         <div class="scratch-frame">
           <VueScratcher
             class="scratch-card"
+            responsive
             :width="canvasSize.width"
             :height="canvasSize.height"
             :brush-size="40"

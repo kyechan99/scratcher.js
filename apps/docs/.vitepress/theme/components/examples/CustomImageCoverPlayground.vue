@@ -33,7 +33,13 @@ function resetCanvas() {
 <template>
   <PlaygroundFrame @reset="resetCanvas">
     <template #main>
-      <VueScratcher :width="300" :height="200" :brush-size="50" :renderCover="renderCover">
+      <VueScratcher
+        responsive
+        :width="300"
+        :height="200"
+        :brush-size="50"
+        :renderCover="renderCover"
+      >
         <div class="reward">Image Cover Example</div>
       </VueScratcher>
     </template>

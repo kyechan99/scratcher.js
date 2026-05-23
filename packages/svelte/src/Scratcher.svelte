@@ -29,6 +29,7 @@
     class?: string;
     canvasClass?: string;
     rewardClass?: string;
+    responsive?: boolean;
     onScratcherReady?: (scratcher: CoreScratcher) => void;
     children?: Snippet;
   };
@@ -54,6 +55,7 @@
     class: className,
     canvasClass,
     rewardClass,
+    responsive = false,
     onScratcherReady,
     children,
   }: Props = $props();
@@ -137,9 +139,10 @@
   class={className}
   style:position="relative"
   style:width="{width}px"
-  style:max-width="100%"
-  style:min-width="0"
-  style:aspect-ratio="{width} / {height}"
+  style:height={responsive ? null : `${height}px`}
+  style:max-width={responsive ? '100%' : null}
+  style:min-width={responsive ? '0' : null}
+  style:aspect-ratio={responsive ? `${width} / ${height}` : null}
   style:overflow="hidden"
   style:touch-action="none"
 >

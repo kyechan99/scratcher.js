@@ -44,13 +44,14 @@ All `ScratcherConfig` options from [`@scratcher.js/core`](https://www.npmjs.com/
 
 | Prop                  | Type                         | Required | Description                                               | Default     |
 | --------------------- | ---------------------------- | :------: | --------------------------------------------------------- | ----------- |
-| `width`               | `number`                     |    ✓     | Canvas drawing-buffer width (px). Also the wrapper's max display width — see [Responsive sizing](#responsive-sizing).  | —           |
-| `height`              | `number`                     |    ✓     | Canvas drawing-buffer height (px). Display height follows `width` via `aspect-ratio`.                                   | —           |
+| `width`               | `number`                     |    ✓     | Canvas width (px). Drawing-buffer size; also the wrapper's display width (or max width when `responsive`).    | —           |
+| `height`              | `number`                     |    ✓     | Canvas height (px). Drawing-buffer size; ignored for display when `responsive` (computed from `aspect-ratio`). | —           |
 | `brushSize`           | `number`                     |    ✓     | Brush diameter (px)                                       | —           |
 | `cellSize`            | `number`                     |          | Grid cell size (px) for progress tracking. Lower = finer. | `16`        |
 | `completionThreshold` | `number (0~1)`               |          | Progress at which `onComplete` fires                      | `0.5`       |
 | `revealOnCompletion`  | `boolean`                    |          | Auto-clear the cover when threshold is reached            | `false`     |
 | `cover`               | `string`                     |          | Cover color or image URL                                  | `'#b9c2ce'` |
+| `responsive`          | `boolean`                    |          | Shrink to fit narrower parents while preserving aspect ratio — see [Responsive sizing](#responsive-sizing). | `false`     |
 | `area`                | `RectArea \| ImageArea`      |          | Restrict progress measurement to a region                 | —           |
 | `callbacks`           | `ScratchControllerCallbacks` |          | Event handlers (see below)                                | —           |
 | `mapPoint`            | `function`                   |          | Custom pointer → canvas coordinate mapper                 | built-in    |
@@ -72,22 +73,22 @@ All callbacks receive `ScratchSnapshot` — `{ scratchedCells, totalCells, progr
 
 ### Responsive sizing
 
-The wrapper renders with `width: ${width}px; max-width: 100%; aspect-ratio: ${width} / ${height}`, so it fits its parent container while preserving its aspect ratio. Pointer coordinates are scaled internally, so scratches stay aligned with the cursor even when the canvas is CSS-scaled.
-
-- Parent ≥ `width`: rendered at the exact `width × height` (same as a fixed-size wrapper).
-- Parent < `width`: shrinks proportionally to the parent's width.
-
-To opt out and force the wrapper to its natural pixel size, wrap it in a container with a fixed width or override the wrapper class:
+By default the wrapper renders at a fixed `width × height`. Pass `responsive` to make it shrink to fit narrower parents while preserving its aspect ratio:
 
 ```svelte
-<Scratcher {...config} class="fixed-size" />
-
-<style>
-  :global(.fixed-size) { max-width: none; }
-</style>
+<Scratcher {...config} responsive>
+  <div class="reward">You found it!</div>
+</Scratcher>
 ```
 
-If you place custom overlays (e.g. area markers) inside the wrapper, prefer percentage coordinates (`left: 18.75%`) over pixels so they scale with the canvas.
+When `responsive` is enabled, the wrapper renders with `width: ${width}px; max-width: 100%; min-width: 0; aspect-ratio: ${width} / ${height}`:
+
+- Parent ≥ `width`: rendered at the exact `width × height` (same as the fixed-size default).
+- Parent < `width`: shrinks proportionally to the parent's width.
+
+Pointer coordinates are scaled internally by the core engine regardless of `responsive`, so scratches stay aligned with the cursor even when the canvas is CSS-scaled (whether via this prop or your own styles).
+
+If you place custom overlays (e.g. area markers) inside a responsive wrapper, prefer percentage coordinates (`left: 18.75%`) over pixels so they scale with the canvas.
 
 ### Svelte-specific props
 

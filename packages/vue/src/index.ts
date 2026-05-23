@@ -27,6 +27,7 @@ export const Scratcher = defineComponent({
     completionThreshold: { type: Number, required: false },
     revealOnCompletion: { type: Boolean, required: false },
     cover: { type: String, required: false },
+    responsive: { type: Boolean, required: false, default: false },
     area: {
       type: Object as PropType<Area | undefined>,
       required: false,
@@ -207,22 +208,29 @@ export const Scratcher = defineComponent({
         visibility: isCoverReady.value ? 'visible' : 'hidden',
       };
 
+      const wrapperStyle = props.responsive
+        ? {
+            position: 'relative',
+            width: `${props.width}px`,
+            maxWidth: '100%',
+            minWidth: 0,
+            aspectRatio: `${props.width} / ${props.height}`,
+            overflow: 'hidden',
+            touchAction: 'none',
+          }
+        : {
+            position: 'relative',
+            width: `${props.width}px`,
+            height: `${props.height}px`,
+            overflow: 'hidden',
+            touchAction: 'none',
+          };
+
       return h(
         'div',
         {
           ...attrs,
-          style: [
-            {
-              position: 'relative',
-              width: `${props.width}px`,
-              maxWidth: '100%',
-              minWidth: 0,
-              aspectRatio: `${props.width} / ${props.height}`,
-              overflow: 'hidden',
-              touchAction: 'none',
-            },
-            attrs.style as object,
-          ],
+          style: [wrapperStyle, attrs.style as object],
         },
         [
           slots.default
