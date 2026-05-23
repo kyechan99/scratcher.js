@@ -470,9 +470,12 @@ describe('Scratcher User Input Simulation', () => {
   });
 });
 
-type MockRect = { left: number; top: number; width: number; height: number };
+type MockRect = { left: number; top: number; width?: number; height?: number };
 
-function createMockCanvas(rect: MockRect = { left: 0, top: 0, width: 100, height: 100 }) {
+// Default rect omits width/height to exercise the fallback path in
+// defaultMapPoint and prove that minimal mocks (matching the optional
+// shape of ScratcherCanvasRectType) still work end-to-end.
+function createMockCanvas(rect: MockRect = { left: 0, top: 0 }) {
   const listeners: Record<string, ((e: any) => void)[]> = {};
   return {
     addEventListener: (type: string, listener: (e: any) => void) => {

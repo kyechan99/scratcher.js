@@ -170,8 +170,11 @@ export interface ScratcherPointerEventType {
 export type ScratcherCanvasRectType = {
   left: number;
   top: number;
-  width: number;
-  height: number;
+  // width/height are optional so non-DOM ScratcherCanvasType implementations
+  // (lightweight mocks, SSR shims, custom backends) need not provide them.
+  // defaultMapPoint falls back to scale=1 when they are missing or zero.
+  width?: number;
+  height?: number;
 };
 
 type ScratcherCanvasContextType = {
