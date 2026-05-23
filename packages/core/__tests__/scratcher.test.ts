@@ -404,9 +404,75 @@ describe('Scratcher User Input Simulation', () => {
     canvas.__listeners['pointerup'][0]({});
     expect(scratcher.isDrawing).toBe(false);
   });
+
+  // The drawing buffer (canvas width/height) and the CSS display size can
+  // differ when the canvas is styled responsively. defaultMapPoint must
+  // multiply by buffer/displaySize so strokes land in the right buffer pixel.
+  describe('defaultMapPoint CSS-scaled coordinate mapping', () => {
+    function bindAdapter(canvas: ReturnType<typeof createMockCanvas>) {
+      const renderAtPoint = vi.fn();
+      const scratcher = new Scratcher({ width: 100, height: 100, brushSize: 10, cellSize: 1 });
+      const adapter = new ScratchCanvasAdapter({
+        canvas,
+        interaction: scratcher,
+        width: 100,
+        height: 100,
+        renderAtPoint,
+      });
+      adapter.bind();
+      return { renderAtPoint };
+    }
+
+    it('scales coords up when the canvas is displayed smaller than its buffer', () => {
+      // 100×100 buffer rendered at 50×50 → scale 2x.
+      const canvas = createMockCanvas({ left: 0, top: 0, width: 50, height: 50 });
+      const { renderAtPoint } = bindAdapter(canvas);
+
+      canvas.__listeners['pointerdown'][0]({ clientX: 10, clientY: 20, pointerId: 1 });
+      expect(renderAtPoint).toHaveBeenCalledWith(20, 40, 10, canvas);
+    });
+
+    it('scales coords down when the canvas is displayed larger than its buffer', () => {
+      // 100×100 buffer rendered at 200×200 → scale 0.5x.
+      const canvas = createMockCanvas({ left: 0, top: 0, width: 200, height: 200 });
+      const { renderAtPoint } = bindAdapter(canvas);
+
+      canvas.__listeners['pointerdown'][0]({ clientX: 40, clientY: 80, pointerId: 1 });
+      expect(renderAtPoint).toHaveBeenCalledWith(20, 40, 10, canvas);
+    });
+
+    it('applies x and y scales independently for non-uniform display', () => {
+      // 100×100 buffer rendered at 50×100 → scaleX=2, scaleY=1.
+      const canvas = createMockCanvas({ left: 0, top: 0, width: 50, height: 100 });
+      const { renderAtPoint } = bindAdapter(canvas);
+
+      canvas.__listeners['pointerdown'][0]({ clientX: 10, clientY: 20, pointerId: 1 });
+      expect(renderAtPoint).toHaveBeenCalledWith(20, 20, 10, canvas);
+    });
+
+    it('subtracts rect offset before scaling', () => {
+      // Rect at (10, 20), 50×50 display, 100×100 buffer.
+      // Client (25, 45) → local (15, 25) → buffer (30, 50).
+      const canvas = createMockCanvas({ left: 10, top: 20, width: 50, height: 50 });
+      const { renderAtPoint } = bindAdapter(canvas);
+
+      canvas.__listeners['pointerdown'][0]({ clientX: 25, clientY: 45, pointerId: 1 });
+      expect(renderAtPoint).toHaveBeenCalledWith(30, 50, 10, canvas);
+    });
+
+    it('falls back to scale=1 when rect has zero size (detached canvas)', () => {
+      const canvas = createMockCanvas({ left: 0, top: 0, width: 0, height: 0 });
+      const { renderAtPoint } = bindAdapter(canvas);
+
+      canvas.__listeners['pointerdown'][0]({ clientX: 10, clientY: 20, pointerId: 1 });
+      expect(renderAtPoint).toHaveBeenCalledWith(10, 20, 10, canvas);
+    });
+  });
 });
 
-function createMockCanvas() {
+type MockRect = { left: number; top: number; width: number; height: number };
+
+function createMockCanvas(rect: MockRect = { left: 0, top: 0, width: 100, height: 100 }) {
   const listeners: Record<string, ((e: any) => void)[]> = {};
   return {
     addEventListener: (type: string, listener: (e: any) => void) => {
@@ -416,7 +482,7 @@ function createMockCanvas() {
     removeEventListener: (type: string, listener: (e: any) => void) => {
       listeners[type] = (listeners[type] || []).filter(l => l !== listener);
     },
-    getBoundingClientRect: () => ({ left: 0, top: 0, width: 100, height: 100 }),
+    getBoundingClientRect: () => rect,
     getContext: () => ({
       beginPath: vi.fn(),
       arc: vi.fn(),

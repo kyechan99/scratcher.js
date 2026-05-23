@@ -13,3 +13,8 @@ apps/docs/.docs/.nuxt/
 apps/docs/.docs/.output/
 apps/docs/.docs/.data/
 apps/docs/.docs/dist/
+
+# Local development
+local/
+*.local
+.claude/settings.local.json
